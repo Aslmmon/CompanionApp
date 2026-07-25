@@ -12,6 +12,8 @@
     <string name="home_duration">~%1$d mins</string>
     <string name="home_todays_journey">Today\'s Journey</string>
     <string name="home_action_label">Today\'s Action</string>
+    <string name="home_loading">Loading today\'s journey…</string>
+    <string name="home_steps_count">%1$d steps</string>
 
     <!-- Journey Flow Screen -->
     <string name="journey_step_of">Step %1$d of %2$d</string>
