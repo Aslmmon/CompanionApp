@@ -1,5 +1,10 @@
 package com.aslmmovic.qurancompanion
 
+import platform.Foundation.NSCalendar
+import platform.Foundation.NSCalendarUnitDay
+import platform.Foundation.NSCalendarUnitYear
+import platform.Foundation.NSDate
+import platform.Foundation.preferredLanguages
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
@@ -12,3 +17,12 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()
+
+actual fun getCurrentDayOfYear(): Int {
+    val calendar = NSCalendar.currentCalendar
+    return calendar.ordinalityOfUnit(
+        smaller = NSCalendarUnitDay,
+        inUnit = NSCalendarUnitYear,
+        forDate = NSDate()
+    ).toInt()
+}

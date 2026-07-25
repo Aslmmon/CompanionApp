@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * simple method to navigate to another screen.
  */
 class NavigationManager {
-    private val _currentScreen = MutableStateFlow<Screen>(Screen.Welcome)
+    private val _currentScreen = MutableStateFlow<Screen>(Screen.Home)
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
     /** Navigate to the given screen. */

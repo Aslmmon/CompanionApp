@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App-wide -->
     <string name="welcome_title">رفيق القرآن</string>
-    <string name="welcome_subtitle">دليلك اليومي للحكمة القرآنية والقيم الإسلامية.</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
-    <string name="loading_journey">جاري تحميل رحلتك اليومية…</string>
-    <string name="setup_quick_setup">إعداد سريع</string>
-    <string name="setup_customize">تخصيص تفضيلات رفيقك اليومي.</string>
-    <string name="setup_daily_reminders">التذكيرات اليومية</string>
-    <string name="setup_daily_reminders_desc">تلقى إشعاراً عندما تكون رحلتك جاهزة.</string>
-    <string name="setup_reminder_time">وقت التذكير</string>
-    <string name="setup_complete">إتمام الإعداد</string>
-    <string name="onboarding_begin">ابدأ</string>
-    <string name="reset_setup">إعادة تعيين الإعداد</string>
-    <string name="verse_arabic">فَٱذْكُرُونِىٓ أَذْكُرْكُمْ</string>
-    <string name="verse_translation">«فَاذْكُرُونِي أَذْكُرْكُمْ»</string>
-    <string name="verse_reference">سورة البقرة ٢:١٥٢</string>
-    <string name="benefit1_title">رحلة يومية واحدة</string>
-    <string name="benefit1_desc">رحلة واحدة منسقة بعناية لإثراء يومك دون تشتت الاختيار.</string>
-    <string name="benefit2_title">أقل من ١٠ دقائق</string>
-    <string name="benefit2_desc">دروس عملية قصيرة تناسب روتينك اليومي بشكل طبيعي.</string>
-    <string name="benefit3_title">خالٍ تماماً من الإنترنت</string>
-    <string name="benefit3_desc">بمجرد التحميل، اقرأ في أي مكان وفي أي وقت بدون إلهاءات.</string>
-    <!-- Reminder status — composed in UI, no format function needed -->
+
+    <!-- Home Screen -->
+    <string name="home_begin_journey">ابدأ رحلة اليوم</string>
+    <string name="home_completed_title">اكتملت رحلة اليوم</string>
+    <string name="home_completed_subtitle">إلى اللقاء غداً إن شاء الله.</string>
+    <string name="home_reset_journey">إعادة البدء</string>
+    <string name="home_duration">~%1$d دقائق</string>
+    <string name="home_todays_journey">رحلة اليوم</string>
+    <string name="home_action_label">عمل اليوم</string>
+
+    <!-- Journey Flow Screen -->
+    <string name="journey_step_of">الخطوة %1$d من %2$d</string>
+    <string name="journey_next">التالي</string>
+    <string name="journey_finish">إنهاء</string>
+    <string name="journey_back">السابق</string>
+
+    <!-- Completion Screen -->
+    <string name="completion_heading">الحمد لله!</string>
+    <string name="completion_subtitle">إلى اللقاء غداً إن شاء الله.</string>
+    <string name="completion_return_home">العودة للرئيسية</string>
+    <string name="completion_action_label">عمل اليوم</string>
+
+    <!-- Reminder status -->
     <string name="reminders_label">التذكيرات:</string>
     <string name="reminders_enabled_at">مفعّلة الساعة %1$s</string>
     <string name="reminders_disabled">معطّلة</string>
-    <!-- SetupScreen quick-time labels -->
-    <string name="time_morning">صباحاً</string>
-    <string name="time_noon">ظهراً</string>
-    <string name="time_night">مساءً</string>
 </resources>

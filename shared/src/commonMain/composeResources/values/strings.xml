@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App-wide -->
     <string name="welcome_title">Quran Companion</string>
-    <string name="welcome_subtitle">Your daily guide to Quranic wisdom and Islamic values.</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
-    <string name="loading_journey">Today\'s Curated Journey is loading…</string>
-    <string name="setup_quick_setup">Quick Setup</string>
-    <string name="setup_customize">Customize your companion preferences.</string>
-    <string name="setup_daily_reminders">Daily Reminders</string>
-    <string name="setup_daily_reminders_desc">Receive a notification when your journey is ready.</string>
-    <string name="setup_reminder_time">Reminder Time</string>
-    <string name="setup_complete">Complete Setup</string>
-    <string name="onboarding_begin">Begin</string>
-    <string name="reset_setup">Reset Setup &amp; Onboarding</string>
-    <string name="verse_arabic">فَٱذْكُرُونِىٓ أَذْكُرْكُمْ</string>
-    <string name="verse_translation">\"So remember Me; I will remember you.\"</string>
-    <string name="verse_reference">Surah Al-Baqarah 2:152</string>
-    <string name="benefit1_title">One Daily Journey</string>
-    <string name="benefit1_desc">A single, carefully curated journey designed to enrich your day without decision fatigue.</string>
-    <string name="benefit2_title">Under 10 Minutes</string>
-    <string name="benefit2_desc">Bite-sized, practical lessons made to fit naturally into your daily routine.</string>
-    <string name="benefit3_title">100%% Offline-First</string>
-    <string name="benefit3_desc">Once loaded, read anywhere, anytime, without any distraction or online dependencies.</string>
-    <!-- Reminder status — composed in UI, no format function needed -->
+
+    <!-- Home Screen -->
+    <string name="home_begin_journey">Begin Today\'s Journey</string>
+    <string name="home_completed_title">Journey Complete for Today</string>
+    <string name="home_completed_subtitle">See you tomorrow insha\'Allah.</string>
+    <string name="home_reset_journey">Reset &amp; Start Again</string>
+    <string name="home_duration">~%1$d mins</string>
+    <string name="home_todays_journey">Today\'s Journey</string>
+    <string name="home_action_label">Today\'s Action</string>
+
+    <!-- Journey Flow Screen -->
+    <string name="journey_step_of">Step %1$d of %2$d</string>
+    <string name="journey_next">Next</string>
+    <string name="journey_finish">Finish</string>
+    <string name="journey_back">Back</string>
+
+    <!-- Completion Screen -->
+    <string name="completion_heading">Alhamdulillah!</string>
+    <string name="completion_subtitle">See you tomorrow insha\'Allah.</string>
+    <string name="completion_return_home">Return Home</string>
+    <string name="completion_action_label">Today\'s Action</string>
+
+    <!-- Reminder status -->
     <string name="reminders_label">Reminders:</string>
     <string name="reminders_enabled_at">Enabled at %1$s</string>
     <string name="reminders_disabled">Disabled</string>
-    <!-- SetupScreen quick-time labels -->
-    <string name="time_morning">Morning</string>
-    <string name="time_noon">Noon</string>
-    <string name="time_night">Night</string>
 </resources>

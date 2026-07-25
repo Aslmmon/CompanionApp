@@ -6,3 +6,6 @@ interface Platform {
 }
 
 expect fun getPlatform(): Platform
+
+/** Returns the current day of year (1-based). Implemented per platform. */
+expect fun getCurrentDayOfYear(): Int

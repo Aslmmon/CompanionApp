@@ -9,3 +9,6 @@ class AndroidPlatform : Platform {
 }
 
 actual fun getPlatform(): Platform = AndroidPlatform()
+
+actual fun getCurrentDayOfYear(): Int =
+    java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_YEAR)
