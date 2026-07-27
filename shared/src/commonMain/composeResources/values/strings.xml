@@ -31,4 +31,18 @@
     <string name="reminders_label">Reminders:</string>
     <string name="reminders_enabled_at">Enabled at %1$s</string>
     <string name="reminders_disabled">Disabled</string>
+
+    <!-- Weekly Tracker -->
+    <string name="home_weekly_tracker">Weekly Progress</string>
+    <string name="home_weekly_monday">M</string>
+    <string name="home_weekly_tuesday">T</string>
+    <string name="home_weekly_wednesday">W</string>
+    <string name="home_weekly_thursday">T</string>
+    <string name="home_weekly_friday">F</string>
+    <string name="home_weekly_saturday">S</string>
+    <string name="home_weekly_sunday">S</string>
+
+    <!-- Tomorrow Preview -->
+    <string name="home_tomorrow_preview">Tomorrow\'s Preview</string>
+    <string name="home_tomorrow_badge">Tomorrow</string>
 </resources>

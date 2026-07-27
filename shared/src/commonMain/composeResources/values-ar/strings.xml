@@ -31,4 +31,18 @@
     <string name="reminders_label">التذكيرات:</string>
     <string name="reminders_enabled_at">مفعّلة الساعة %1$s</string>
     <string name="reminders_disabled">معطّلة</string>
+
+    <!-- Weekly Tracker -->
+    <string name="home_weekly_tracker">التقدم الأسبوعي</string>
+    <string name="home_weekly_monday">ن</string>
+    <string name="home_weekly_tuesday">ث</string>
+    <string name="home_weekly_wednesday">ر</string>
+    <string name="home_weekly_thursday">خ</string>
+    <string name="home_weekly_friday">ج</string>
+    <string name="home_weekly_saturday">س</string>
+    <string name="home_weekly_sunday">ح</string>
+
+    <!-- Tomorrow Preview -->
+    <string name="home_tomorrow_preview">معاينة الغد</string>
+    <string name="home_tomorrow_badge">غداً</string>
 </resources>

@@ -19,6 +19,9 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
+
 val appModule = module {
     // JSON parser — shared across data sources
     single { Json { ignoreUnknownKeys = true } }
@@ -37,11 +40,13 @@ val appModule = module {
 
     // Domain layer — journey
     single { GetTodayJourneyUseCase(get()) }
+    single { GetTomorrowJourneyUseCase(get()) }
+    single { GetWeeklyProgressUseCase(get()) }
     single { IsJourneyCompletedUseCase(get()) }
     single { MarkJourneyCompletedUseCase(get()) }
     single { ResetJourneyUseCase(get()) }
 
     // Presentation layer
-    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get()) }
 }
