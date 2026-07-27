@@ -97,21 +97,24 @@ fun HomeScreen(viewModel: HomeViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(horizontal = 24.dp, vertical = if (isCompleted) 8.dp else 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            if (!isCompleted) {
+                Spacer(modifier = Modifier.height(24.dp))
 
-            // Bismillah header
-            Text(
-                text = stringResource(Res.string.bismillah),
-                style = QuranArabicTextStyle,
-                color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Center
-            )
+                // Bismillah header
+                Text(
+                    text = stringResource(Res.string.bismillah),
+                    style = QuranArabicTextStyle,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+            } else {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
             // App name & Settings Header Row
             Row(
@@ -136,29 +139,31 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            if (!isCompleted) {
+                Spacer(modifier = Modifier.height(8.dp))
 
-            // Subtitle — emotional hook for today's journey
-            Text(
-                text = journey?.subtitle ?: stringResource(Res.string.home_loading),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+                // Subtitle — emotional hook for today's journey
+                Text(
+                    text = journey?.subtitle ?: stringResource(Res.string.home_loading),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+            } else {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
             // Weekly Tracker
             val weeklyProgress by viewModel.weeklyProgress.collectAsState()
             WeeklyProgressTracker(
                 weeklyProgress = weeklyProgress,
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(if (isCompleted) 12.dp else 24.dp))
 
             // Content — animated between Ready and Completed states
             val tomorrowJourney by viewModel.tomorrowJourney.collectAsState()
@@ -407,29 +412,29 @@ private fun CompletedStateContent(
         // Completion badge
         Box(
             modifier = Modifier
-                .size(80.dp)
+                .size(60.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "✅", fontSize = 36.sp)
+            Text(text = "✅", fontSize = 28.sp)
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
             text = stringResource(Res.string.home_completed_title),
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = stringResource(Res.string.home_completed_subtitle),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.65f),
             textAlign = TextAlign.Center
         )
@@ -439,7 +444,7 @@ private fun CompletedStateContent(
         AnimatedVisibility(visible = actionStep != null) {
             if (actionStep != null) {
                 Column {
-                    Spacer(modifier = Modifier.height(28.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
                         text = stringResource(Res.string.home_action_label),
@@ -449,27 +454,27 @@ private fun CompletedStateContent(
                         letterSpacing = 1.sp
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
 
                     Card(
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
                         ),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .border(
                                 1.dp,
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                                RoundedCornerShape(16.dp)
+                                RoundedCornerShape(12.dp)
                             )
                     ) {
                         Text(
                             text = actionStep.content,
-                            modifier = Modifier.padding(20.dp),
+                            modifier = Modifier.padding(14.dp),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface,
-                            lineHeight = 22.sp
+                            lineHeight = 20.sp
                         )
                     }
                 }
@@ -478,7 +483,7 @@ private fun CompletedStateContent(
 
         // Tomorrow's Preview Card
         if (tomorrowJourney != null) {
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = stringResource(qurancompanion.shared.generated.resources.Res.string.home_tomorrow_preview),
@@ -488,22 +493,22 @@ private fun CompletedStateContent(
                 letterSpacing = 1.sp
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                        RoundedCornerShape(16.dp)
+                        RoundedCornerShape(12.dp)
                     )
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column(modifier = Modifier.padding(14.dp)) {
                     // Tomorrow badge
                     Box(
                         modifier = Modifier
@@ -511,21 +516,21 @@ private fun CompletedStateContent(
                                 color = MaterialTheme.colorScheme.secondaryContainer,
                                 shape = RoundedCornerShape(8.dp)
                             )
-                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
                     ) {
                         Text(
                             text = stringResource(qurancompanion.shared.generated.resources.Res.string.home_tomorrow_badge),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
                         text = tomorrowJourney.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -533,15 +538,15 @@ private fun CompletedStateContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedButton(
             onClick = onResetClick,
-            shape = RoundedCornerShape(14.dp),
+            shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary
             ),
-            modifier = Modifier.fillMaxWidth().height(50.dp)
+            modifier = Modifier.fillMaxWidth().height(48.dp)
         ) {
             Text(
                 text = stringResource(Res.string.home_reset_journey),
