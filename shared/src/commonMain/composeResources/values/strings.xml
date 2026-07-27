@@ -5,14 +5,14 @@
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
 
     <!-- Home Screen -->
-    <string name="home_begin_journey">Begin Today\'s Journey</string>
+    <string name="home_begin_journey">Begin Today's Journey</string>
     <string name="home_completed_title">Journey Complete for Today</string>
-    <string name="home_completed_subtitle">See you tomorrow insha\'Allah.</string>
+    <string name="home_completed_subtitle">See you tomorrow insha'Allah.</string>
     <string name="home_reset_journey">Reset &amp; Start Again</string>
     <string name="home_duration">~%1$d mins</string>
-    <string name="home_todays_journey">Today\'s Journey</string>
-    <string name="home_action_label">Today\'s Action</string>
-    <string name="home_loading">Loading today\'s journey…</string>
+    <string name="home_todays_journey">Today's Journey</string>
+    <string name="home_action_label">Today's Action</string>
+    <string name="home_loading">Loading today's journey…</string>
     <string name="home_steps_count">%1$d steps</string>
 
     <!-- Journey Flow Screen -->
@@ -25,9 +25,9 @@
     <string name="completion_heading">Alhamdulillah</string>
     <string name="completion_minutes_spent">You invested %1$d meaningful minutes today.</string>
     <string name="completion_reward">May Allah reward your effort.</string>
-    <string name="completion_next_day">We\'ll prepare another journey tomorrow.</string>
+    <string name="completion_next_day">We'll prepare another journey tomorrow.</string>
     <string name="completion_done">Done</string>
-    <string name="completion_action_label">Today\'s Action</string>
+    <string name="completion_action_label">Today's Action</string>
 
     <!-- Reminder status -->
     <string name="reminders_label">Reminders:</string>
@@ -45,7 +45,7 @@
     <string name="home_weekly_sunday">S</string>
 
     <!-- Tomorrow Preview -->
-    <string name="home_tomorrow_preview">Tomorrow\'s Preview</string>
+    <string name="home_tomorrow_preview">Tomorrow's Preview</string>
     <string name="home_tomorrow_badge">Tomorrow</string>
 
     <!-- Language & Settings -->
@@ -62,6 +62,6 @@
     <string name="step_type_story">Story</string>
     <string name="step_type_key_lessons">Key Lessons</string>
     <string name="step_type_reflection">Reflection</string>
-    <string name="step_type_action">Today\'s Action</string>
+    <string name="step_type_action">Today's Action</string>
     <string name="step_type_references">References</string>
 </resources>
