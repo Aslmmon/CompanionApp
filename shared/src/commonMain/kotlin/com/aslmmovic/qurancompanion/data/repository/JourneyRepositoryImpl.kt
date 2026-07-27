@@ -70,12 +70,12 @@ class JourneyRepositoryImpl(
 
     override suspend fun markCompleted(journeyId: String) {
         storage.putBoolean(completionKey(journeyId), true)
-        _completionStates.value = _completionStates.value + (journeyId to true)
+        _completionStates.value += (journeyId to true)
     }
 
     override suspend fun resetCompletion(journeyId: String) {
         storage.putBoolean(completionKey(journeyId), false)
-        _completionStates.value = _completionStates.value + (journeyId to false)
+        _completionStates.value += (journeyId to false)
     }
 
     private fun completionKey(journeyId: String) = "journey_completed_$journeyId"

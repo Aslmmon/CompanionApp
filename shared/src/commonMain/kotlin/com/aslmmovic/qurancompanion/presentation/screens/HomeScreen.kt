@@ -441,13 +441,13 @@ private fun WeeklyProgressTracker(
     modifier: Modifier = Modifier
 ) {
     val dayLabels = listOf(
-        qurancompanion.shared.generated.resources.Res.string.home_weekly_monday,
-        qurancompanion.shared.generated.resources.Res.string.home_weekly_tuesday,
-        qurancompanion.shared.generated.resources.Res.string.home_weekly_wednesday,
-        qurancompanion.shared.generated.resources.Res.string.home_weekly_thursday,
-        qurancompanion.shared.generated.resources.Res.string.home_weekly_friday,
-        qurancompanion.shared.generated.resources.Res.string.home_weekly_saturday,
-        qurancompanion.shared.generated.resources.Res.string.home_weekly_sunday
+        Res.string.home_weekly_monday,
+        Res.string.home_weekly_tuesday,
+        Res.string.home_weekly_wednesday,
+        Res.string.home_weekly_thursday,
+        Res.string.home_weekly_friday,
+        Res.string.home_weekly_saturday,
+        Res.string.home_weekly_sunday
     )
 
     Card(
