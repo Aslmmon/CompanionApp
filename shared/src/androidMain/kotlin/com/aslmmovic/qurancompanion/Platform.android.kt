@@ -12,3 +12,8 @@ actual fun getPlatform(): Platform = AndroidPlatform()
 
 actual fun getCurrentDayOfYear(): Int =
     java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_YEAR)
+
+actual fun getCurrentDayOfWeek(): Int {
+    val dayOfWeek = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_WEEK)
+    return if (dayOfWeek == java.util.Calendar.SUNDAY) 7 else dayOfWeek - 1
+}

@@ -9,5 +9,5 @@ import org.koin.dsl.module
 
 fun androidModule(context: Context) = module {
     single<KeyValueStorage> { AndroidKeyValueStorage(context) }
-    single<LocaleProvider> { AndroidLocaleProvider() }
+    single<LocaleProvider> { AndroidLocaleProvider(context, get()) }
 }

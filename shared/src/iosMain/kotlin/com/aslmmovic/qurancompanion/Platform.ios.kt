@@ -7,6 +7,8 @@ import platform.Foundation.NSDate
 import platform.Foundation.preferredLanguages
 import platform.UIKit.UIDevice
 
+import platform.Foundation.NSCalendarUnitWeekday
+
 class IOSPlatform: Platform {
     override val name: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
     override val languageCode: String
@@ -25,4 +27,10 @@ actual fun getCurrentDayOfYear(): Int {
         inUnit = NSCalendarUnitYear,
         forDate = NSDate()
     ).toInt()
+}
+
+actual fun getCurrentDayOfWeek(): Int {
+    val calendar = NSCalendar.currentCalendar
+    val dayOfWeek = calendar.component(NSCalendarUnitWeekday, NSDate()).toInt()
+    return if (dayOfWeek == 1) 7 else dayOfWeek - 1
 }

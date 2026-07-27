@@ -14,10 +14,14 @@ import com.aslmmovic.qurancompanion.domain.usecase.ResetJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
+import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
+
+import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
 
 val appModule = module {
     // JSON parser — shared across data sources
@@ -26,10 +30,13 @@ val appModule = module {
     // Data layer — data sources
     single<JourneyLocalDataSource> { ResourceJourneyLocalDataSource(get()) }
 
+    // DateTime Provider
+    single<com.aslmmovic.qurancompanion.domain.util.DateTimeProvider> { com.aslmmovic.qurancompanion.domain.util.SystemDateTimeProvider() }
+
     // Data layer — repositories
     // KeyValueStorage and LocaleProvider are provided by platform-specific modules
     single { UserPreferencesRepositoryImpl(get()) } bind UserPreferencesRepository::class
-    single { JourneyRepositoryImpl(get(), get(), get()) } bind JourneyRepository::class
+    single { JourneyRepositoryImpl(get(), get(), get(), get()) } bind JourneyRepository::class
 
     // Domain layer — preferences
     single { GetUserPreferencesUseCase(get()) }
@@ -37,11 +44,14 @@ val appModule = module {
 
     // Domain layer — journey
     single { GetTodayJourneyUseCase(get()) }
+    single { GetTomorrowJourneyUseCase(get()) }
+    single { GetWeeklyProgressUseCase(get()) }
     single { IsJourneyCompletedUseCase(get()) }
     single { MarkJourneyCompletedUseCase(get()) }
     single { ResetJourneyUseCase(get()) }
 
     // Presentation layer
-    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { LanguageViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get()) }
 }

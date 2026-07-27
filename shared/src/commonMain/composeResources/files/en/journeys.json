@@ -1,0 +1,1242 @@
+[
+  {
+    "id": "day_01",
+    "dayNumber": 1,
+    "title": "The Patience of Prophet Ayyub",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Ayyub (Job) is the ultimate exemplar of Sabr — beautiful patience — in Islamic tradition. His story is not merely one of suffering, but of an unwavering heart that remained grateful even when everything was stripped away."
+      },
+      {
+        "type": "STORY",
+        "title": "The Trial",
+        "content": "Ayyub was blessed with health, wealth, and a loving family. Then, suddenly, he was tested with the loss of all three — his health deteriorated, his wealth vanished, and his loved ones were taken. For years he endured with quiet dignity, never once blaming his Lord. His supplication was simple: \"Harm has touched me, and You are the Most Merciful.\" (21:83)"
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. True patience is active trust in Allah, not passive defeat.\n2. Tests are not necessarily punishments — they are elevations.\n3. Du'a in difficulty should be humble, not demanding.\n4. Gratitude must not be conditional on comfort."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Think of a difficulty you are currently facing — small or large. How have you been reacting to it emotionally? Have you been turning toward Allah, or away from Him? Ayyub's patience was not silence; it was an active, deliberate choice, made again and again."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Pause for 3 seconds before reacting when faced with any frustration today. In that pause, silently say: \"Ya Sabur\" — O The Most Patient."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Anbiya (21:83)\nSahih al-Bukhari"
+      }
+    ],
+    "subtitle": "Patience is not passive waiting; it is active trust in the dark."
+  },
+  {
+    "id": "day_02",
+    "dayNumber": 2,
+    "title": "Prophet Ibrahim — The Friend of Allah",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Ibrahim (Abraham) is known as Khalilullah, the intimate friend of Allah. His life was a series of immense trials and unquestioning submissions, embodying pure monotheism."
+      },
+      {
+        "type": "STORY",
+        "title": "The Fire",
+        "content": "When Ibrahim challenged the idol worship of his people, they threw him into a massive fire. Yet, his faith did not waver. He simply uttered, \"Allah is sufficient for us, and He is the best Disposer of affairs.\" Allah commanded the fire, \"O fire, be coolness and safety upon Ibrahim.\" (21:69) He emerged completely unharmed, a testament to true reliance on the Creator."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Sincere faith brings divine protection in unexpected ways.\n2. Standing for truth requires courage, even against one's own people.\n3. Trust in Allah (Tawakkul) turns the greatest fears into safety.\n4. Idols can take many forms; we must only worship the Creator."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "What 'fires' are you facing in your life right now? When faced with impossible situations, do you rely on your own limited means, or do you surrender the outcome to Allah, knowing He controls the elements of your struggles?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Whenever you feel anxious today, recite \"Hasbunallahu wa ni'mal wakeel\" (Allah is sufficient for us, and He is the best Disposer of affairs)."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Anbiya (21:69)\nSurah Al-Imran (3:173)"
+      }
+    ],
+    "subtitle": "Faith is standing calm in the midst of life's fires."
+  },
+  {
+    "id": "day_03",
+    "dayNumber": 3,
+    "title": "Prophet Musa — Courage and the Sea",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Musa (Moses) faced the ultimate tyrant of his time, Pharaoh. His journey teaches us that even when all worldly odds are stacked against you, Allah's promise is true."
+      },
+      {
+        "type": "STORY",
+        "title": "The Parting",
+        "content": "Trapped between the raging Red Sea and Pharaoh's approaching army, the Israelites despaired. But Musa's certainty was unshaken. He declared, \"No! Indeed, with me is my Lord; He will guide me.\" (26:62) Allah commanded him to strike the sea with his staff. The waters parted, creating a dry path for their salvation and drowning the oppressors."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. True confidence comes from knowing Allah is with you.\n2. Despair is a trick when the situation looks impossible.\n3. Divine help often comes only at the final, desperate moment.\n4. Tyranny and oppression will always ultimately fall."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Consider a situation where you feel 'trapped' between two difficult choices or overwhelming odds. Are you looking only at the material reality, or are you remembering the One who can split the sea for you?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Identify one area of your life where you feel stuck, and make a sincere du'a asking Allah to 'part the sea' for you."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Ash-Shu'ara (26:62)\nSurah Taha (20:77)"
+      }
+    ],
+    "subtitle": "When the path is blocked, the Splitter of Seas is with you."
+  },
+  {
+    "id": "day_04",
+    "dayNumber": 4,
+    "title": "Prophet Yusuf — Forgiveness After Betrayal",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "The story of Prophet Yusuf (Joseph) is called the 'most beautiful of stories' in the Quran. It is a profound lesson in navigating betrayal, temptation, and the ultimate triumph of forgiveness."
+      },
+      {
+        "type": "STORY",
+        "title": "The Reunion",
+        "content": "Betrayed by his brothers, sold into slavery, and unjustly imprisoned, Yusuf rose to power in Egypt. Years later, his brothers stood before him in need, not recognizing him. When he revealed his identity, instead of seeking revenge, he said: \"No blame will there be upon you today. Allah will forgive you; and He is the most merciful of the merciful.\" (12:92)"
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Hardship is often preparation for a greater purpose.\n2. Forgiveness breaks the cycle of bitterness and heals the heart.\n3. Integrity in private prevents downfall in public.\n4. Allah's plan is always perfect, even when it involves pain."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Is there someone who has wronged you whose memory still causes you pain? Yusuf's forgiveness was not about validating his brothers' actions, but about freeing his own heart. How can you begin the process of letting go?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Make du'a for someone who has hurt you. Ask Allah to guide them and forgive them, and to heal your heart."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Yusuf (12:92)\nSurah Yusuf (12:56)"
+      }
+    ],
+    "subtitle": "Healing begins when we release the weight of betrayal."
+  },
+  {
+    "id": "day_05",
+    "dayNumber": 5,
+    "title": "Prophet Yunus — Repentance in the Darkness",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Yunus (Jonah) teaches us that it is never too late to turn back to Allah, and that no darkness is too deep for the light of His mercy to reach."
+      },
+      {
+        "type": "STORY",
+        "title": "The Whale",
+        "content": "Frustrated with his people's disbelief, Yunus left his mission prematurely. He ended up swallowed by a massive whale. In the threefold darkness—of the night, the sea, and the whale's belly—he realized his mistake. He called out in pure repentance: \"There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers.\" (21:87) Allah heard him and delivered him."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Admitting our mistakes is the first step to salvation.\n2. No situation is beyond Allah's power to rescue us.\n3. Patience with our duties is a prophetic requirement.\n4. The Du'a of Yunus is a powerful key to removing distress."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "We all have moments where we feel engulfed by darkness—be it depression, regret, or feeling stuck. Yunus found his way out not through physical effort, but through spiritual admission. What do you need to admit to Allah today?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Recite the Du'a of Yunus (La ilaha illa anta, subhanaka, inni kuntu minaz-zalimin) 10 times with deep presence of mind."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Anbiya (21:87)\nSahih Muslim"
+      }
+    ],
+    "subtitle": "No darkness is too deep for the light of His mercy."
+  },
+  {
+    "id": "day_06",
+    "dayNumber": 6,
+    "title": "Prophet Nuh — Steadfast Over Centuries",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Nuh (Noah) is the ultimate example of persistence. His story reminds us that success is defined by our continuous effort and obedience to Allah, not merely by the visible results."
+      },
+      {
+        "type": "STORY",
+        "title": "The Ark",
+        "content": "Nuh preached to his people for 950 years, facing constant mockery and rejection. Only a small group believed. Yet, he never gave up. When commanded to build an Ark inland, away from water, he obeyed despite the ridicule. When the great flood came, only those on the Ark were saved. He said, \"Embark therein; in the name of Allah is its course and its anchorage.\" (11:41)"
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Persistence in truth is a duty, regardless of the outcome.\n2. Obedience to Allah may seem irrational to onlookers.\n3. Our responsibility is the effort; the result is up to Allah.\n4. True salvation comes only through following divine guidance."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Are you feeling discouraged because your efforts—in work, relationships, or worship—aren't showing immediate results? Nuh labored for centuries with little fruit. Can you shift your focus from the outcome to the purity of your effort?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Commit to one small, positive habit today and promise yourself to stick to it for a week, regardless of how you feel."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Hud (11:41)\nSurah Nuh (71:1-28)"
+      }
+    ],
+    "subtitle": "Define success by your devotion, not just the visible results."
+  },
+  {
+    "id": "day_07",
+    "dayNumber": 7,
+    "title": "Prophet Isa — Humility and Mercy",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Isa (Jesus), the son of Maryam, was a spirit and a word from Allah. He was sent to a hardened society, bringing a message of deep spirituality, compassion, and true humility."
+      },
+      {
+        "type": "STORY",
+        "title": "The Miracles",
+        "content": "From speaking in the cradle to defend his mother's honor, to healing the blind and the leper by Allah's permission, Isa was a manifestation of divine mercy. He rejected materialism and preached sincere devotion. He said from the cradle, \"And He has made me blessed wherever I am and has enjoined upon me prayer and zakah as long as I remain alive.\" (19:31)"
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. True spirituality involves both inner purity and outer compassion.\n2. Material wealth is not a sign of divine favor; piety is.\n3. Defending the innocent is a prophetic trait.\n4. Miracles are signs of Allah's power, not the Prophet's own divinity."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Isa's life was free from attachment to the material world. How attached are you to your possessions or status? If everything you owned disappeared tomorrow, what would remain of your character and your faith?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Give away one item you own (or a small amount of money) anonymously, to practice detachment from material things."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Maryam (19:30-34)\nSurah Al-Ma'idah (5:110)"
+      }
+    ],
+    "subtitle": "True wealth is a content soul that walks gently on the earth."
+  },
+  {
+    "id": "day_08",
+    "dayNumber": 8,
+    "title": "Prophet Dawud — Gratitude in Every State",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Dawud (David) was blessed with kingship, prophecy, and a beautiful voice. His life shows that true gratitude is found not just in words, but in the continuous, humble worship of Allah."
+      },
+      {
+        "type": "STORY",
+        "title": "The Psalms",
+        "content": "Dawud was given the Zabur (Psalms) and was known for his intense devotion. Despite being a powerful king, he would fast every other day and pray through the night. The mountains and birds would join him in glorifying Allah. \"Work, O family of David, in gratitude. And few of My servants are grateful.\" (34:13) He recognized that all his power was a gift to be used for justice."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Worldly power and deep spirituality can coexist.\n2. True gratitude is expressed through righteous actions.\n3. The universe praises Allah; we should join the chorus.\n4. Fasting and night prayer are profound ways to build discipline."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "When we are given blessings, it is easy to become complacent. Dawud used his immense blessings as a reason to worship more, not less. How do you respond when things are going well in your life?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Take two minutes to make a list of three blessings you often take for granted, and genuinely thank Allah for them."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Saba (34:13)\nSurah Saad (38:17-26)"
+      }
+    ],
+    "subtitle": "Let your actions be the loudest expression of your gratitude."
+  },
+  {
+    "id": "day_09",
+    "dayNumber": 9,
+    "title": "Prophet Sulayman — Power With Humility",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Sulayman (Solomon) inherited Dawud's kingdom and was given authority over the wind, jinn, and the language of animals. Yet, his unmatched power only deepened his humility."
+      },
+      {
+        "type": "STORY",
+        "title": "The Ant",
+        "content": "Marching with his vast, awe-inspiring army, Sulayman heard a tiny ant warning her colony to take cover lest they be crushed. Hearing this, Sulayman smiled and immediately turned to Allah, saying: \"My Lord, enable me to be grateful for Your favor... and admit me by Your mercy into [the ranks of] Your righteous servants.\" (27:19) He knew his power was a test, not a right."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. True strength is gentle enough to hear the weakest voices.\n2. All power and abilities are tests of our gratitude.\n3. Smiling at the wonders of creation is a prophetic sunnah.\n4. Success should make us more humble, not arrogant."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Do you listen to the 'ants' in your life—the voices of those who are weaker, less influential, or easily ignored? True leadership and strength are measured by how we treat those who can do nothing for us."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Go out of your way to show kindness or respect to someone whose role is often overlooked (like a cleaner, a server, or a junior colleague)."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah An-Naml (27:19)\nSurah Saad (38:30-40)"
+      }
+    ],
+    "subtitle": "True strength is gentle enough to hear the weakest voices."
+  },
+  {
+    "id": "day_10",
+    "dayNumber": 10,
+    "title": "Prophet Idris — The Elevation of Knowledge",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Idris (Enoch) is celebrated for his profound intellect, truthfulness, and dedication to knowledge. He teaches us that seeking beneficial knowledge is a path to divine elevation."
+      },
+      {
+        "type": "STORY",
+        "title": "The Scribe",
+        "content": "Tradition holds that Idris was the first to write with a pen and study astronomy and mathematics. He was a man of intense contemplation and steadfastness in worship. The Quran honors him briefly but powerfully: \"And mention in the Book, Idris. Indeed, he was a man of truth and a prophet. And We raised him to a high station.\" (19:56-57)"
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Truthfulness (Sidq) is the foundation of prophetic character.\n2. Seeking knowledge and innovation can be acts of worship.\n3. High status in Allah's eyes comes from piety, not just lineage.\n4. Contemplating the universe brings us closer to the Creator."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Knowledge without ethics can lead to destruction, but knowledge paired with truthfulness elevates the soul. What kind of knowledge are you seeking in your life, and how is it bringing you closer to your Creator?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Learn one new beneficial fact or read one page of a beneficial book today, intending it as an act of worship."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Maryam (19:56-57)\nSurah Al-Anbiya (21:85)"
+      }
+    ],
+    "subtitle": "Beneficial knowledge is a ladder that elevates the soul."
+  },
+  {
+    "id": "day_11",
+    "dayNumber": 11,
+    "title": "Prophet Ismail — The Ultimate Submission",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Ismail (Ishmael) was the beloved son of Ibrahim, embodying the epitome of patience and filial piety. His story is the foundation of the Hajj and the spirit of sacrifice."
+      },
+      {
+        "type": "STORY",
+        "title": "The Sacrifice",
+        "content": "When Ibrahim told Ismail about his recurring dream—a divine command to sacrifice him—Ismail did not rebel or question. With profound calmness, he replied: \"O my father, do as you are commanded. You will find me, if Allah wills, of the steadfast.\" (37:102) Because of their complete submission, Allah replaced Ismail with a ram, cementing their legacy of devotion."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. True obedience to parents is tied to obedience to Allah.\n2. The willingness to sacrifice what we love proves our faith.\n3. Allah tests us to elevate us, and provides a way out for the pious.\n4. Patience (Sabr) is a choice we make in the face of fear."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "We may not be asked to make the physical sacrifice Ismail made, but we are all asked to sacrifice our ego, our time, or our desires for Allah. What is your 'Ismail'—the thing you find hardest to give up for the sake of God?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Give up one small desire today (like an unnecessary snack or scrolling on your phone) and dedicate that moment of discipline to Allah."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah As-Saffat (37:102)\nSurah Al-Baqarah (2:127)"
+      }
+    ],
+    "subtitle": "Submit your desires to the One who knows what is best for you."
+  },
+  {
+    "id": "day_12",
+    "dayNumber": 12,
+    "title": "Prophet Zakariyya — Unwavering Hope",
+    "category": "Story of a Prophet",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Prophet Zakariyya (Zechariah) reminds us that no matter how old we get or how impossible our circumstances seem, Allah's ability to answer our prayers remains absolute."
+      },
+      {
+        "type": "STORY",
+        "title": "The Secret Prayer",
+        "content": "Old, frail, and with a barren wife, Zakariyya yearned for an heir to carry on the prophetic work. In the quiet of the sanctuary, he whispered his prayer: \"My Lord, indeed my bones have weakened, and my head has filled with white, and never have I been in my supplication to You, my Lord, unhappy.\" (19:4) Allah answered him with Yahya (John), breaking all biological norms."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Never stop asking; polite persistence in Du'a is loved by Allah.\n2. Call upon Allah softly and privately; He hears the silent whispers.\n3. Past blessings should give us hope for future ones.\n4. Biological and physical impossibilities mean nothing to the Creator."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Have you given up on a prayer because it feels 'too late' or 'impossible' based on worldly logic? Zakariyya based his hope on Allah's power, not his own physical reality. Where do you need to restore your hope?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Make a private, whispered du'a today for something you have almost given up hope on."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Maryam (19:4)\nSurah Al-Imran (3:38-41)"
+      }
+    ],
+    "subtitle": "Never stop asking; the Creator of causes is never limited by them."
+  },
+  {
+    "id": "day_13",
+    "dayNumber": 13,
+    "title": "Bilal ibn Rabah — Dignity Under Oppression",
+    "category": "Stories of the Companions",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Bilal ibn Rabah, an Abyssinian slave who became the first Mu'adhin (caller to prayer), symbolizes how Islam elevates human beings based on faith, entirely erasing the boundaries of race and class."
+      },
+      {
+        "type": "STORY",
+        "title": "Ahad, Ahad",
+        "content": "When Bilal accepted Islam, his cruel master tortured him in the scorching Meccan desert, placing a massive boulder on his chest to force him to renounce his faith. But Bilal's soul was free. He simply repeated, \"Ahad, Ahad\" (One, One). Abu Bakr purchased and freed him. Later, it was Bilal who was chosen to climb the Kaaba to call the first Adhan in liberated Mecca."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. True freedom is the freedom of the soul, regardless of physical chains.\n2. Islam dismantles racism; piety is the only measure of worth.\n3. Enduring hardship for truth leaves a lasting, beautiful legacy.\n4. A heart anchored in Tawheed (Oneness of God) cannot be broken."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Bilal had no worldly power, yet his voice is remembered 1,400 years later because of his unbreakable conviction. When you are pressured by society or peers to compromise your values, what is the 'Ahad' that anchors you?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Listen to an Adhan attentively today, and remember the endurance of the man who was first chosen to call it."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Sahih al-Bukhari (Book of Jihad)\nSeerah Ibn Hisham"
+      }
+    ],
+    "subtitle": "A soul anchored in the One cannot be enslaved by the many."
+  },
+  {
+    "id": "day_14",
+    "dayNumber": 14,
+    "title": "Khadijah bint Khuwaylid — Love That Uplifts",
+    "category": "Stories of the Companions",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Khadijah was the Prophet Muhammad's (PBUH) first wife, his greatest supporter, and the first person to accept Islam. Her life teaches us the profound impact of unconditional support and emotional intelligence."
+      },
+      {
+        "type": "STORY",
+        "title": "The Blanket",
+        "content": "When the Prophet received the first revelation in the cave of Hira, he returned trembling with fear, crying \"Cover me!\" Khadijah did not doubt him. She wrapped him up and comforted him with absolute certainty: \"Never! By Allah, Allah will never disgrace you. You unite family ties, bear the burden of the weak, help the needy...\" Her belief anchored him when he doubted himself."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. True love is being a source of peace for your partner in times of crisis.\n2. Wealth is most beautiful when spent in the service of truth.\n3. Good character is the best proof of one's sincerity.\n4. Women play a foundational and intellectual role in Islamic history."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Who is the 'Khadijah' in your life—the person who believes in you when you doubt yourself? More importantly, are you being a Khadijah to someone else? Support is a verb, demonstrated in moments of fear."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Send a message of deep appreciation to someone who has supported you during a difficult time in your life."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Sahih al-Bukhari (Book of Revelation, Hadith 3)\nSahih Muslim"
+      }
+    ],
+    "subtitle": "Unconditional support is an anchor in the storm of doubt."
+  },
+  {
+    "id": "day_15",
+    "dayNumber": 15,
+    "title": "Abu Bakr As-Siddiq — The Truest Friend",
+    "category": "Stories of the Companions",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Abu Bakr was the closest companion of the Prophet (PBUH). His title 'As-Siddiq' (The Truthful One) was earned through his absolute, unhesitating belief in the Prophet's message and mission."
+      },
+      {
+        "type": "STORY",
+        "title": "The Cave",
+        "content": "During the dangerous Hijra (migration) to Medina, Abu Bakr and the Prophet hid in the Cave of Thawr. When the assassins stood right outside the cave, Abu Bakr wept, fearing not for his own life, but for the Prophet's. The Prophet comforted him: \"Do not grieve; indeed Allah is with us.\" (9:40) Abu Bakr's loyalty was unmatched; he gave all his wealth for Islam without hesitation."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Unwavering loyalty is the hallmark of true friendship.\n2. Total certainty (Yaqeen) leaves no room for doubt or hesitation.\n3. Generosity is giving everything when the cause is greater than yourself.\n4. Grief born of love for the righteous is a beautiful emotion."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Abu Bakr did not ask for proof when the Prophet spoke; his trust was based on knowing the character of his friend. How trustworthy are you in your friendships? Do you defend your friends in their absence?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Check in on a close friend today, asking nothing of them, just to make sure they are doing okay."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah At-Tawbah (9:40)\nSahih al-Bukhari (Virtues of Companions)"
+      }
+    ],
+    "subtitle": "Unwavering loyalty is the highest form of companionship."
+  },
+  {
+    "id": "day_16",
+    "dayNumber": 16,
+    "title": "Umar ibn al-Khattab — The Power of Transformation",
+    "category": "Stories of the Companions",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Umar ibn al-Khattab went from being a fierce opponent of Islam to its strongest defender. His story proves that no heart is too hard to be softened by the truth of the Quran."
+      },
+      {
+        "type": "STORY",
+        "title": "The Softened Heart",
+        "content": "Enraged and marching with a sword to kill the Prophet, Umar stopped at his sister's house, discovering she had accepted Islam. He struck her, but seeing her bleed, his heart softened. He read the scroll she had: Surah Ta-Ha. The sheer beauty of the words shattered his anger. He went straight to the Prophet, not to kill him, but to embrace Islam, bringing immense strength to the Muslims."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Sincere change can happen in an instant if the heart is open.\n2. Strength and toughness, when guided by faith, bring justice.\n3. The Quran has a profound power to heal and transform.\n4. Never write anyone off as beyond the mercy and guidance of Allah."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "We often judge people by their pasts, forgetting that Allah can transform a person's heart overnight. Are you holding onto past resentments about yourself or others? Remember Umar, whose darkest intent became his brightest turning point."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Read or listen to the first 10 verses of Surah Ta-Ha, the very words that softened the heart of Umar."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Taha (20:1-14)\nMusnad Ahmad\nSeerah Ibn Hisham"
+      }
+    ],
+    "subtitle": "No heart is too hard to be softened by the truth."
+  },
+  {
+    "id": "day_17",
+    "dayNumber": 17,
+    "title": "Fatimah Az-Zahra — Contentment and Dignity",
+    "category": "Stories of the Companions",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Fatimah, the beloved daughter of the Prophet (PBUH), is a role model of resilience, simplicity, and deep spiritual contentment despite living a life of physical hardship."
+      },
+      {
+        "type": "STORY",
+        "title": "The Millstone",
+        "content": "Fatimah's hands were blistered from grinding grain, and her back ached from carrying water. When she went to her father to ask for a servant to help with the grueling chores, he instead taught her something better. He told her and Ali to say SubhanAllah, Alhamdulillah, and Allahu Akbar before sleeping. She accepted this spiritual gift over physical ease with immense joy."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Spiritual strength can overcome physical exhaustion.\n2. True nobility is found in hard work and simplicity, not luxury.\n3. The remembrance of Allah (Dhikr) is a genuine source of energy.\n4. A father's best gift to his child is spiritual guidance."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "When we feel overwhelmed by our daily tasks, our instinct is to seek physical relief. Fatimah's story shifts our focus: sometimes, what we need is not an easier load, but a stronger spirit to bear it."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Tonight, before you sleep, recite SubhanAllah (33x), Alhamdulillah (33x), and Allahu Akbar (34x) as the Prophet taught Fatimah."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Sahih al-Bukhari (Book of Dhikr)\nSahih Muslim"
+      }
+    ],
+    "subtitle": "Seek spiritual energy when the physical load gets heavy."
+  },
+  {
+    "id": "day_18",
+    "dayNumber": 18,
+    "title": "Salman Al-Farisi — The Seeker Who Found Truth",
+    "category": "Stories of the Companions",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Salman Al-Farisi's life was an incredible geographic and spiritual journey. He left his homeland and wealth, traveling across empires and enduring slavery, solely to find the true religion."
+      },
+      {
+        "type": "STORY",
+        "title": "The Long Search",
+        "content": "Born a privileged Persian Zoroastrian, Salman left his home in search of truth. He became a Christian, serving various monks across the Middle East. On his deathbed, his last teacher told him of a coming Prophet in Arabia. Salman was betrayed and sold into slavery in Medina, where he eventually met the Prophet (PBUH), recognized the signs, and finally found the truth he had sought for decades."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. The sincere seeker of truth will always be guided by Allah.\n2. Comfort and wealth are worth sacrificing for spiritual clarity.\n3. Knowledge must be pursued actively, not waited upon.\n4. Islam transcends race; Salman the Persian became 'of the Prophet's family'."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Salman gave up everything familiar for an abstract truth he hadn't yet seen. How hungry are you for spiritual growth? Are you passively waiting for inspiration, or are you actively seeking to improve your connection with Allah?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Spend 5 minutes researching or reading about a part of Islamic history or theology you don't know much about."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Musnad Ahmad (Hadith Salman)\nSahih al-Bukhari (Book of Merits)"
+      }
+    ],
+    "subtitle": "The sincere search for meaning always leads back to the Creator."
+  },
+  {
+    "id": "day_19",
+    "dayNumber": 19,
+    "title": "Tawakkul — Complete Reliance on Allah",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Tawakkul is not passive resignation; it is the active, empowering trust that after you have done everything in your power, the outcome is perfectly managed by the Most Wise."
+      },
+      {
+        "type": "STORY",
+        "title": "Tie Your Camel",
+        "content": "A Bedouin once came to the Prophet (PBUH) and left his camel untied, saying, \"I put my trust in Allah.\" The Prophet corrected his misunderstanding of Tawakkul, saying: \"Tie her, and trust in Allah.\" True reliance means respecting the laws of cause and effect that Allah has put in this world, while knowing the results belong to Him alone."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Effort and trust must always go hand in hand.\n2. Anxiety decreases when we accept we only control the effort.\n3. Trusting Allah means accepting His timing and His answers.\n4. Inaction disguised as piety is not from the Sunnah."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Are you stressing over an outcome you cannot control, or are you neglecting the effort you should be making? Tawakkul is the sweet spot between doing your utmost and sleeping peacefully knowing Allah is in charge."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Identify one thing you are worrying about. Take one practical step to address it ('tie the camel'), and then consciously hand the worry over to Allah."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Sunan al-Tirmidhi (Hadith 2517)\nSahih Ibn Hibban"
+      }
+    ],
+    "subtitle": "Tie your camel with care, then rest your heart in His wisdom."
+  },
+  {
+    "id": "day_20",
+    "dayNumber": 20,
+    "title": "Shukr — The Transforming Power of Gratitude",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Shukr (Gratitude) is central to the Islamic worldview. It is a paradigm shift that changes how we view our entire lives, turning what we have into enough, and unlocking further blessings."
+      },
+      {
+        "type": "STORY",
+        "title": "The Promise of Increase",
+        "content": "Allah lays down a fundamental law of spiritual and psychological physics in the Quran: \"If you are grateful, I will surely increase you [in favor]; but if you deny, indeed, My punishment is severe.\" (14:7) The Prophet (PBUH) would stand in prayer until his feet swelled, and when asked why he did so when his sins were forgiven, he replied, \"Should I not be a grateful servant?\""
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Gratitude is the key to abundance, both worldly and spiritual.\n2. True Shukr is shown through actions and worship, not just words.\n3. Focusing on what you lack breeds misery; focusing on gifts breeds joy.\n4. We owe gratitude not just for the gifts, but for the Giver."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "We often condition our gratitude on major events—getting a job, buying a home, passing an exam. But what about the air in your lungs, the safety of your home, the ability to see? How often do you thank Allah for the ordinary?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Write down three things that went well today, no matter how small, and say 'Alhamdulillah' for each one."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Ibrahim (14:7)\nSahih al-Bukhari (Book of Night Prayers)"
+      }
+    ],
+    "subtitle": "Focus on the blessings you have, and watch them multiply."
+  },
+  {
+    "id": "day_21",
+    "dayNumber": 21,
+    "title": "Dhikr — The Life of the Heart",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Dhikr (remembrance of Allah) is the oxygen of the spiritual heart. Just as a body dies without breath, the soul withers without connecting to its Creator."
+      },
+      {
+        "type": "STORY",
+        "title": "The Polish of the Heart",
+        "content": "The Prophet (PBUH) said, \"The difference between the one who remembers his Lord and the one who does not is like the difference between the living and the dead.\" In the Quran, Allah promises a profound cure for human anxiety: \"Unquestionably, by the remembrance of Allah hearts are assured.\" (13:28) Dhikr polishes the rust that accumulates on our hearts from the distractions of life."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Constant remembrance brings immense peace to the restless mind.\n2. Dhikr is easy on the tongue but heavy on the scales of deeds.\n3. Remembering Allah in times of ease ensures He remembers you in hardship.\n4. It requires no wealth or specific time; it is always accessible."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "How much of your day is spent in mindless scrolling, listening, or talking? What if you replaced just 5 minutes of that mental noise with the quiet, deliberate remembrance of the One who sustains your heartbeat?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Say 'Astaghfirullah' (I seek forgiveness from Allah) 100 times today while doing a mundane task like commuting or washing dishes."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Ar-Ra'd (13:28)\nSahih al-Bukhari (Book of Dhikr)"
+      }
+    ],
+    "subtitle": "Connect your heart to the Divine to find lasting peace."
+  },
+  {
+    "id": "day_22",
+    "dayNumber": 22,
+    "title": "Tawbah — The Door That Never Closes",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Tawbah (repentance) literally means 'to return'. Islam does not expect humans to be flawless angels; it expects them to be resilient returners to Allah after they fall."
+      },
+      {
+        "type": "STORY",
+        "title": "The Joy of the Return",
+        "content": "The Prophet (PBUH) beautifully illustrated Allah's mercy by describing a man who loses his camel in the deadly desert with all his food and water. As he waits to die, he wakes up to find his camel standing right over him. The Prophet said that Allah's joy when a servant repents is greater than the immense joy of that man who thought he was doomed. \"Indeed, Allah loves those who are constantly repentant.\" (2:222)"
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Sin is human; despairing of Allah's mercy is the real danger.\n2. Sincere repentance can wipe a sin completely away.\n3. Allah rejoices at our return, He does not wait to punish us.\n4. True Tawbah involves leaving the sin and intending not to return."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Shaytan's greatest trick is making you feel you are too sinful to pray or ask for forgiveness. The door of Tawbah is open until the sun rises from the west. What is stopping you from simply walking back through it today?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Take a moment of privacy, admit a specific flaw or mistake to Allah, and sincerely ask for His forgiveness."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Baqarah (2:222)\nSahih al-Bukhari (Book of Repentance)"
+      }
+    ],
+    "subtitle": "Giving to others is the truest way to enrich yourself."
+  },
+  {
+    "id": "day_23",
+    "dayNumber": 23,
+    "title": "Ikhlas — The Secret of Sincerity",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Ikhlas (sincerity) is the engine of all good deeds. Without it, even the greatest actions are empty shells. It means doing things solely for the pleasure of Allah, free from the desire for human praise."
+      },
+      {
+        "type": "STORY",
+        "title": "The Hidden Deed",
+        "content": "A beautiful principle in Islam is that a small deed done with perfect sincerity is heavier than a mountain of deeds done for show. The Prophet (PBUH) warned of 'hidden shirk' (Riya) — performing acts of worship so that people will see and praise you. Allah says, \"And they were not commanded except to worship Allah, [being] sincere to Him in religion...\" (98:5)"
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. The intention behind an action determines its true worth.\n2. Seeking human approval destroys the spiritual value of a good deed.\n3. Hidden, private good deeds are the best training for sincerity.\n4. Ikhlas protects the heart from the anxiety of people-pleasing."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "When you do a good deed, do you feel an itch to tell someone about it? Does your motivation drop if you know no one will thank you? True freedom is found when the only Audience you care about is Allah."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Do one purely good deed today (like a charity or a prayer) in absolute secret, ensuring no one but Allah knows about it."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Bayyinah (98:5)\nSahih al-Bukhari (Book of Revelation, Hadith 1)"
+      }
+    ],
+    "subtitle": "Endure with grace, knowing relief is always close."
+  },
+  {
+    "id": "day_24",
+    "dayNumber": 24,
+    "title": "Husn al-Dhann — Good Thoughts of Allah",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Husn al-Dhann billah is having a beautiful, positive assumption about Allah. It is believing deeply that He wants good for you, that He will forgive you, and that His plans are inherently wise."
+      },
+      {
+        "type": "STORY",
+        "title": "As You Expect",
+        "content": "In a powerful Hadith Qudsi, Allah says: \"I am as My servant expects Me to be, and I am with him when he remembers Me.\" This means our mindset shapes our spiritual reality. If we expect mercy, we find it. If we expect harshness, we distance ourselves. Even in deep hardship, the believer thinks well of Allah, knowing the struggle is a purification or an elevation, not a spiteful punishment."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Positive expectations of Allah lead to positive spiritual outcomes.\n2. Despair is a failure to understand the vastness of Allah's mercy.\n3. Hardships are laced with hidden wisdom and love.\n4. Trusting Allah's plan brings profound psychological peace."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "When things go wrong, does your mind immediately jump to 'Allah is punishing me' or 'Allah is abandoning me'? How would your life change if you truly believed that everything happening is ultimately tailored for your good?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Whenever a negative thought about your future arises today, replace it by saying aloud: 'I expect only good from my Lord.'"
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Hadith Qudsi (Sahih al-Bukhari, Sahih Muslim)\nSahih al-Bukhari (Book of Tawheed)"
+      }
+    ],
+    "subtitle": "Your silent whispers reach the heavens instantly."
+  },
+  {
+    "id": "day_25",
+    "dayNumber": 25,
+    "title": "Silat al-Rahim — The Ties That Bless",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Maintaining family ties (Silat al-Rahim) is not just a social nicety in Islam; it is a fundamental religious obligation tied directly to one's provision and lifespan."
+      },
+      {
+        "type": "STORY",
+        "title": "The Suspended Tie",
+        "content": "The Prophet (PBUH) taught that the word for womb (Rahim) is derived from Allah's name Ar-Rahman (The Most Merciful). Allah promised the womb: \"Whoever keeps your ties, I will keep my ties with him, and whoever cuts you off, I will cut him off.\" He also said that whoever wishes for their provision to be increased and their life extended, let them maintain family ties."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Your relationship with Allah is affected by your relationship with relatives.\n2. Reaching out to those who cut you off is the highest form of this deed.\n3. Family ties bring invisible blessings to wealth and time.\n4. Forgiveness within families is deeply rewarded."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Families can be difficult, and maintaining ties doesn't mean accepting abuse. But have you allowed petty arguments or pride to sever a relationship with a relative? Who have you stopped speaking to?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Send a simple message of peace or greeting to a relative you haven't spoken to in a while."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Sahih al-Bukhari (Book of Good Manners)\nSahih Muslim"
+      }
+    ],
+    "subtitle": "Do good when no one is watching, except the All-Seeing."
+  },
+  {
+    "id": "day_26",
+    "dayNumber": 26,
+    "title": "Sadaqah — The Charity That Multiplies",
+    "category": "Quranic Values",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Sadaqah (voluntary charity) is described as a proof of faith. It goes beyond money, encompassing time, effort, and even emotional support, acting as a shield against hardship."
+      },
+      {
+        "type": "STORY",
+        "title": "The Grain of Corn",
+        "content": "The Quran uses a stunning agricultural metaphor to describe the reality of giving: \"The example of those who spend their wealth in the way of Allah is like a seed [of grain] which grows seven spikes; in each spike is a hundred grains. And Allah multiplies [His reward] for whom He wills.\" (2:261) The Prophet (PBUH) also taught that even a smile is charity, and that giving never decreases wealth."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Charity is an investment with infinite, guaranteed returns.\n2. Giving sincerely protects a person from tragedies and bad ends.\n3. You do not need to be wealthy to give; kindness is a currency.\n4. Giving purifies the heart from greed and materialism."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "We often hold tightly to our money or our time out of a fear of scarcity. But Allah is the Provider. When was the last time you gave something away when you yourself felt you needed it?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Give a small amount to charity today, or if you cannot, offer genuine help or a warm smile to someone who needs it."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Baqarah (2:261)\nSunan al-Tirmidhi (Book of Charity)"
+      }
+    ],
+    "subtitle": "Expect beautiful outcomes from the Lord of Mercy."
+  },
+  {
+    "id": "day_27",
+    "dayNumber": 27,
+    "title": "Al-Rahman — The All-Encompassing Mercy",
+    "category": "Names of Allah",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Al-Rahman is the most frequently mentioned name of Allah in the Quran. It refers to His immense, universal mercy that encompasses all of creation, believers and non-believers alike."
+      },
+      {
+        "type": "STORY",
+        "title": "The Hundred Parts",
+        "content": "To help us understand His mercy, the Prophet (PBUH) explained that Allah divided mercy into one hundred parts. He sent down only one part to the earth; from that one part, all creatures show compassion to one another, even an animal lifting its hoof away from its young. Allah has kept ninety-nine parts of mercy to show to His servants on the Day of Judgment."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Every act of love in the universe is just a fraction of Allah's mercy.\n2. We must never despair, for His mercy overpowers His wrath.\n3. Knowing Al-Rahman should make us more merciful to others.\n4. We begin every action with Bismillah to invoke this profound mercy."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Think of the most intense love and mercy you have ever felt—perhaps from a mother, or towards your own child. Realize that this is not even a drop in the ocean compared to how much Allah cares for you."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Show a deliberate act of mercy to a creature today—be it feeding a stray animal, or forgiving someone who made a mistake."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Sahih al-Bukhari (Book of Mercy)\nSahih Muslim"
+      }
+    ],
+    "subtitle": "Walk through life carefully, keeping your heart pure."
+  },
+  {
+    "id": "day_28",
+    "dayNumber": 28,
+    "title": "Al-Ghafur — The All-Forgiving",
+    "category": "Names of Allah",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Al-Ghafur is the One who constantly and completely forgives. The root of the word means 'to cover or shield,' meaning He not only forgives the sin but conceals it from others."
+      },
+      {
+        "type": "STORY",
+        "title": "The Mountains of Forgiveness",
+        "content": "A man came to the Prophet (PBUH) trembling, saying his sins were too great. In a profound Hadith Qudsi, Allah says: \"O son of Adam, so long as you call upon Me and ask of Me, I shall forgive you for what you have done, and I shall not mind. O son of Adam, were your sins to reach the clouds of the sky and were you then to ask forgiveness of Me, I would forgive you.\""
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. No amount of sin can exhaust the forgiveness of Al-Ghafur.\n2. Allah covers our faults in this world out of love.\n3. We must continually seek forgiveness, as we continually make mistakes.\n4. Experiencing His forgiveness should make us eager to forgive others."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Are you punishing yourself for something Allah has already forgiven? Al-Ghafur covers your sins; do not expose them or let the guilt paralyze you from moving forward in your spiritual journey."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Make a heartfelt du'a asking Al-Ghafur to conceal your faults in this world and the next, and forgive someone who wronged you."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Hadith Qudsi (Sunan al-Tirmidhi)\nSahih Muslim (Book of Repentance)"
+      }
+    ],
+    "subtitle": "Mend the ties that bind, and watch your life be blessed."
+  },
+  {
+    "id": "day_29",
+    "dayNumber": 29,
+    "title": "The Isra and Mi'raj — The Night of Nearness",
+    "category": "Islamic History",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "The Isra and Mi'raj (The Night Journey and Ascension) was a miraculous gift given to the Prophet (PBUH) during his most difficult year, proving that after immense hardship comes unimaginable elevation."
+      },
+      {
+        "type": "STORY",
+        "title": "Beyond the Heavens",
+        "content": "Following the 'Year of Sorrow' where he lost his wife and uncle, the Prophet was taken from Mecca to Jerusalem, and then up through the seven heavens. He met previous prophets and spoke directly with Allah. During this ultimate intimate meeting, the gift of the five daily prayers was given—a means for every believer to have their own daily 'ascension' and conversation with God."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Deepest solace often follows the most profound sorrow.\n2. Salah (prayer) is a direct, intimate gift from Allah.\n3. The Prophet's status is unmatched in the heavens and earth.\n4. Worldly grief does not mean divine abandonment."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "When you pray, do you feel it as a burden or as a miraculous gift? The five daily prayers were given in the highest heavens as a lifeline for you to rise above the crushing weight of the world."
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Pray one of your daily prayers today with the consciousness that it is your personal Mi'raj (ascension) to speak to Allah."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Isra (17:1)\nSahih al-Bukhari (Book of Prayer/Salah)"
+      }
+    ],
+    "subtitle": "A beautiful character is the heaviest weight on the scales."
+  },
+  {
+    "id": "day_30",
+    "dayNumber": 30,
+    "title": "The Hijra — Migration and New Beginnings",
+    "category": "Islamic History",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "The Hijra (Migration) from Mecca to Medina marks the beginning of the Islamic calendar. It symbolizes the sacrifice of leaving the familiar for the sake of establishing the truth."
+      },
+      {
+        "type": "STORY",
+        "title": "Leaving Home",
+        "content": "Persecuted for 13 years, the Muslims left their homes, wealth, and families to migrate to Medina. The Prophet (PBUH) was the last to leave. Looking back at Mecca, he expressed his deep love for his homeland, but his love for Allah was greater. The people of Medina (the Ansar) welcomed the migrants (the Muhajirun) with unprecedented brotherhood, sharing half their wealth with strangers out of pure faith."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. Sometimes you must leave your comfort zone to protect your faith.\n2. True brotherhood transcends bloodlines and tribal affiliations.\n3. Sacrifice for Allah is always replaced with something better.\n4. A fresh start is possible when built on sincere intentions."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Hijra is not just physical migration; the Prophet said the true Muhajir (emigrant) is the one who leaves what Allah has forbidden. What toxic habit, environment, or sin do you need to migrate away from?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Identify one bad habit you will 'migrate' from starting today, leaving it entirely for the sake of Allah."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah At-Tawbah (9:40)\nSahih al-Bukhari (Book of Hijra)"
+      }
+    ],
+    "subtitle": "No matter how far you wander, the door of return is always open."
+  },
+  {
+    "id": "day_31",
+    "dayNumber": 31,
+    "title": "Laylat al-Qadr — The Night of Power",
+    "category": "Islamic History",
+    "durationMinutes": 10,
+    "steps": [
+      {
+        "type": "INTRO",
+        "title": "Introduction",
+        "content": "Laylat al-Qadr, hidden in the last ten nights of Ramadan, is the crowning jewel of the Islamic calendar. It is the night the Quran was first revealed to humanity."
+      },
+      {
+        "type": "STORY",
+        "title": "Better Than a Thousand Months",
+        "content": "Allah describes this single night as being better than a thousand months (over 83 years) of worship. \"The angels and the Spirit descend therein by permission of their Lord for every matter. Peace it is until the emergence of dawn.\" (97:4-5) It is a night of immense decree, where destinies for the coming year are written, and where mercy rains down so heavily that the angels outnumber the pebbles on earth."
+      },
+      {
+        "type": "KEY_LESSONS",
+        "title": "Key Lessons",
+        "content": "1. A single moment of sincere devotion can outweigh a lifetime.\n2. The Quran is the greatest gift ever given to humanity.\n3. Allah provides massive multipliers of reward out of His generosity.\n4. Seeking this night requires dedication, isolating oneself for worship."
+      },
+      {
+        "type": "REFLECTION",
+        "title": "Reflection",
+        "content": "Laylat al-Qadr represents the infinite generosity of Allah, giving us the chance to earn lifetimes of reward in a few hours. Do you value your time? How much energy do you expend seeking worldly bonuses compared to divine ones?"
+      },
+      {
+        "type": "ACTION",
+        "title": "Today's Action",
+        "content": "Memorize the simple du'a for Laylat al-Qadr: 'Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni' (O Allah, You are forgiving and love forgiveness, so forgive me)."
+      },
+      {
+        "type": "REFERENCES",
+        "title": "References",
+        "content": "Surah Al-Qadr (97:1-5)\nSunan al-Tirmidhi (Book of Fasting)"
+      }
+    ],
+    "subtitle": "The most beloved deeds are those done consistently, even if small."
+  }
+]
