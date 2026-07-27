@@ -51,6 +51,12 @@ import qurancompanion.shared.generated.resources.journey_back
 import qurancompanion.shared.generated.resources.journey_finish
 import qurancompanion.shared.generated.resources.journey_next
 import qurancompanion.shared.generated.resources.journey_step_of
+import qurancompanion.shared.generated.resources.step_type_intro
+import qurancompanion.shared.generated.resources.step_type_story
+import qurancompanion.shared.generated.resources.step_type_key_lessons
+import qurancompanion.shared.generated.resources.step_type_reflection
+import qurancompanion.shared.generated.resources.step_type_action
+import qurancompanion.shared.generated.resources.step_type_references
 import androidx.compose.ui.draw.alpha
 
 @Composable
@@ -86,7 +92,9 @@ fun JourneyFlowScreen(viewModel: JourneyViewModel) {
 
                 val currentStep = steps.getOrNull(currentStepIndex)
                 Text(
-                    text = "${stringResource(Res.string.journey_step_of, currentStepIndex + 1, totalSteps)}: ${currentStep?.type?.label.orEmpty()}",
+                    text = "${stringResource(Res.string.journey_step_of, currentStepIndex + 1, totalSteps)}: ${
+                        currentStep?.type?.let { getStepTypeLabel(it) }.orEmpty()
+                    }",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
@@ -307,6 +315,18 @@ private fun StepProgressMap(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun getStepTypeLabel(type: StepType): String {
+    return when (type) {
+        StepType.INTRO -> stringResource(Res.string.step_type_intro)
+        StepType.STORY -> stringResource(Res.string.step_type_story)
+        StepType.KEY_LESSONS -> stringResource(Res.string.step_type_key_lessons)
+        StepType.REFLECTION -> stringResource(Res.string.step_type_reflection)
+        StepType.ACTION -> stringResource(Res.string.step_type_action)
+        StepType.REFERENCES -> stringResource(Res.string.step_type_references)
     }
 }
 

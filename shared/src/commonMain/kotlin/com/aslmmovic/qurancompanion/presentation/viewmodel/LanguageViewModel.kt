@@ -10,12 +10,15 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+
 sealed class LanguageUiEvent {
     data object NavigateToHome : LanguageUiEvent()
 }
 
 class LanguageViewModel(
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val localeProvider: LocaleProvider
 ) : ViewModel() {
 
     private val _uiEvents = MutableSharedFlow<LanguageUiEvent>()
@@ -27,6 +30,7 @@ class LanguageViewModel(
             userPreferencesRepository.saveUserPreferences(
                 currentPrefs.copy(preferredLanguage = languageCode)
             )
+            localeProvider.changeLocale(languageCode)
             _uiEvents.emit(LanguageUiEvent.NavigateToHome)
         }
     }

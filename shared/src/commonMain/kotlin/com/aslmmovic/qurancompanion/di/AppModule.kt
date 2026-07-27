@@ -51,7 +51,7 @@ val appModule = module {
     single { ResetJourneyUseCase(get()) }
 
     // Presentation layer
-    viewModel { LanguageViewModel(get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { LanguageViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get()) }
 }

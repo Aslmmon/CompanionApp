@@ -14,4 +14,8 @@ class IosLocaleProvider(private val storage: KeyValueStorage) : LocaleProvider {
             val preferred = NSLocale.preferredLanguages.firstOrNull() as? String ?: "en"
             return preferred.split("-").firstOrNull() ?: "en"
         }
+
+    override fun changeLocale(locale: String) {
+        // iOS platform stub
+    }
 }

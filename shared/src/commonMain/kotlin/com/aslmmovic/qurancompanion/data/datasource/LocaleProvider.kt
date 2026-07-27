@@ -6,4 +6,5 @@ package com.aslmmovic.qurancompanion.data.datasource
  */
 interface LocaleProvider {
     val currentLocale: String
+    fun changeLocale(locale: String)
 }

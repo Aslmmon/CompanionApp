@@ -26,6 +26,8 @@ import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import kotlinx.coroutines.flow.first
 
+import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val getTodayJourneyUseCase: GetTodayJourneyUseCase,
@@ -34,7 +36,8 @@ class HomeViewModel(
     private val isJourneyCompletedUseCase: IsJourneyCompletedUseCase,
     private val resetJourneyUseCase: ResetJourneyUseCase,
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
-    private val savePreferencesUseCase: SavePreferencesUseCase
+    private val savePreferencesUseCase: SavePreferencesUseCase,
+    private val localeProvider: LocaleProvider
 ) : ViewModel() {
 
     private val _journey = MutableStateFlow<Journey?>(null)
@@ -83,6 +86,7 @@ class HomeViewModel(
         viewModelScope.launch {
             val current = getUserPreferencesUseCase().first()
             savePreferencesUseCase(current.copy(preferredLanguage = languageCode))
+            localeProvider.changeLocale(languageCode)
         }
     }
 }

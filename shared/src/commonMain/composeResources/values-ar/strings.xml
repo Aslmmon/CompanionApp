@@ -56,4 +56,12 @@
     <string name="language_confirm">تأكيد</string>
     <string name="settings_title">الإعدادات</string>
     <string name="settings_change_language">تغيير اللغة</string>
+
+    <!-- Step Types -->
+    <string name="step_type_intro">مقدمة</string>
+    <string name="step_type_story">القصة</string>
+    <string name="step_type_key_lessons">الدروس المستفادة</string>
+    <string name="step_type_reflection">تأمل</string>
+    <string name="step_type_action">عمل اليوم</string>
+    <string name="step_type_references">المراجع</string>
 </resources>

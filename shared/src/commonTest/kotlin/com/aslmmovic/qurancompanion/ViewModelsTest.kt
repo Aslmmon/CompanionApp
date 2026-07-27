@@ -14,6 +14,7 @@ import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
+import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,6 +48,10 @@ class ViewModelsTest {
             _preferences.value = preferences
         }
     }
+    private val fakeLocaleProvider = object : LocaleProvider {
+        override var currentLocale = "en"
+        override fun changeLocale(locale: String) { currentLocale = locale }
+    }
 
     @BeforeTest
     fun setUp() {
@@ -73,7 +78,8 @@ class ViewModelsTest {
             isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
             resetJourneyUseCase = ResetJourneyUseCase(repo),
             getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo)
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            localeProvider = fakeLocaleProvider
         )
 
         advanceUntilIdle()
@@ -91,7 +97,8 @@ class ViewModelsTest {
             isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
             resetJourneyUseCase = ResetJourneyUseCase(repo),
             getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo)
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            localeProvider = fakeLocaleProvider
         )
 
         val events = mutableListOf<HomeUiEvent>()
@@ -120,7 +127,8 @@ class ViewModelsTest {
             isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
             resetJourneyUseCase = ResetJourneyUseCase(repo),
             getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo)
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            localeProvider = fakeLocaleProvider
         )
 
         advanceUntilIdle()

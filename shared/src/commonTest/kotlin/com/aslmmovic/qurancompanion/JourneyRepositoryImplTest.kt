@@ -147,7 +147,10 @@ class JourneyRepositoryImplTest {
     }
 
     private class FakeLocaleProvider : LocaleProvider {
-        override val currentLocale: String = "en"
+        override var currentLocale: String = "en"
+        override fun changeLocale(locale: String) {
+            currentLocale = locale
+        }
     }
 
     private class FakeKeyValueStorage : KeyValueStorage {
