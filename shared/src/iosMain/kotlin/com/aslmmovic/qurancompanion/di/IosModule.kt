@@ -8,5 +8,5 @@ import org.koin.dsl.module
 
 val iosModule = module {
     single<KeyValueStorage> { IosKeyValueStorage() }
-    single<LocaleProvider> { IosLocaleProvider() }
+    single<LocaleProvider> { IosLocaleProvider(get()) }
 }

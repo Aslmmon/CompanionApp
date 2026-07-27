@@ -4,7 +4,7 @@ package com.aslmmovic.qurancompanion.data.datasource
  * Android implementation of [LocaleProvider].
  * Returns the current default locale's language code (e.g. "en", "ar").
  */
-class AndroidLocaleProvider : LocaleProvider {
+class AndroidLocaleProvider(private val storage: KeyValueStorage) : LocaleProvider {
     override val currentLocale: String
-        get() = java.util.Locale.getDefault().language
+        get() = storage.getString("pref_preferred_language") ?: java.util.Locale.getDefault().language
 }

@@ -14,6 +14,7 @@ import com.aslmmovic.qurancompanion.domain.usecase.ResetJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
+import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
@@ -50,6 +51,7 @@ val appModule = module {
     single { ResetJourneyUseCase(get()) }
 
     // Presentation layer
-    viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
+    viewModel { LanguageViewModel(get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get()) }
 }

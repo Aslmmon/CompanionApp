@@ -10,6 +10,13 @@ import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeUiEvent
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyUiEvent
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
+import com.aslmmovic.qurancompanion.domain.model.UserPreferences
+import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
+import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -33,6 +40,13 @@ class ViewModelsTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private val repo = FakeJourneyRepository()
+    private val prefsRepo = object : UserPreferencesRepository {
+        private val _preferences = MutableStateFlow(UserPreferences())
+        override fun getUserPreferences(): Flow<UserPreferences> = _preferences.asStateFlow()
+        override suspend fun saveUserPreferences(preferences: UserPreferences) {
+            _preferences.value = preferences
+        }
+    }
 
     @BeforeTest
     fun setUp() {
@@ -57,7 +71,9 @@ class ViewModelsTest {
             getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
             getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
             isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo)
+            resetJourneyUseCase = ResetJourneyUseCase(repo),
+            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo)
         )
 
         advanceUntilIdle()
@@ -73,7 +89,9 @@ class ViewModelsTest {
             getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
             getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
             isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo)
+            resetJourneyUseCase = ResetJourneyUseCase(repo),
+            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo)
         )
 
         val events = mutableListOf<HomeUiEvent>()
@@ -100,7 +118,9 @@ class ViewModelsTest {
             getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
             getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
             isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo)
+            resetJourneyUseCase = ResetJourneyUseCase(repo),
+            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo)
         )
 
         advanceUntilIdle()

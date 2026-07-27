@@ -21,6 +21,10 @@ import kotlinx.coroutines.launch
 
 import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.model.UserPreferences
+import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
@@ -28,7 +32,9 @@ class HomeViewModel(
     private val getTomorrowJourneyUseCase: GetTomorrowJourneyUseCase,
     private val getWeeklyProgressUseCase: GetWeeklyProgressUseCase,
     private val isJourneyCompletedUseCase: IsJourneyCompletedUseCase,
-    private val resetJourneyUseCase: ResetJourneyUseCase
+    private val resetJourneyUseCase: ResetJourneyUseCase,
+    private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
+    private val savePreferencesUseCase: SavePreferencesUseCase
 ) : ViewModel() {
 
     private val _journey = MutableStateFlow<Journey?>(null)
@@ -36,6 +42,9 @@ class HomeViewModel(
 
     private val _tomorrowJourney = MutableStateFlow<Journey?>(null)
     val tomorrowJourney: StateFlow<Journey?> = _tomorrowJourney.asStateFlow()
+
+    private val _userPreferences = MutableStateFlow(UserPreferences())
+    val userPreferences: StateFlow<UserPreferences> = _userPreferences.asStateFlow()
 
     val isCompleted: StateFlow<Boolean> = _journey
         .flatMapLatest { journey ->
@@ -52,8 +61,11 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
-            _journey.value = getTodayJourneyUseCase()
-            _tomorrowJourney.value = getTomorrowJourneyUseCase()
+            getUserPreferencesUseCase().collect { prefs ->
+                _userPreferences.value = prefs
+                _journey.value = getTodayJourneyUseCase()
+                _tomorrowJourney.value = getTomorrowJourneyUseCase()
+            }
         }
     }
 
@@ -64,6 +76,13 @@ class HomeViewModel(
     fun onResetCompletionClick() {
         viewModelScope.launch {
             _journey.value?.let { resetJourneyUseCase(it.id) }
+        }
+    }
+
+    fun onLanguageSelected(languageCode: String) {
+        viewModelScope.launch {
+            val current = getUserPreferencesUseCase().first()
+            savePreferencesUseCase(current.copy(preferredLanguage = languageCode))
         }
     }
 }

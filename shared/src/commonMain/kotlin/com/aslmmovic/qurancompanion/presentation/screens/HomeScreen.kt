@@ -43,6 +43,20 @@ import androidx.compose.ui.unit.sp
 import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.model.StepType
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import qurancompanion.shared.generated.resources.settings_title
+import qurancompanion.shared.generated.resources.settings_change_language
+import qurancompanion.shared.generated.resources.language_english
+import qurancompanion.shared.generated.resources.language_arabic
+import qurancompanion.shared.generated.resources.completion_done
 import com.aslmmovic.qurancompanion.ui.theme.QuranArabicTextStyle
 import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
@@ -72,6 +86,8 @@ import qurancompanion.shared.generated.resources.home_weekly_sunday
 fun HomeScreen(viewModel: HomeViewModel) {
     val journey by viewModel.journey.collectAsState()
     val isCompleted by viewModel.isCompleted.collectAsState()
+    val userPreferences by viewModel.userPreferences.collectAsState()
+    var showSettingsDialog by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -97,14 +113,28 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // App name
-            Text(
-                text = stringResource(Res.string.welcome_title),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+            // App name & Settings Header Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.size(48.dp)) // Equalizer spacer
+                Text(
+                    text = stringResource(Res.string.welcome_title),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    onClick = { showSettingsDialog = true },
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Text(text = "⚙️", fontSize = 22.sp)
+                }
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -156,6 +186,93 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
             Spacer(modifier = Modifier.height(32.dp))
         }
+
+        if (showSettingsDialog) {
+            AlertDialog(
+                onDismissRequest = { showSettingsDialog = false },
+                title = {
+                    Text(
+                        text = stringResource(Res.string.settings_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
+                text = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.settings_change_language),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        // English Option Row
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    viewModel.onLanguageSelected("en")
+                                }
+                                .padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.language_english),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            RadioButton(
+                                selected = userPreferences.preferredLanguage == "en",
+                                onClick = { viewModel.onLanguageSelected("en") },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                        }
+
+                        // Arabic Option Row
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    viewModel.onLanguageSelected("ar")
+                                }
+                                .padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.language_arabic),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            RadioButton(
+                                selected = userPreferences.preferredLanguage == "ar",
+                                onClick = { viewModel.onLanguageSelected("ar") },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showSettingsDialog = false }) {
+                        Text(
+                            text = stringResource(Res.string.completion_done),
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -182,17 +299,17 @@ private fun ReadyStateContent(
         // Journey card
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
-            shape = RoundedCornerShape(20.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
                     1.dp,
                     MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                    RoundedCornerShape(20.dp)
+                    RoundedCornerShape(16.dp)
                 )
         ) {
-            Column(modifier = Modifier.padding(24.dp)) {
+            Column(modifier = Modifier.padding(20.dp)) {
                 if (journey != null) {
                     // Category badge
                     Box(
@@ -343,13 +460,13 @@ private fun CompletedStateContent(
                             .fillMaxWidth()
                             .border(
                                 1.dp,
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
                                 RoundedCornerShape(16.dp)
                             )
                     ) {
                         Text(
                             text = actionStep.content,
-                            modifier = Modifier.padding(18.dp),
+                            modifier = Modifier.padding(20.dp),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             lineHeight = 22.sp
@@ -386,7 +503,7 @@ private fun CompletedStateContent(
                         RoundedCornerShape(16.dp)
                     )
             ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Column(modifier = Modifier.padding(20.dp)) {
                     // Tomorrow badge
                     Box(
                         modifier = Modifier
@@ -456,7 +573,7 @@ private fun WeeklyProgressTracker(
         modifier = modifier
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(

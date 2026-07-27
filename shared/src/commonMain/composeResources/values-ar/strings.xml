@@ -47,4 +47,13 @@
     <!-- Tomorrow Preview -->
     <string name="home_tomorrow_preview">معاينة الغد</string>
     <string name="home_tomorrow_badge">غداً</string>
+
+    <!-- Language & Settings -->
+    <string name="language_selection_title">اختر اللغة</string>
+    <string name="language_selection_subtitle">اختر لغتك المفضلة للمتابعة</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_confirm">تأكيد</string>
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_change_language">تغيير اللغة</string>
 </resources>
