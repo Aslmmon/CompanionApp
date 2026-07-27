@@ -22,5 +22,6 @@ enum class StepType(val emoji: String, val label: String) {
     STORY("📜", "STORY"),
     KEY_LESSONS("💡", "KEY LESSONS"),
     REFLECTION("🤔", "REFLECTION"),
-    ACTION("✅", "ACTION")
+    ACTION("✅", "ACTION"),
+    REFERENCES("📚", "REFERENCES")
 }

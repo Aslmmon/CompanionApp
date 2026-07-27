@@ -29,10 +29,13 @@ val appModule = module {
     // Data layer — data sources
     single<JourneyLocalDataSource> { ResourceJourneyLocalDataSource(get()) }
 
+    // DateTime Provider
+    single<com.aslmmovic.qurancompanion.domain.util.DateTimeProvider> { com.aslmmovic.qurancompanion.domain.util.SystemDateTimeProvider() }
+
     // Data layer — repositories
     // KeyValueStorage and LocaleProvider are provided by platform-specific modules
     single { UserPreferencesRepositoryImpl(get()) } bind UserPreferencesRepository::class
-    single { JourneyRepositoryImpl(get(), get(), get()) } bind JourneyRepository::class
+    single { JourneyRepositoryImpl(get(), get(), get(), get()) } bind JourneyRepository::class
 
     // Domain layer — preferences
     single { GetUserPreferencesUseCase(get()) }

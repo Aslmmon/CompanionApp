@@ -22,9 +22,11 @@
     <string name="journey_back">Back</string>
 
     <!-- Completion Screen -->
-    <string name="completion_heading">Alhamdulillah!</string>
-    <string name="completion_subtitle">See you tomorrow insha\'Allah.</string>
-    <string name="completion_return_home">Return Home</string>
+    <string name="completion_heading">Alhamdulillah</string>
+    <string name="completion_minutes_spent">You invested %1$d meaningful minutes today.</string>
+    <string name="completion_reward">May Allah reward your effort.</string>
+    <string name="completion_next_day">We\'ll prepare another journey tomorrow.</string>
+    <string name="completion_done">Done</string>
     <string name="completion_action_label">Today\'s Action</string>
 
     <!-- Reminder status -->

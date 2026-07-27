@@ -26,7 +26,7 @@ data class JourneyStepDto(
 
 @Serializable
 enum class StepTypeDto {
-    INTRO, STORY, KEY_LESSONS, REFLECTION, ACTION
+    INTRO, STORY, KEY_LESSONS, REFLECTION, ACTION, REFERENCES
 }
 
 // --- Mappers ---

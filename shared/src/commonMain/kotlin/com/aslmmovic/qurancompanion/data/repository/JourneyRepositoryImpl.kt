@@ -6,16 +6,17 @@ import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import com.aslmmovic.qurancompanion.data.dto.toDomain
 import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.repository.JourneyRepository
-import com.aslmmovic.qurancompanion.getCurrentDayOfWeek
-import com.aslmmovic.qurancompanion.getCurrentDayOfYear
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
+import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
+
 class JourneyRepositoryImpl(
     private val localDataSource: JourneyLocalDataSource,
     private val localeProvider: LocaleProvider,
-    private val storage: KeyValueStorage
+    private val storage: KeyValueStorage,
+    private val dateTimeProvider: DateTimeProvider
 ) : JourneyRepository {
 
     // Keys are journeyIds, values are completion booleans
@@ -35,14 +36,14 @@ class JourneyRepositoryImpl(
         val journeys = getAllJourneys()
         if (journeys.isEmpty()) return null
         // Cycle through journeys by day-of-year so users see a new journey each day
-        val index = (getCurrentDayOfYear() - 1) % journeys.size
+        val index = (dateTimeProvider.getCurrentDayOfYear() - 1) % journeys.size
         return journeys[index]
     }
 
     override suspend fun getTomorrowJourney(): Journey? {
         val journeys = getAllJourneys()
         if (journeys.isEmpty()) return null
-        val index = getCurrentDayOfYear() % journeys.size
+        val index = dateTimeProvider.getCurrentDayOfYear() % journeys.size
         return journeys[index]
     }
 
@@ -55,8 +56,8 @@ class JourneyRepositoryImpl(
             val journeys = localDataSource.loadJourneys(localeProvider.currentLocale).map { it.toDomain() }
             if (journeys.isEmpty()) return@map List(7) { false }
 
-            val todayDayOfYear = getCurrentDayOfYear()
-            val todayDayOfWeek = getCurrentDayOfWeek() // 1 = Mon, 7 = Sun
+            val todayDayOfYear = dateTimeProvider.getCurrentDayOfYear()
+            val todayDayOfWeek = dateTimeProvider.getCurrentDayOfWeek() // 1 = Mon, 7 = Sun
 
             (1..7).map { d ->
                 val dayOffset = d - todayDayOfWeek

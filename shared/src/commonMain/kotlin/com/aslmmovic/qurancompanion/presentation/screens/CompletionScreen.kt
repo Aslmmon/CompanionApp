@@ -43,8 +43,10 @@ import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.completion_action_label
 import qurancompanion.shared.generated.resources.completion_heading
-import qurancompanion.shared.generated.resources.completion_return_home
-import qurancompanion.shared.generated.resources.completion_subtitle
+import qurancompanion.shared.generated.resources.completion_minutes_spent
+import qurancompanion.shared.generated.resources.completion_reward
+import qurancompanion.shared.generated.resources.completion_next_day
+import qurancompanion.shared.generated.resources.completion_done
 
 @Composable
 fun CompletionScreen(viewModel: JourneyViewModel) {
@@ -99,10 +101,32 @@ fun CompletionScreen(viewModel: JourneyViewModel) {
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = stringResource(Res.string.completion_subtitle),
+                        text = stringResource(
+                            Res.string.completion_minutes_spent,
+                            journey?.durationMinutes ?: 10
+                        ),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = stringResource(Res.string.completion_reward),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = stringResource(Res.string.completion_next_day),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
@@ -171,7 +195,7 @@ fun CompletionScreen(viewModel: JourneyViewModel) {
                     .height(56.dp)
             ) {
                 Text(
-                    text = stringResource(Res.string.completion_return_home),
+                    text = stringResource(Res.string.completion_done),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
