@@ -1,6 +1,7 @@
 package com.aslmmovic.qurancompanion
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +48,13 @@ fun App() {
         }
     }
 
-    QuranCompanionTheme {
+    val isDarkMode = when (prefsState?.isDarkMode) {
+        true -> true
+        false -> false
+        null -> isSystemInDarkTheme()
+    }
+
+    QuranCompanionTheme(darkTheme = isDarkMode) {
         val navController = rememberNavController()
 
         val startDestination = remember(prefsState) {

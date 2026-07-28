@@ -20,15 +20,20 @@ class UserPreferencesRepositoryImpl(
         storage.putInt(KEY_REMINDER_MINUTE, preferences.reminderMinute)
         storage.putBoolean(KEY_REMINDER_ENABLED, preferences.isReminderEnabled)
         preferences.preferredLanguage?.let { storage.putString(KEY_PREFERRED_LANGUAGE, it) }
+        storage.putString(KEY_DARK_MODE, preferences.isDarkMode?.toString() ?: "system")
         _preferences.value = preferences
     }
 
     private fun loadFromStorage(): UserPreferences {
+        val isDarkModeString = storage.getString(KEY_DARK_MODE)
+        val isDarkMode = if (isDarkModeString == "system") null else isDarkModeString?.toBooleanStrictOrNull()
+
         return UserPreferences(
             reminderHour = storage.getInt(KEY_REMINDER_HOUR, 8),
             reminderMinute = storage.getInt(KEY_REMINDER_MINUTE, 0),
             isReminderEnabled = storage.getBoolean(KEY_REMINDER_ENABLED, true),
-            preferredLanguage = storage.getString(KEY_PREFERRED_LANGUAGE)
+            preferredLanguage = storage.getString(KEY_PREFERRED_LANGUAGE),
+            isDarkMode = isDarkMode
         )
     }
 
@@ -37,5 +42,6 @@ class UserPreferencesRepositoryImpl(
         private const val KEY_REMINDER_MINUTE = "pref_reminder_minute"
         private const val KEY_REMINDER_ENABLED = "pref_reminder_enabled"
         private const val KEY_PREFERRED_LANGUAGE = "pref_preferred_language"
+        private const val KEY_DARK_MODE = "pref_dark_mode"
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -48,6 +49,7 @@ fun HomeContent(
     onBeginClick: () -> Unit,
     onResetClick: () -> Unit,
     onLanguageSelected: (String) -> Unit,
+    onThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var showSettingsDialog by remember { mutableStateOf(false) }
@@ -72,6 +74,8 @@ fun HomeContent(
             }
 
             HomeHeader(
+                isDarkMode = userPreferences.isDarkMode ?: isSystemInDarkTheme(),
+                onThemeToggleClick = onThemeToggle,
                 onSettingsClick = { showSettingsDialog = true }
             )
 
@@ -145,6 +149,7 @@ fun HomeContentPreview() {
         tomorrowJourney = null,
         onBeginClick = {},
         onResetClick = {},
-        onLanguageSelected = {}
+        onLanguageSelected = {},
+        onThemeToggle = {}
     )
 }

@@ -56,6 +56,8 @@
     <string name="language_confirm">Confirm</string>
     <string name="settings_title">Settings</string>
     <string name="settings_change_language">Change Language</string>
+    <string name="theme_light_mode">Light Mode</string>
+    <string name="theme_dark_mode">Dark Mode</string>
 
     <!-- Step Types -->
     <string name="step_type_intro">Introduction</string>

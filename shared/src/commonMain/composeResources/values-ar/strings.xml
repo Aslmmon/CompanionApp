@@ -56,6 +56,8 @@
     <string name="language_confirm">تأكيد</string>
     <string name="settings_title">الإعدادات</string>
     <string name="settings_change_language">تغيير اللغة</string>
+    <string name="theme_light_mode">المظهر الفاتح</string>
+    <string name="theme_dark_mode">المظهر الداكن</string>
 
     <!-- Step Types -->
     <string name="step_type_intro">مقدمة</string>
