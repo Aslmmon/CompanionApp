@@ -48,6 +48,7 @@ fun HomeContent(
     tomorrowJourney: Journey?,
     onBeginClick: () -> Unit,
     onResetClick: () -> Unit,
+    onNextJourneyClick: () -> Unit,
     onLanguageSelected: (String) -> Unit,
     onThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
@@ -132,6 +133,7 @@ fun HomeContent(
             SettingsDialog(
                 preferredLanguage = userPreferences.preferredLanguage,
                 onLanguageSelected = onLanguageSelected,
+                onSimulateNextDay = onNextJourneyClick,
                 onDismissRequest = { showSettingsDialog = false }
             )
         }
@@ -149,6 +151,7 @@ fun HomeContentPreview() {
         tomorrowJourney = null,
         onBeginClick = {},
         onResetClick = {},
+        onNextJourneyClick = {},
         onLanguageSelected = {},
         onThemeToggle = {}
     )

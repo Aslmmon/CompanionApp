@@ -58,6 +58,8 @@
     <string name="settings_change_language">Change Language</string>
     <string name="theme_light_mode">Light Mode</string>
     <string name="theme_dark_mode">Dark Mode</string>
+    <string name="settings_debug_options">Developer Options</string>
+    <string name="settings_simulate_next_day">Simulate Next Day</string>
 
     <!-- Step Types -->
     <string name="step_type_intro">Introduction</string>

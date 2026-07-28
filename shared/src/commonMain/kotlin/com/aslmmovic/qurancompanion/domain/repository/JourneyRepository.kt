@@ -11,4 +11,8 @@ interface JourneyRepository {
     fun getWeeklyProgress(): Flow<List<Boolean>>
     suspend fun markCompleted(journeyId: String)
     suspend fun resetCompletion(journeyId: String)
+    
+    // Debug helper functions
+    fun getDebugDayOffset(): Flow<Int>
+    suspend fun incrementDebugDayOffset()
 }

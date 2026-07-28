@@ -26,11 +26,14 @@ import qurancompanion.shared.generated.resources.language_arabic
 import qurancompanion.shared.generated.resources.language_english
 import qurancompanion.shared.generated.resources.settings_change_language
 import qurancompanion.shared.generated.resources.settings_title
+import qurancompanion.shared.generated.resources.settings_debug_options
+import qurancompanion.shared.generated.resources.settings_simulate_next_day
 
 @Composable
 fun SettingsDialog(
     preferredLanguage: String?,
     onLanguageSelected: (String) -> Unit,
+    onSimulateNextDay: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -101,6 +104,34 @@ fun SettingsDialog(
                         colors = RadioButtonDefaults.colors(
                             selectedColor = MaterialTheme.colorScheme.primary
                         )
+                    )
+                }
+
+                // Developer Options
+                androidx.compose.material3.HorizontalDivider(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+
+                Text(
+                    text = stringResource(Res.string.settings_debug_options),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                androidx.compose.material3.Button(
+                    onClick = onSimulateNextDay,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                ) {
+                    Text(
+                        text = stringResource(Res.string.settings_simulate_next_day),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }

@@ -3,11 +3,14 @@ package com.aslmmovic.qurancompanion
 import com.aslmmovic.qurancompanion.data.datasource.JourneyLocalDataSource
 import com.aslmmovic.qurancompanion.data.datasource.KeyValueStorage
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+import com.aslmmovic.qurancompanion.data.dto.CoverDto
 import com.aslmmovic.qurancompanion.data.dto.JourneyDto
 import com.aslmmovic.qurancompanion.data.dto.JourneyStepDto
 import com.aslmmovic.qurancompanion.data.repository.JourneyRepositoryImpl
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -130,6 +133,45 @@ class JourneyRepositoryImplTest {
         assertFalse(fakeStorage.getBoolean("journey_completed_test-id", true))
     }
 
+    @Test
+    fun `getWeeklyProgress dynamically updates when incrementing debug day offset`() = runTest {
+        val journeys = listOf(
+            createJourneyDto("1"),
+            createJourneyDto("2"),
+            createJourneyDto("3")
+        )
+        fakeDataSource.journeys = journeys
+
+        // Setup: Wednesday (3rd day of week), Day 10 of year
+        fakeDateTimeProvider.dayOfWeek = 3
+        fakeDateTimeProvider.dayOfYear = 10
+        repository.getAllJourneys()
+
+        // Complete Journey "1" (will map to Wednesday) and Journey "2" (will map to Monday)
+        repository.markCompleted("1")
+        repository.markCompleted("2")
+
+        val progressList = mutableListOf<List<Boolean>>()
+        val job = launch {
+            repository.getWeeklyProgress().collect { progressList.add(it) }
+        }
+        advanceUntilIdle()
+
+        // Increment day offset: this should shift the virtual day of year for the week by +1
+        repository.incrementDebugDayOffset()
+        advanceUntilIdle()
+
+        job.cancel()
+
+        // Verify that the flow emitted at least twice and the second one has shifted results
+        println("PROGRESS LIST CONTENTS: $progressList")
+        assertTrue(progressList.size >= 2)
+        // First emission (offset 0): Mon(J2)=true, Tue(J3)=false, Wed(J1)=true, Thu(J2)=true, Fri(J3)=false, Sat(J1)=true, Sun(J2)=true
+        assertEquals(listOf(true, false, true, true, false, true, true), progressList[0])
+        // Second emission (offset 1): Mon(J3)=false, Tue(J1)=true, Wed(J2)=true, Thu(J3)=false, Fri(J1)=true, Sat(J2)=true, Sun(J3)=false
+        assertEquals(listOf(false, true, true, false, true, true, false), progressList[1])
+    }
+
     // Helper functions and fakes
     private fun createJourneyDto(id: String) = JourneyDto(
         id = id,
@@ -137,8 +179,18 @@ class JourneyRepositoryImplTest {
         title = "Journey $id",
         subtitle = "Subtitle $id",
         category = "Category",
+        person = "Person $id",
+        emotion = "Emotion $id",
+        theme = "Theme $id",
+        heroQuote = "HeroQuote $id",
+        intention = "Intention $id",
         durationMinutes = 10,
-        steps = listOf(JourneyStepDto(com.aslmmovic.qurancompanion.data.dto.StepTypeDto.INTRO, "Title", "Content"))
+        difficulty = "Easy",
+        estimatedReadingMinutes = 8,
+        cover = CoverDto("illustration", "asset"),
+        steps = listOf(JourneyStepDto(com.aslmmovic.qurancompanion.data.dto.StepTypeDto.INTRO, "Title", "Content")),
+        references = listOf("Ref $id"),
+        tags = listOf("Tag $id")
     )
 
     private class FakeJourneyLocalDataSource : JourneyLocalDataSource {

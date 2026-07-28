@@ -6,6 +6,8 @@ import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IsJourneyCompletedUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.MarkJourneyCompletedUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ResetJourneyUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeUiEvent
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyUiEvent
@@ -80,6 +82,8 @@ class ViewModelsTest {
             resetJourneyUseCase = ResetJourneyUseCase(repo),
             getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
             localeProvider = fakeLocaleProvider
         )
 
@@ -99,6 +103,8 @@ class ViewModelsTest {
             resetJourneyUseCase = ResetJourneyUseCase(repo),
             getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
             localeProvider = fakeLocaleProvider
         )
 
@@ -121,6 +127,8 @@ class ViewModelsTest {
             resetJourneyUseCase = ResetJourneyUseCase(repo),
             getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
             localeProvider = fakeLocaleProvider
         )
 
@@ -151,6 +159,8 @@ class ViewModelsTest {
             resetJourneyUseCase = ResetJourneyUseCase(repo),
             getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
             localeProvider = fakeLocaleProvider
         )
 
@@ -255,5 +265,36 @@ class ViewModelsTest {
         assertEquals(JourneyUiEvent.NavigateToHome, events.first())
 
         job.cancel()
+    }
+
+    @Test
+    fun `HomeViewModel onNextJourneyClick increments offset`() = runTest {
+        val viewModel = HomeViewModel(
+            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
+            getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
+            getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
+            isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
+            resetJourneyUseCase = ResetJourneyUseCase(repo),
+            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
+            localeProvider = fakeLocaleProvider
+        )
+
+        advanceUntilIdle()
+        
+        var offsetValue = 0
+        val collectJob = launch {
+            repo.getDebugDayOffset().collect { offsetValue = it }
+        }
+        advanceUntilIdle()
+        assertEquals(0, offsetValue)
+
+        viewModel.onNextJourneyClick()
+        advanceUntilIdle()
+
+        assertEquals(1, offsetValue)
+        collectJob.cancel()
     }
 }

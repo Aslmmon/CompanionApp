@@ -4,11 +4,25 @@ data class Journey(
     val id: String,
     val dayNumber: Int,
     val title: String,
-    // New field – manually curated subtitle for emotional hook
     val subtitle: String,
     val category: String,
+    val person: String?,
+    val emotion: String,
+    val theme: String,
+    val heroQuote: String,
+    val intention: String,
     val durationMinutes: Int,
-    val steps: List<JourneyStep>
+    val difficulty: String,
+    val estimatedReadingMinutes: Int,
+    val cover: Cover,
+    val steps: List<JourneyStep>,
+    val references: List<String>,
+    val tags: List<String>
+)
+
+data class Cover(
+    val type: String,
+    val asset: String
 )
 
 data class JourneyStep(

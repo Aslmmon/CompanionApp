@@ -22,6 +22,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         tomorrowJourney = tomorrowJourney,
         onBeginClick = viewModel::onBeginJourneyClick,
         onResetClick = viewModel::onResetCompletionClick,
+        onNextJourneyClick = viewModel::onNextJourneyClick,
         onLanguageSelected = viewModel::onLanguageSelected,
         onThemeToggle = viewModel::onToggleTheme
     )

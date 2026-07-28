@@ -21,6 +21,9 @@ class JourneyRepositoryImpl(
 
     // Keys are journeyIds, values are completion booleans
     private val _completionStates = MutableStateFlow<Map<String, Boolean>>(emptyMap())
+    
+    // Debug offset to manually change days/journeys for testing
+    private val _debugDayOffset = MutableStateFlow(storage.getInt("debug_day_offset", 0))
 
     override suspend fun getAllJourneys(): List<Journey> {
         val journeys = localDataSource.loadJourneys(localeProvider.currentLocale).map { it.toDomain() }
@@ -35,15 +38,17 @@ class JourneyRepositoryImpl(
     override suspend fun getTodayJourney(): Journey? {
         val journeys = getAllJourneys()
         if (journeys.isEmpty()) return null
-        // Cycle through journeys by day-of-year so users see a new journey each day
-        val index = (dateTimeProvider.getCurrentDayOfYear() - 1) % journeys.size
+        val offset = _debugDayOffset.value
+        // Cycle through journeys by day-of-year + offset so users see a new journey each day
+        val index = (dateTimeProvider.getCurrentDayOfYear() - 1 + offset) % journeys.size
         return journeys[index]
     }
 
     override suspend fun getTomorrowJourney(): Journey? {
         val journeys = getAllJourneys()
         if (journeys.isEmpty()) return null
-        val index = dateTimeProvider.getCurrentDayOfYear() % journeys.size
+        val offset = _debugDayOffset.value
+        val index = (dateTimeProvider.getCurrentDayOfYear() + offset) % journeys.size
         return journeys[index]
     }
 
@@ -52,16 +57,16 @@ class JourneyRepositoryImpl(
     }
 
     override fun getWeeklyProgress(): Flow<List<Boolean>> {
-        return _completionStates.map { states ->
+        return kotlinx.coroutines.flow.combine(_completionStates, _debugDayOffset) { states, offset ->
             val journeys = localDataSource.loadJourneys(localeProvider.currentLocale).map { it.toDomain() }
-            if (journeys.isEmpty()) return@map List(7) { false }
+            if (journeys.isEmpty()) return@combine List(7) { false }
 
             val todayDayOfYear = dateTimeProvider.getCurrentDayOfYear()
             val todayDayOfWeek = dateTimeProvider.getCurrentDayOfWeek() // 1 = Mon, 7 = Sun
 
             (1..7).map { d ->
                 val dayOffset = d - todayDayOfWeek
-                val targetDayOfYear = todayDayOfYear + dayOffset
+                val targetDayOfYear = todayDayOfYear + dayOffset + offset
                 val journeyIndex = ((targetDayOfYear - 1) % journeys.size + journeys.size) % journeys.size
                 val journeyId = journeys[journeyIndex].id
                 states[journeyId] ?: false
@@ -77,6 +82,15 @@ class JourneyRepositoryImpl(
     override suspend fun resetCompletion(journeyId: String) {
         storage.putBoolean(completionKey(journeyId), false)
         _completionStates.value += (journeyId to false)
+    }
+
+    // Debug offset overrides
+    override fun getDebugDayOffset(): Flow<Int> = _debugDayOffset
+
+    override suspend fun incrementDebugDayOffset() {
+        val next = _debugDayOffset.value + 1
+        storage.putInt("debug_day_offset", next)
+        _debugDayOffset.value = next
     }
 
     private fun completionKey(journeyId: String) = "journey_completed_$journeyId"

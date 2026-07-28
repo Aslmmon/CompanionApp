@@ -12,6 +12,10 @@ import com.aslmmovic.qurancompanion.domain.usecase.IsJourneyCompletedUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.MarkJourneyCompletedUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ResetJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
@@ -19,9 +23,6 @@ import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
-
-import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
-import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
 
 val appModule = module {
     // JSON parser — shared across data sources
@@ -49,9 +50,11 @@ val appModule = module {
     single { IsJourneyCompletedUseCase(get()) }
     single { MarkJourneyCompletedUseCase(get()) }
     single { ResetJourneyUseCase(get()) }
+    single { GetDebugDayOffsetUseCase(get()) }
+    single { IncrementDebugDayOffsetUseCase(get()) }
 
     // Presentation layer
     viewModel { LanguageViewModel(get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get()) }
 }

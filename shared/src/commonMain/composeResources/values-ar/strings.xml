@@ -58,6 +58,8 @@
     <string name="settings_change_language">تغيير اللغة</string>
     <string name="theme_light_mode">المظهر الفاتح</string>
     <string name="theme_dark_mode">المظهر الداكن</string>
+    <string name="settings_debug_options">خيارات المطور</string>
+    <string name="settings_simulate_next_day">محاكاة اليوم التالي</string>
 
     <!-- Step Types -->
     <string name="step_type_intro">مقدمة</string>

@@ -23,6 +23,8 @@ import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import kotlinx.coroutines.flow.first
 
@@ -37,6 +39,8 @@ class HomeViewModel(
     private val resetJourneyUseCase: ResetJourneyUseCase,
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
     private val savePreferencesUseCase: SavePreferencesUseCase,
+    private val getDebugDayOffsetUseCase: GetDebugDayOffsetUseCase,
+    private val incrementDebugDayOffsetUseCase: IncrementDebugDayOffsetUseCase,
     private val localeProvider: LocaleProvider
 ) : ViewModel() {
 
@@ -70,6 +74,13 @@ class HomeViewModel(
                 _tomorrowJourney.value = getTomorrowJourneyUseCase()
             }
         }
+
+        viewModelScope.launch {
+            getDebugDayOffsetUseCase().collect {
+                _journey.value = getTodayJourneyUseCase()
+                _tomorrowJourney.value = getTomorrowJourneyUseCase()
+            }
+        }
     }
 
     fun onBeginJourneyClick() {
@@ -79,6 +90,12 @@ class HomeViewModel(
     fun onResetCompletionClick() {
         viewModelScope.launch {
             _journey.value?.let { resetJourneyUseCase(it.id) }
+        }
+    }
+
+    fun onNextJourneyClick() {
+        viewModelScope.launch {
+            incrementDebugDayOffsetUseCase()
         }
     }
 

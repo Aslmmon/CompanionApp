@@ -1,5 +1,6 @@
 package com.aslmmovic.qurancompanion
 
+import com.aslmmovic.qurancompanion.domain.model.Cover
 import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.model.JourneyStep
 import com.aslmmovic.qurancompanion.domain.model.StepType
@@ -18,6 +19,7 @@ class FakeJourneyRepository : JourneyRepository {
     var todayJourney: Journey? = null
 
     private val completions = MutableStateFlow<Map<String, Boolean>>(emptyMap())
+    private val debugOffset = MutableStateFlow(0)
 
     override suspend fun getAllJourneys(): List<Journey> = allJourneys
 
@@ -45,6 +47,12 @@ class FakeJourneyRepository : JourneyRepository {
     override suspend fun resetCompletion(journeyId: String) {
         completions.value = completions.value + (journeyId to false)
     }
+
+    override fun getDebugDayOffset(): Flow<Int> = debugOffset
+
+    override suspend fun incrementDebugDayOffset() {
+        debugOffset.value += 1
+    }
 }
 
 /** Convenience factory for creating test [Journey] instances. */
@@ -54,9 +62,37 @@ fun testJourney(
     title: String = "Test Journey",
     subtitle: String = "Placeholder subtitle",
     category: String = "Test",
+    person: String? = null,
+    emotion: String = "Peace",
+    theme: String = "Night",
+    heroQuote: String = "Quote",
+    intention: String = "Intention",
     durationMinutes: Int = 5,
+    difficulty: String = "Easy",
+    estimatedReadingMinutes: Int = 4,
+    cover: Cover = Cover("illustration", "asset"),
     steps: List<JourneyStep> = listOf(
         JourneyStep(StepType.INTRO, "Intro Title", "Intro content"),
         JourneyStep(StepType.ACTION, "Action Title", "Action content")
-    )
-) = Journey(id, dayNumber, title, subtitle, category, durationMinutes, steps)
+    ),
+    references: List<String> = emptyList(),
+    tags: List<String> = emptyList()
+) = Journey(
+    id = id,
+    dayNumber = dayNumber,
+    title = title,
+    subtitle = subtitle,
+    category = category,
+    person = person,
+    emotion = emotion,
+    theme = theme,
+    heroQuote = heroQuote,
+    intention = intention,
+    durationMinutes = durationMinutes,
+    difficulty = difficulty,
+    estimatedReadingMinutes = estimatedReadingMinutes,
+    cover = cover,
+    steps = steps,
+    references = references,
+    tags = tags
+)

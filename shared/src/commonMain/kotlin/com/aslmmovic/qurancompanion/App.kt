@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -35,7 +36,14 @@ import org.koin.compose.viewmodel.koinViewModel
 fun App() {
     val userPreferencesRepository: UserPreferencesRepository = koinInject()
     val localeProvider: LocaleProvider = koinInject()
+    val journeyRepository: com.aslmmovic.qurancompanion.domain.repository.JourneyRepository = koinInject()
     val prefsState by userPreferencesRepository.getUserPreferences().collectAsState(null)
+    var todayJourney by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<com.aslmmovic.qurancompanion.domain.model.Journey?>(null) }
+    val debugOffset by journeyRepository.getDebugDayOffset().collectAsState(0)
+
+    LaunchedEffect(prefsState?.preferredLanguage, debugOffset) {
+        todayJourney = journeyRepository.getTodayJourney()
+    }
 
     // Handle auto-selecting Arabic if device language is Arabic
     LaunchedEffect(prefsState) {
@@ -54,7 +62,7 @@ fun App() {
         null -> isSystemInDarkTheme()
     }
 
-    QuranCompanionTheme(darkTheme = isDarkMode) {
+    QuranCompanionTheme(darkTheme = isDarkMode, themeName = todayJourney?.theme) {
         val navController = rememberNavController()
 
         val startDestination = remember(prefsState) {
