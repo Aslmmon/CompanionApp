@@ -34,6 +34,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -86,6 +87,28 @@ class ViewModelsTest {
 
         assertEquals(today, viewModel.journey.value)
         assertEquals(today, viewModel.tomorrowJourney.value)
+    }
+
+    @Test
+    fun `HomeViewModel onToggleTheme updates preferences`() = runTest {
+        val viewModel = HomeViewModel(
+            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
+            getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
+            getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
+            isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
+            resetJourneyUseCase = ResetJourneyUseCase(repo),
+            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+            localeProvider = fakeLocaleProvider
+        )
+
+        advanceUntilIdle()
+        assertNull(viewModel.userPreferences.value.isDarkMode)
+
+        viewModel.onToggleTheme(true)
+        advanceUntilIdle()
+
+        assertTrue(viewModel.userPreferences.value.isDarkMode == true)
     }
 
     @Test

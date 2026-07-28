@@ -24,7 +24,7 @@ This is a Kotlin Multiplatform (KMP) project utilizing Compose Multiplatform for
 - **Screen-Content Pattern**: Split screens into two composables:
   1. Stateful screen wrapper (`*Screen`): Receives the `ViewModel`, collects UI states using `collectAsStateWithLifecycle()`, and binds event handlers.
   2. Stateless content (`*Content`): Accepts raw states and lambda callbacks. Must be preview-friendly and easy to test.
-- **Localization**: Retrieve string values via `stringResource(Res.string.<id>)` from the generated Multiplatform resources.
+- **Localization**: Retrieve string values via `stringResource(Res.string.<id>)` from the generated Multiplatform resources. Any new user-facing text must be added to the localization resource files: English in `shared/src/commonMain/composeResources/values/strings.xml` and Arabic translation in `shared/src/commonMain/composeResources/values-ar/strings.xml`.
 - **Typography & Theme**: Apply theme tokens from `MaterialTheme`. For Arabic or Quranic text, use `QuranArabicTextStyle` from `ui/theme/Type.kt` to accommodate tashkeel (vowel markings) line heights.
 
 ---
@@ -77,6 +77,7 @@ This is a Kotlin Multiplatform (KMP) project utilizing Compose Multiplatform for
 - Recreate host activities when configuration changes require a full resource reload (e.g., `MainActivity.recreate()` on locale switches).
 - Map DTOs to Domain models within data layers before returning values.
 - Declare custom preview composables to test layouts in multiple screen sizes.
+- Define all user-facing strings in the multiplatform XML resources and provide both English (`values/strings.xml`) and Arabic (`values-ar/strings.xml`) translations.
 
 ---
 

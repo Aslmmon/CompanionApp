@@ -89,4 +89,11 @@ class HomeViewModel(
             localeProvider.changeLocale(languageCode)
         }
     }
+
+    fun onToggleTheme(isDarkMode: Boolean) {
+        viewModelScope.launch {
+            val current = getUserPreferencesUseCase().first()
+            savePreferencesUseCase(current.copy(isDarkMode = isDarkMode))
+        }
+    }
 }
