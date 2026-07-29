@@ -55,6 +55,7 @@
     <string name="language_arabic">العربية</string>
     <string name="language_confirm">Confirm</string>
     <string name="settings_title">Settings</string>
+    <string name="menu_content_description">Menu</string>
     <string name="settings_change_language">Change Language</string>
     <string name="theme_light_mode">Light Mode</string>
     <string name="theme_dark_mode">Dark Mode</string>

@@ -25,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,29 +34,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.model.StepType
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.completion_action_label
+import qurancompanion.shared.generated.resources.completion_done
 import qurancompanion.shared.generated.resources.completion_heading
 import qurancompanion.shared.generated.resources.completion_minutes_spent
-import qurancompanion.shared.generated.resources.completion_reward
 import qurancompanion.shared.generated.resources.completion_next_day
-import qurancompanion.shared.generated.resources.completion_done
+import qurancompanion.shared.generated.resources.completion_reward
 
 @Composable
 fun CompletionScreen(viewModel: JourneyViewModel) {
-    val journey by viewModel.journey.collectAsState()
+    val journey by viewModel.journey.collectAsStateWithLifecycle()
+
+    CompletionContent(
+        journey = journey,
+        onReturnHome = viewModel::onReturnHome
+    )
+}
+
+@Composable
+fun CompletionContent(
+    journey: Journey?,
+    onReturnHome: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val actionStep = journey?.steps?.firstOrNull { it.type == StepType.ACTION }
 
     var animateIn by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { animateIn = true }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
@@ -184,7 +199,7 @@ fun CompletionScreen(viewModel: JourneyViewModel) {
 
             // Return Home button
             Button(
-                onClick = viewModel::onReturnHome,
+                onClick = onReturnHome,
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -204,4 +219,13 @@ fun CompletionScreen(viewModel: JourneyViewModel) {
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
+}
+
+@Preview
+@Composable
+fun CompletionContentPreview() {
+    CompletionContent(
+        journey = null,
+        onReturnHome = {}
+    )
 }

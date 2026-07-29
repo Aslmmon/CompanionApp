@@ -30,6 +30,7 @@ import qurancompanion.shared.generated.resources.ic_dark_mode
 import qurancompanion.shared.generated.resources.ic_light_mode
 import qurancompanion.shared.generated.resources.ic_menu
 import qurancompanion.shared.generated.resources.ic_settings
+import qurancompanion.shared.generated.resources.menu_content_description
 import qurancompanion.shared.generated.resources.settings_title
 import qurancompanion.shared.generated.resources.theme_dark_mode
 import qurancompanion.shared.generated.resources.theme_light_mode
@@ -68,7 +69,7 @@ fun HomeHeader(
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_menu),
-                    contentDescription = "Menu",
+                    contentDescription = stringResource(Res.string.menu_content_description),
                     tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(24.dp)
                 )

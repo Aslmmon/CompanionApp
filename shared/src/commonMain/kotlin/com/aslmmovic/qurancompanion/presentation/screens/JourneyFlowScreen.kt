@@ -26,20 +26,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.model.JourneyStep
 import com.aslmmovic.qurancompanion.domain.model.StepType
@@ -51,21 +52,38 @@ import qurancompanion.shared.generated.resources.journey_back
 import qurancompanion.shared.generated.resources.journey_finish
 import qurancompanion.shared.generated.resources.journey_next
 import qurancompanion.shared.generated.resources.journey_step_of
-import qurancompanion.shared.generated.resources.step_type_intro
-import qurancompanion.shared.generated.resources.step_type_story
-import qurancompanion.shared.generated.resources.step_type_key_lessons
-import qurancompanion.shared.generated.resources.step_type_reflection
 import qurancompanion.shared.generated.resources.step_type_action
+import qurancompanion.shared.generated.resources.step_type_intro
+import qurancompanion.shared.generated.resources.step_type_key_lessons
 import qurancompanion.shared.generated.resources.step_type_references
-import androidx.compose.ui.draw.alpha
+import qurancompanion.shared.generated.resources.step_type_reflection
+import qurancompanion.shared.generated.resources.step_type_story
 
 @Composable
 fun JourneyFlowScreen(viewModel: JourneyViewModel) {
-    val journey by viewModel.journey.collectAsState()
-    val currentStepIndex by viewModel.currentStepIndex.collectAsState()
+    val journey by viewModel.journey.collectAsStateWithLifecycle()
+    val currentStepIndex by viewModel.currentStepIndex.collectAsStateWithLifecycle()
 
+    JourneyFlowContent(
+        journey = journey,
+        currentStepIndex = currentStepIndex,
+        onPreviousStep = viewModel::onPreviousStep,
+        onNextStep = viewModel::onNextStep,
+        onFinish = viewModel::onFinish
+    )
+}
+
+@Composable
+fun JourneyFlowContent(
+    journey: Journey?,
+    currentStepIndex: Int,
+    onPreviousStep: () -> Unit,
+    onNextStep: () -> Unit,
+    onFinish: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
@@ -80,7 +98,7 @@ fun JourneyFlowScreen(viewModel: JourneyViewModel) {
             // Progress map + step label
             val steps = journey?.steps.orEmpty()
             val totalSteps = steps.size
-            
+
             if (totalSteps > 0) {
                 StepProgressMap(
                     steps = steps,
@@ -145,7 +163,7 @@ fun JourneyFlowScreen(viewModel: JourneyViewModel) {
             ) {
                 if (currentStepIndex > 0) {
                     OutlinedButton(
-                        onClick = viewModel::onPreviousStep,
+                        onClick = onPreviousStep,
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.primary
@@ -155,7 +173,7 @@ fun JourneyFlowScreen(viewModel: JourneyViewModel) {
                             .height(52.dp)
                     ) {
                         Text(
-                            text = "← ${stringResource(Res.string.journey_back)}",
+                            text = stringResource(Res.string.journey_back),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -164,7 +182,7 @@ fun JourneyFlowScreen(viewModel: JourneyViewModel) {
                 }
 
                 Button(
-                    onClick = if (isLastStep) viewModel::onFinish else viewModel::onNextStep,
+                    onClick = if (isLastStep) onFinish else onNextStep,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -178,7 +196,7 @@ fun JourneyFlowScreen(viewModel: JourneyViewModel) {
                         text = if (isLastStep)
                             stringResource(Res.string.journey_finish)
                         else
-                            "${stringResource(Res.string.journey_next)} →",
+                            stringResource(Res.string.journey_next),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -330,4 +348,14 @@ private fun getStepTypeLabel(type: StepType): String {
     }
 }
 
-
+@Preview
+@Composable
+fun JourneyFlowContentPreview() {
+    JourneyFlowContent(
+        journey = null,
+        currentStepIndex = 0,
+        onPreviousStep = {},
+        onNextStep = {},
+        onFinish = {}
+    )
+}

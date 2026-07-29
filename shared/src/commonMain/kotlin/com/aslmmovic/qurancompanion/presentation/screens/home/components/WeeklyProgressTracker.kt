@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,15 +41,17 @@ fun WeeklyProgressTracker(
     weeklyProgress: List<Boolean>,
     modifier: Modifier = Modifier
 ) {
-    val dayLabels = listOf(
-        Res.string.home_weekly_monday,
-        Res.string.home_weekly_tuesday,
-        Res.string.home_weekly_wednesday,
-        Res.string.home_weekly_thursday,
-        Res.string.home_weekly_friday,
-        Res.string.home_weekly_saturday,
-        Res.string.home_weekly_sunday
-    )
+    val dayLabels = remember {
+        listOf(
+            Res.string.home_weekly_monday,
+            Res.string.home_weekly_tuesday,
+            Res.string.home_weekly_wednesday,
+            Res.string.home_weekly_thursday,
+            Res.string.home_weekly_friday,
+            Res.string.home_weekly_saturday,
+            Res.string.home_weekly_sunday
+        )
+    }
 
     Card(
         colors = CardDefaults.cardColors(
