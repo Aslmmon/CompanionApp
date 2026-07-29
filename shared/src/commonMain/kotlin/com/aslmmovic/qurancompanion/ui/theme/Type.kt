@@ -30,60 +30,59 @@ val OutfitFontFamily: FontFamily
         Font(Res.font.outfit, FontWeight.Bold)
     )
 
-// Define base typography with Outfit for clean English styling
-val QuranCompanionTypography: Typography
-    @Composable
-    get() {
-        val outfit = OutfitFontFamily
-        val defaultTypography = Typography()
-        return Typography(
-            displayLarge = defaultTypography.displayLarge.copy(fontFamily = outfit),
-            displayMedium = defaultTypography.displayMedium.copy(fontFamily = outfit),
-            displaySmall = defaultTypography.displaySmall.copy(fontFamily = outfit),
-            headlineLarge = defaultTypography.headlineLarge.copy(
-                fontFamily = outfit,
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp,
-                lineHeight = 36.sp,
-                letterSpacing = 0.sp
-            ),
-            headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = outfit),
-            headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = outfit),
-            titleLarge = defaultTypography.titleLarge.copy(
-                fontFamily = outfit,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 22.sp,
-                lineHeight = 28.sp,
-                letterSpacing = 0.sp
-            ),
-            titleMedium = defaultTypography.titleMedium.copy(fontFamily = outfit),
-            titleSmall = defaultTypography.titleSmall.copy(fontFamily = outfit),
-            bodyLarge = defaultTypography.bodyLarge.copy(
-                fontFamily = outfit,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                lineHeight = 24.sp,
-                letterSpacing = 0.5.sp
-            ),
-            bodyMedium = defaultTypography.bodyMedium.copy(
-                fontFamily = outfit,
-                fontWeight = FontWeight.Normal,
-                fontSize = 14.sp,
-                lineHeight = 20.sp,
-                letterSpacing = 0.25.sp
-            ),
-            bodySmall = defaultTypography.bodySmall.copy(fontFamily = outfit),
-            labelLarge = defaultTypography.labelLarge.copy(fontFamily = outfit),
-            labelMedium = defaultTypography.labelMedium.copy(
-                fontFamily = outfit,
-                fontWeight = FontWeight.Medium,
-                fontSize = 12.sp,
-                lineHeight = 16.sp,
-                letterSpacing = 0.5.sp
-            ),
-            labelSmall = defaultTypography.labelSmall.copy(fontFamily = outfit)
-        )
-    }
+// Define base typography with dynamic font selection based on active language
+@Composable
+fun getQuranCompanionTypography(isArabic: Boolean): Typography {
+    val fontFamily = if (isArabic) CairoFontFamily else OutfitFontFamily
+    val defaultTypography = Typography()
+    return Typography(
+        displayLarge = defaultTypography.displayLarge.copy(fontFamily = fontFamily),
+        displayMedium = defaultTypography.displayMedium.copy(fontFamily = fontFamily),
+        displaySmall = defaultTypography.displaySmall.copy(fontFamily = fontFamily),
+        headlineLarge = defaultTypography.headlineLarge.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 28.sp,
+            lineHeight = 36.sp,
+            letterSpacing = 0.sp
+        ),
+        headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = fontFamily),
+        headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = fontFamily),
+        titleLarge = defaultTypography.titleLarge.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 22.sp,
+            lineHeight = 28.sp,
+            letterSpacing = 0.sp
+        ),
+        titleMedium = defaultTypography.titleMedium.copy(fontFamily = fontFamily),
+        titleSmall = defaultTypography.titleSmall.copy(fontFamily = fontFamily),
+        bodyLarge = defaultTypography.bodyLarge.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            lineHeight = 24.sp,
+            letterSpacing = 0.5.sp
+        ),
+        bodyMedium = defaultTypography.bodyMedium.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            lineHeight = 20.sp,
+            letterSpacing = 0.25.sp
+        ),
+        bodySmall = defaultTypography.bodySmall.copy(fontFamily = fontFamily),
+        labelLarge = defaultTypography.labelLarge.copy(fontFamily = fontFamily),
+        labelMedium = defaultTypography.labelMedium.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp,
+            lineHeight = 16.sp,
+            letterSpacing = 0.5.sp
+        ),
+        labelSmall = defaultTypography.labelSmall.copy(fontFamily = fontFamily)
+    )
+}
 
 // Custom text style specifically designed for Quranic / Arabic verses using Cairo font
 val QuranArabicTextStyle: TextStyle

@@ -62,7 +62,13 @@ fun App() {
         null -> isSystemInDarkTheme()
     }
 
-    QuranCompanionTheme(darkTheme = isDarkMode, themeName = todayJourney?.theme) {
+    val isArabic = (prefsState?.preferredLanguage ?: localeProvider.currentLocale) == "ar"
+
+    QuranCompanionTheme(
+        darkTheme = isDarkMode,
+        themeName = todayJourney?.theme,
+        isArabic = isArabic
+    ) {
         val navController = rememberNavController()
 
         val startDestination = remember(prefsState) {

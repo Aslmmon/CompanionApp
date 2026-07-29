@@ -66,6 +66,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "emerald" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -95,6 +96,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "ocean" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -124,6 +126,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "night" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -153,6 +156,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "gold" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -182,6 +186,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         else -> if (darkTheme) DarkColorScheme else LightColorScheme
     }
 }
@@ -190,13 +195,14 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
 fun QuranCompanionTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     themeName: String? = null,
+    isArabic: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = getThemeColorScheme(darkTheme, themeName)
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = QuranCompanionTypography,
+        typography = getQuranCompanionTypography(isArabic),
         content = content
     )
 }
