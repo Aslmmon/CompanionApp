@@ -8,17 +8,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
 import qurancompanion.shared.generated.resources.Res
-import qurancompanion.shared.generated.resources.cairo
+import qurancompanion.shared.generated.resources.el_messiri
 import qurancompanion.shared.generated.resources.outfit
 
 // Define custom font families using resources inside Composable context
-val CairoFontFamily: FontFamily
+val ElMessiriFontFamily: FontFamily
     @Composable
     get() = FontFamily(
-        Font(Res.font.cairo, FontWeight.Normal),
-        Font(Res.font.cairo, FontWeight.Medium),
-        Font(Res.font.cairo, FontWeight.SemiBold),
-        Font(Res.font.cairo, FontWeight.Bold)
+        Font(Res.font.el_messiri, FontWeight.Normal),
+        Font(Res.font.el_messiri, FontWeight.Medium),
+        Font(Res.font.el_messiri, FontWeight.SemiBold),
+        Font(Res.font.el_messiri, FontWeight.Bold)
     )
 
 val OutfitFontFamily: FontFamily
@@ -33,7 +33,7 @@ val OutfitFontFamily: FontFamily
 // Define base typography with dynamic font selection based on active language
 @Composable
 fun getQuranCompanionTypography(isArabic: Boolean): Typography {
-    val fontFamily = if (isArabic) CairoFontFamily else OutfitFontFamily
+    val fontFamily = if (isArabic) ElMessiriFontFamily else OutfitFontFamily
     val defaultTypography = Typography()
     return Typography(
         displayLarge = defaultTypography.displayLarge.copy(fontFamily = fontFamily),
@@ -84,11 +84,11 @@ fun getQuranCompanionTypography(isArabic: Boolean): Typography {
     )
 }
 
-// Custom text style specifically designed for Quranic / Arabic verses using Cairo font
+// Custom text style specifically designed for Quranic / Arabic verses using El Messiri font
 val QuranArabicTextStyle: TextStyle
     @Composable
     get() = TextStyle(
-        fontFamily = CairoFontFamily,
+        fontFamily = ElMessiriFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 24.sp,
         lineHeight = 44.sp // High line-height to accommodate Arabic vowel markings (tashkeel)
