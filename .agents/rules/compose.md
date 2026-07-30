@@ -34,3 +34,11 @@ Every screen implementation must be split into two composable structures:
 * Annotate domain models passed to stateless composables with `@Immutable` or `@Stable`.
 * **Collection Stability**: Avoid passing raw Kotlin `List` collections directly to stateless composables if they change frequently; prefer wrapping them in a stable wrapper or using `kotlinx.collections.immutable`.
 * **Stable Keys**: Always use stable keys in lazy layouts (`LazyColumn`, `LazyRow`).
+
+---
+
+## 5. Adaptive & Multi-Device Layouts
+* Support phone, foldable, and tablet screen sizes gracefully.
+* Use flexible layout containers (`BoxWithConstraints`, `LazyVerticalGrid`, or responsive weight distributions) for content cards.
+* Enforce dynamic layout direction handling: use `LocalLayoutDirection.current` to derive direction-aware offsets, animation slide directions (e.g. `slideInHorizontally { sign * it }`), and icon mirroring for RTL (Arabic) vs LTR (English).
+

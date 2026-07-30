@@ -59,3 +59,12 @@ These guidelines define the Clean Architecture standards for the project.
 ## 6. Error & Result Shielding
 * Repositories and Use Cases must not propagate raw, platform/network-specific exceptions (e.g., `IOException`, `SerializationException`, `SqlException`) to ViewModels or the UI.
 * Wrap data operations in a clean, domain-specific `Result` type or return safe fallbacks where appropriate.
+
+---
+
+## 7. Storage & Data Persistence Evolution
+* **Static / Seed Data**: Bundled JSON resources loaded via `ResourceJourneyLocalDataSource` using Compose Resources.
+* **Key-Value State**: Lightweight user preferences stored via `KeyValueStorage` implementations (`AndroidKeyValueStorage` / `IosKeyValueStorage`).
+* **Relational / Complex Persistent Data**: When introducing features requiring search, bookmarks, audio sync, or historical analytics, implement a KMP database (SQLDelight or Room KMP) inside `data/datasource/db/`.
+* **Database Isolation**: SQL driver setups, table adapters, and generated entity classes must remain private to `data/`. Map all entities to pure domain models before returning from repositories.
+

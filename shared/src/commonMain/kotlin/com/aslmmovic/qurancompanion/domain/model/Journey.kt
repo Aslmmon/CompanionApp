@@ -1,8 +1,5 @@
 package com.aslmmovic.qurancompanion.domain.model
 
-import androidx.compose.runtime.Immutable
-
-@Immutable
 data class Journey(
     val id: String,
     val dayNumber: Int,
@@ -23,13 +20,11 @@ data class Journey(
     val tags: List<String>
 )
 
-@Immutable
 data class Cover(
     val type: String,
     val asset: String
 )
 
-@Immutable
 data class JourneyStep(
     val type: StepType,
     val title: String,

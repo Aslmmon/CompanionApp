@@ -7,13 +7,16 @@ import com.aslmmovic.qurancompanion.data.dto.toDomain
 import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.repository.JourneyRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
@@ -29,8 +32,16 @@ class JourneyRepositoryImpl(
     // Keys are journeyIds, values are completion booleans
     private val _completionStates = MutableStateFlow<Map<String, Boolean>>(emptyMap())
     
-    // Debug offset to manually change days/journeys for testing
-    private val _debugDayOffset = MutableStateFlow(storage.getInt("debug_day_offset", 0))
+    // Debug offset to manually change days/journeys for testing - starts at 0, loaded in init
+    private val _debugDayOffset = MutableStateFlow(0)
+
+    private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
+
+    init {
+        scope.launch {
+            _debugDayOffset.value = storage.getInt(KEY_DEBUG_DAY_OFFSET, 0)
+        }
+    }
 
     override suspend fun getAllJourneys(): List<Journey> = withContext(ioDispatcher) {
         try {
@@ -122,12 +133,15 @@ class JourneyRepositoryImpl(
     override suspend fun incrementDebugDayOffset() = withContext(ioDispatcher) {
         try {
             val next = _debugDayOffset.value + 1
-            storage.putInt("debug_day_offset", next)
+            storage.putInt(KEY_DEBUG_DAY_OFFSET, next)
             _debugDayOffset.value = next
         } catch (e: Exception) {
             // handle exception silently or log
         }
     }
 
-    private fun completionKey(journeyId: String) = "journey_completed_$journeyId"
+    companion object {
+        private const val KEY_DEBUG_DAY_OFFSET = "debug_day_offset"
+        private fun completionKey(journeyId: String) = "journey_completed_$journeyId"
+    }
 }

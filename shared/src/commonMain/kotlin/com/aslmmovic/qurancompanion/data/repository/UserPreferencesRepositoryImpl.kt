@@ -4,11 +4,14 @@ import com.aslmmovic.qurancompanion.data.datasource.KeyValueStorage
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserPreferencesRepositoryImpl(
@@ -16,7 +19,14 @@ class UserPreferencesRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserPreferencesRepository {
 
-    private val _preferences = MutableStateFlow(loadFromStorage())
+    private val _preferences = MutableStateFlow(UserPreferences())
+    private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
+
+    init {
+        scope.launch {
+            _preferences.value = loadFromStorage()
+        }
+    }
 
     override fun getUserPreferences(): Flow<UserPreferences> = _preferences.asStateFlow()
 
