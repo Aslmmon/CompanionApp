@@ -3,7 +3,8 @@ package com.aslmmovic.qurancompanion.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
-import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
+import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -17,7 +18,8 @@ sealed class LanguageUiEvent {
 }
 
 class LanguageViewModel(
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
+    private val savePreferencesUseCase: SavePreferencesUseCase,
     private val localeProvider: LocaleProvider
 ) : ViewModel() {
 
@@ -26,8 +28,8 @@ class LanguageViewModel(
 
     fun selectLanguage(languageCode: String) {
         viewModelScope.launch {
-            val currentPrefs = userPreferencesRepository.getUserPreferences().first()
-            userPreferencesRepository.saveUserPreferences(
+            val currentPrefs = getUserPreferencesUseCase().first()
+            savePreferencesUseCase(
                 currentPrefs.copy(preferredLanguage = languageCode)
             )
             localeProvider.changeLocale(languageCode)

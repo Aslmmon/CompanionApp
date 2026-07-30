@@ -12,12 +12,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class JourneyRepositoryImplTest {
 
     private val fakeDataSource = FakeJourneyLocalDataSource()
@@ -25,15 +29,17 @@ class JourneyRepositoryImplTest {
     private val fakeStorage = FakeKeyValueStorage()
     private val fakeDateTimeProvider = FakeDateTimeProvider()
 
-    private val repository = JourneyRepositoryImpl(
+    private fun TestScope.createRepository() = JourneyRepositoryImpl(
         localDataSource = fakeDataSource,
         localeProvider = fakeLocaleProvider,
         storage = fakeStorage,
-        dateTimeProvider = fakeDateTimeProvider
+        dateTimeProvider = fakeDateTimeProvider,
+        ioDispatcher = UnconfinedTestDispatcher(testScheduler)
     )
 
     @Test
     fun `getTodayJourney cycles through available journeys correctly`() = runTest {
+        val repository = createRepository()
         val journeys = listOf(
             createJourneyDto("1"),
             createJourneyDto("2"),
@@ -60,6 +66,7 @@ class JourneyRepositoryImplTest {
 
     @Test
     fun `getTomorrowJourney returns next day cycle correctly`() = runTest {
+        val repository = createRepository()
         val journeys = listOf(
             createJourneyDto("1"),
             createJourneyDto("2"),
@@ -78,6 +85,7 @@ class JourneyRepositoryImplTest {
 
     @Test
     fun `getWeeklyProgress correctly calculates completed states offset by current day of week`() = runTest {
+        val repository = createRepository()
         val journeys = listOf(
             createJourneyDto("1"), // index 0
             createJourneyDto("2"), // index 1
@@ -118,6 +126,7 @@ class JourneyRepositoryImplTest {
 
     @Test
     fun `marking journey completed persists in storage and emits true`() = runTest {
+        val repository = createRepository()
         val journeys = listOf(createJourneyDto("test-id"))
         fakeDataSource.journeys = journeys
         repository.getAllJourneys()
@@ -135,6 +144,7 @@ class JourneyRepositoryImplTest {
 
     @Test
     fun `getWeeklyProgress dynamically updates when incrementing debug day offset`() = runTest {
+        val repository = createRepository()
         val journeys = listOf(
             createJourneyDto("1"),
             createJourneyDto("2"),

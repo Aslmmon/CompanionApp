@@ -6,6 +6,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -131,15 +133,18 @@ fun JourneyFlowContent(
             // Step card — slides in/out horizontally on step change
             Box(modifier = Modifier.weight(1f)) {
                 val currentStep = journey?.steps?.getOrNull(currentStepIndex)
+                val layoutDirection = LocalLayoutDirection.current
+                val isRtl = layoutDirection == LayoutDirection.Rtl
                 AnimatedContent(
                     targetState = currentStepIndex,
                     transitionSpec = {
+                        val sign = if (isRtl) -1 else 1
                         if (targetState > initialState) {
-                            slideInHorizontally { it } + fadeIn() togetherWith
-                                    slideOutHorizontally { -it } + fadeOut()
+                            slideInHorizontally { sign * it } + fadeIn() togetherWith
+                                    slideOutHorizontally { -sign * it } + fadeOut()
                         } else {
-                            slideInHorizontally { -it } + fadeIn() togetherWith
-                                    slideOutHorizontally { it } + fadeOut()
+                            slideInHorizontally { -sign * it } + fadeIn() togetherWith
+                                    slideOutHorizontally { sign * it } + fadeOut()
                         }
                     },
                     label = "step_content"
@@ -238,7 +243,7 @@ private fun StepCard(step: JourneyStep) {
 
                 Column {
                     Text(
-                        text = step.type.label,
+                        text = getStepTypeLabel(step.type),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,

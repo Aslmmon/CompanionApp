@@ -54,7 +54,7 @@ val appModule = module {
     single { IncrementDebugDayOffsetUseCase(get()) }
 
     // Presentation layer
-    viewModel { LanguageViewModel(get(), get()) }
+    viewModel { LanguageViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get()) }
 }

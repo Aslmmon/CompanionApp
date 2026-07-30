@@ -34,15 +34,17 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun App() {
-    val userPreferencesRepository: UserPreferencesRepository = koinInject()
+    val getUserPreferencesUseCase: com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase = koinInject()
+    val savePreferencesUseCase: com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase = koinInject()
+    val getTodayJourneyUseCase: com.aslmmovic.qurancompanion.domain.usecase.GetTodayJourneyUseCase = koinInject()
+    val getDebugDayOffsetUseCase: com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase = koinInject()
     val localeProvider: LocaleProvider = koinInject()
-    val journeyRepository: com.aslmmovic.qurancompanion.domain.repository.JourneyRepository = koinInject()
-    val prefsState by userPreferencesRepository.getUserPreferences().collectAsState(null)
+    val prefsState by getUserPreferencesUseCase().collectAsState(null)
     var todayJourney by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<com.aslmmovic.qurancompanion.domain.model.Journey?>(null) }
-    val debugOffset by journeyRepository.getDebugDayOffset().collectAsState(0)
+    val debugOffset by getDebugDayOffsetUseCase().collectAsState(0)
 
     LaunchedEffect(prefsState?.preferredLanguage, debugOffset) {
-        todayJourney = journeyRepository.getTodayJourney()
+        todayJourney = getTodayJourneyUseCase()
     }
 
     // Handle auto-selecting Arabic if device language is Arabic
@@ -51,7 +53,7 @@ fun App() {
         if (prefs.preferredLanguage == null) {
             val systemLocale = localeProvider.currentLocale
             if (systemLocale == "ar") {
-                userPreferencesRepository.saveUserPreferences(prefs.copy(preferredLanguage = "ar"))
+                savePreferencesUseCase(prefs.copy(preferredLanguage = "ar"))
             }
         }
     }
