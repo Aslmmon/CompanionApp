@@ -16,6 +16,7 @@ import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
+import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
@@ -54,7 +55,8 @@ val appModule = module {
     single { IncrementDebugDayOffsetUseCase(get()) }
 
     // Presentation layer
-    viewModel { LanguageViewModel(get(), get()) }
+    viewModel { AppViewModel(get(), get(), get(), get(), get()) }
+    viewModel { LanguageViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get()) }
 }

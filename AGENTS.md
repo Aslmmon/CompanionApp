@@ -1,87 +1,40 @@
-# Project Overview
-This is a Kotlin Multiplatform (KMP) project utilizing Compose Multiplatform for shared UI across Android and iOS. The core logic is structured in the `:shared` module using a layered Clean Architecture structure under `com.aslmmovic.qurancompanion`:
-- **data**: Data sources, DTOs, and Repository implementations.
-- **domain**: Business logic (Domain Models, Repository Interfaces, Use Cases).
-- **presentation**: ViewModels, Composable Screens, and Navigation.
+# Quran Companion Developer & Agent Guidelines
+
+This document provides a high-level overview of the project and serves as an index to our modular engineering guidelines.
 
 ---
 
-# Architecture Rules
-- **Layer Isolation**: Keep `domain` completely free of platform-specific imports (e.g. `android.*`) and data layer dependencies.
-- **Data flow**: Repositories and Use Cases must return Domain Models. Map DTOs to Domain Models in the data layer using extension functions (e.g., `toDomain()`).
-- **Use Case Single Responsibility**: Encapsulate business logic in Use Case classes exposing a single `operator fun invoke()`.
+## 1. Project Overview
+This is a Kotlin Multiplatform (KMP) project utilizing Compose Multiplatform for shared UI across Android and iOS. The core logic is structured in the `:shared` module using a layered Clean Architecture:
+* **data**: Data sources, DTOs, and Repository implementations.
+* **domain**: Business logic (Domain Models, Repository Interfaces, Use Cases).
+* **presentation**: ViewModels, Composable Screens, and Navigation.
 
 ---
 
-# Feature Development
-- **Package by Layer**: Organize code by layer packages (`data`, `domain`, `presentation`), not by feature. Place new files in the corresponding subpackages.
-- **Use Case Grouping**: Do not create one file per Use Case. Group related Use Cases into files named after their domain namespace (e.g., `JourneyUseCases.kt`, `OnboardingUseCases.kt`).
-- **Platform Abstraction**: Place device-specific implementations (e.g., key-value storage, system locale) in `androidMain` and `iosMain` source sets, referencing interfaces defined in `data/datasource/` or `domain/util/`.
+## 2. Modular Guidelines Directory
+Refer to these topic-specific guidelines for detailed rules, code conventions, and implementation instructions:
+* 🏗️ **[Clean Architecture & Layer Isolation Guidelines](file:///.agents/rules/architecture.md)**
+* 📱 **[Compose Multiplatform UI Guidelines](file:///.agents/rules/compose.md)**
+* 🔌 **[Dependency Injection Guidelines (Koin)](file:///.agents/rules/di.md)**
+* ⚡ **[Coroutines & Concurrency Guidelines](file:///.agents/rules/concurrency.md)**
+* 🗺️ **[Navigation Architecture Guidelines](file:///.agents/rules/navigation.md)**
+* 🧪 **[Testing Architecture & Guidelines](file:///.agents/rules/testing.md)**
+* 📝 **[Naming Conventions Guidelines](file:///.agents/rules/naming_conventions.md)**
 
 ---
 
-# Jetpack Compose
-- **Screen-Content Pattern**: Split screens into two composables:
-  1. Stateful screen wrapper (`*Screen`): Receives the `ViewModel`, collects UI states using `collectAsStateWithLifecycle()`, and binds event handlers.
-  2. Stateless content (`*Content`): Accepts raw states and lambda callbacks. Must be preview-friendly and easy to test.
-- **Localization**: Retrieve string values via `stringResource(Res.string.<id>)` from the generated Multiplatform resources. Any new user-facing text must be added to the localization resource files: English in `shared/src/commonMain/composeResources/values/strings.xml` and Arabic translation in `shared/src/commonMain/composeResources/values-ar/strings.xml`.
-- **Typography & Theme**: Apply theme tokens from `MaterialTheme`. For Arabic or Quranic text, use `QuranArabicTextStyle` from `ui/theme/Type.kt` to accommodate tashkeel (vowel markings) line heights.
+## 3. Core Developer Checklist
 
----
+### Do
+* **Recreate Host Activities**: Trigger full resource reloads (e.g. `activity.recreate()`) on dynamic configuration shifts such as language/locale switches.
+* **Map Data Layers**: Fully map DTO/entity representations to domain models inside data layers using mapping extension functions (e.g., `toDomain()`) before returning.
+* **Main Safety**: Always ensure all Use Cases and Repository interfaces are main-safe and run non-blocking.
+* **Localization Resources**: Define all user-facing strings in Multiplatform XML resources (providing English in `values/strings.xml` and Arabic in `values-ar/strings.xml`).
 
-# Dependency Injection
-- **Framework**: Koin is used for dependency injection.
-- **Declaration**: Register common dependencies in `di/AppModule.kt` (`appModule`) and platform overrides in `di/AndroidModule.kt` / `di/IosModule.kt`.
-- **Retrieval**: Use `koinViewModel()` inside Composables to fetch ViewModels. Use constructor injection for all non-UI layers. Use `koinInject()` only in top-level entry composables like `App()`.
-
----
-
-# Navigation
-- **Navigation Graph**: Defined in `App.kt` using Jetpack Navigation Compose.
-- **Routes**: Define type-safe route strings inside the `AppRoute` sealed class in `presentation/navigation/AppRoute.kt`.
-- **Side Effects**: ViewModels emit one-shot actions to a `SharedFlow<*UiEvent>`. Collect these in the Stateful Screen wrapper inside a `LaunchedEffect(vm)` to trigger `navController` actions.
-
----
-
-# Design System
-- **Theme Definitions**: Located in `ui/theme/`.
-- **Dynamic Theming**: Support dark and light palettes by leveraging theme colors (e.g., `MaterialTheme.colorScheme.primary`) instead of hardcoding raw color values.
-
----
-
-# Testing
-- **Structure**: Tests are written in `commonTest` using the `kotlin.test` package.
-- **Coroutines**: Test suspend functions with `runTest` and `StandardTestDispatcher()`. Call `advanceUntilIdle()` to execute scheduled tasks.
-- **Fakes over Mocks**: Do not use mocking libraries (e.g., Mockk). Write simple, in-memory fakes (e.g., `FakeJourneyRepository`) in `commonTest` to stub dependencies.
-
----
-
-# Performance
-- **Flow Lifecycle**: Share StateFlows in ViewModels using `stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ...)` to prevent resource leakage on configuration changes.
-- **I/O Caching**: Implement in-memory caches in local data sources to avoid redundant resource parsing (e.g., JSON file reads).
-
----
-
-# Naming Conventions
-- **ViewModels**: `<Feature>ViewModel` (e.g., `HomeViewModel`)
-- **Stateful Screens**: `<Feature>Screen` (e.g., `HomeScreen`)
-- **Stateless Screens**: `<Feature>Content` (e.g., `HomeContent`)
-- **One-Shot Events**: `<Feature>UiEvent` (e.g., `HomeUiEvent`)
-- **Use Cases**: `<Verb><Subject>UseCase` (e.g., `GetTodayJourneyUseCase`)
-- **Repositories**: `<Subject>Repository` (interface) and `<Subject>RepositoryImpl` (implementation)
-- **Data Transfer Objects**: `<Model>Dto` (e.g., `JourneyDto`)
-
----
-
-# Do
-- Recreate host activities when configuration changes require a full resource reload (e.g., `MainActivity.recreate()` on locale switches).
-- Map DTOs to Domain models within data layers before returning values.
-- Declare custom preview composables to test layouts in multiple screen sizes.
-- Define all user-facing strings in the multiplatform XML resources and provide both English (`values/strings.xml`) and Arabic (`values-ar/strings.xml`) translations.
-
----
-
-# Don't
-- Do not import `android.*` or target Android SDK components in `commonMain` code.
-- Do not instantiate dependencies (like UseCases or Repositories) inside ViewModels or Screens; use dependency injection.
-- Do not bypass Use Cases; ViewModels should interact with the domain layer through Use Cases rather than directly injecting Repositories.
+### Don't
+* **No Platform Imports in Domain**: Do not import Android SDK libraries (like `android.*`) or platform components in `commonMain` or the `domain` module.
+* **No Repository Bypassing**: ViewModels must never directly consume Repositories; always encapsulate business logic in Use Cases.
+* **No Raw Exceptions in UI**: Never propagate raw SQL, filesystem, or network exceptions up to ViewModels; handle exceptions at repository boundaries.
+* **No Mocking Libraries**: Do not import mock frameworks (like Mockk or Mockito) in `commonTest`; write clean, in-memory fake classes instead.
+* **No Unstable UI Params**: Avoid passing unstable collection types (such as raw, standard `List` objects) directly into stateless composables without stable keys or wrappers.

@@ -2,26 +2,24 @@ package com.aslmmovic.qurancompanion
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
-import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
 import com.aslmmovic.qurancompanion.presentation.navigation.AppRoute
 import com.aslmmovic.qurancompanion.presentation.screens.CompletionScreen
 import com.aslmmovic.qurancompanion.presentation.screens.HomeScreen
 import com.aslmmovic.qurancompanion.presentation.screens.JourneyFlowScreen
 import com.aslmmovic.qurancompanion.presentation.screens.LanguageSelectionScreen
+import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeUiEvent
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyUiEvent
@@ -29,58 +27,30 @@ import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageUiEvent
 import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
 import com.aslmmovic.qurancompanion.ui.theme.QuranCompanionTheme
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun App() {
-    val userPreferencesRepository: UserPreferencesRepository = koinInject()
-    val localeProvider: LocaleProvider = koinInject()
-    val journeyRepository: com.aslmmovic.qurancompanion.domain.repository.JourneyRepository = koinInject()
-    val prefsState by userPreferencesRepository.getUserPreferences().collectAsState(null)
-    var todayJourney by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<com.aslmmovic.qurancompanion.domain.model.Journey?>(null) }
-    val debugOffset by journeyRepository.getDebugDayOffset().collectAsState(0)
+    val viewModel: AppViewModel = koinViewModel()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(prefsState?.preferredLanguage, debugOffset) {
-        todayJourney = journeyRepository.getTodayJourney()
-    }
+    if (!state.isInitialized) return
 
-    // Handle auto-selecting Arabic if device language is Arabic
-    LaunchedEffect(prefsState) {
-        val prefs = prefsState ?: return@LaunchedEffect
-        if (prefs.preferredLanguage == null) {
-            val systemLocale = localeProvider.currentLocale
-            if (systemLocale == "ar") {
-                userPreferencesRepository.saveUserPreferences(prefs.copy(preferredLanguage = "ar"))
-            }
-        }
-    }
-
-    val isDarkMode = when (prefsState?.isDarkMode) {
+    val isDarkMode = when (state.isDarkMode) {
         true -> true
         false -> false
         null -> isSystemInDarkTheme()
     }
 
-    QuranCompanionTheme(darkTheme = isDarkMode, themeName = todayJourney?.theme) {
+    QuranCompanionTheme(
+        darkTheme = isDarkMode,
+        themeName = state.todayJourney?.theme,
+        isArabic = state.isArabic
+    ) {
         val navController = rememberNavController()
 
-        val startDestination = remember(prefsState) {
-            val prefs = prefsState ?: return@remember null
-            if (prefs.preferredLanguage != null) {
-                AppRoute.Home.route
-            } else {
-                val systemLocale = localeProvider.currentLocale
-                if (systemLocale == "ar") {
-                    AppRoute.Home.route
-                } else {
-                    AppRoute.Welcome.route
-                }
-            }
-        }
-
-        if (startDestination != null) {
-            androidx.compose.foundation.layout.Box(
+        state.startDestination?.let { startDest ->
+            Box(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
                     .safeContentPadding()
@@ -88,7 +58,7 @@ fun App() {
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = startDestination
+                    startDestination = startDest
                 ) {
                     composable(AppRoute.Welcome.route) {
                         val vm: LanguageViewModel = koinViewModel()

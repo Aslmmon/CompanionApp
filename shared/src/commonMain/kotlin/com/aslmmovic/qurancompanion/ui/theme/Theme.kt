@@ -6,6 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 
 private val LightColorScheme = lightColorScheme(
     primary = LightPrimary,
@@ -66,6 +68,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "emerald" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -95,6 +98,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "ocean" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -124,6 +128,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "night" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -153,6 +158,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         "gold" -> {
             if (darkTheme) {
                 darkColorScheme(
@@ -182,6 +188,7 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
                 )
             }
         }
+
         else -> if (darkTheme) DarkColorScheme else LightColorScheme
     }
 }
@@ -190,13 +197,19 @@ fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
 fun QuranCompanionTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     themeName: String? = null,
+    isArabic: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = getThemeColorScheme(darkTheme, themeName)
+    val layoutDirection = if (isArabic) LayoutDirection.Rtl else LayoutDirection.Ltr
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = QuranCompanionTypography,
-        content = content
-    )
+    androidx.compose.runtime.CompositionLocalProvider(
+        LocalLayoutDirection provides layoutDirection
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = getQuranCompanionTypography(isArabic),
+            content = content
+        )
+    }
 }
