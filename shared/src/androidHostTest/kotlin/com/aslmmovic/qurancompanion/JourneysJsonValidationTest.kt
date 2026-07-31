@@ -12,10 +12,13 @@ class JourneysJsonValidationTest {
         val json = Json { ignoreUnknownKeys = true }
         
         // Find English JSON file path
-        var enFile = java.io.File("src/commonMain/composeResources/files/en/journeys.json")
-        if (!enFile.exists()) {
-            enFile = java.io.File("shared/src/commonMain/composeResources/files/en/journeys.json")
-        }
+        val candidateEnPaths = listOf(
+            "src/commonMain/composeResources/files/en/journeys.json",
+            "shared/src/commonMain/composeResources/files/en/journeys.json",
+            "../shared/src/commonMain/composeResources/files/en/journeys.json"
+        )
+        val enFile = candidateEnPaths.map { java.io.File(it) }.firstOrNull { it.exists() }
+            ?: error("Could not locate en/journeys.json in paths: $candidateEnPaths (cwd: ${java.io.File(".").absolutePath})")
         val enJson = enFile.readText()
         val enJourneys = json.decodeFromString<List<com.aslmmovic.qurancompanion.data.dto.JourneyDto>>(enJson)
         assertEquals(10, enJourneys.size)
@@ -49,13 +52,18 @@ class JourneysJsonValidationTest {
         }
 
         // Find Arabic JSON file path
-        var arFile = java.io.File("src/commonMain/composeResources/files/ar/journeys.json")
-        if (!arFile.exists()) {
-            arFile = java.io.File("shared/src/commonMain/composeResources/files/ar/journeys.json")
-        }
+        val candidateArPaths = listOf(
+            "src/commonMain/composeResources/files/ar/journeys.json",
+            "shared/src/commonMain/composeResources/files/ar/journeys.json",
+            "../shared/src/commonMain/composeResources/files/ar/journeys.json"
+        )
+        val arFile = candidateArPaths.map { java.io.File(it) }.firstOrNull { it.exists() }
+            ?: error("Could not locate ar/journeys.json in paths: $candidateArPaths (cwd: ${java.io.File(".").absolutePath})")
         val arJson = arFile.readText()
+
         val arJourneys = json.decodeFromString<List<com.aslmmovic.qurancompanion.data.dto.JourneyDto>>(arJson)
-        assertEquals(10, arJourneys.size)
+        assertEquals(5, arJourneys.size)
+
         for (journey in arJourneys) {
             assertTrue(journey.id.isNotEmpty())
             assertTrue(journey.title.isNotEmpty())

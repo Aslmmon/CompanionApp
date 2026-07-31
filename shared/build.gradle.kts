@@ -59,6 +59,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.navigation.compose)
+            implementation(libs.compottie)
+            implementation(libs.compottie.dot)
+            implementation(libs.compottie.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
