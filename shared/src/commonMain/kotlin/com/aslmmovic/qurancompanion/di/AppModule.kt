@@ -20,6 +20,7 @@ import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
+import com.aslmmovic.qurancompanion.presentation.viewmodel.SplashViewModel
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
@@ -55,6 +56,7 @@ val appModule = module {
     single { IncrementDebugDayOffsetUseCase(get()) }
 
     // Presentation layer
+    viewModel { SplashViewModel() }
     viewModel { AppViewModel(get(), get(), get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }

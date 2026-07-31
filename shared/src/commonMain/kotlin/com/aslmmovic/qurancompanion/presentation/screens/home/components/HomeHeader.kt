@@ -50,18 +50,6 @@ fun HomeHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Left spacer matches the size of the right menu button (40.dp) to keep title centered.
-        Spacer(modifier = Modifier.size(40.dp))
-
-        Text(
-            text = stringResource(Res.string.welcome_title),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
-        )
-
         Box {
             IconButton(
                 onClick = { showMenu = true },
@@ -108,8 +96,19 @@ fun HomeHeader(
                         )
                     }
                 )
-
             }
         }
+
+        Text(
+            text = stringResource(Res.string.welcome_title),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.weight(1f)
+        )
+
+        // Spacer matches the size of the menu button (40.dp) to keep title centered.
+        Spacer(modifier = Modifier.size(40.dp))
     }
 }

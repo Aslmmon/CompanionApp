@@ -24,8 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aslmmovic.qurancompanion.domain.model.Journey
+import com.aslmmovic.qurancompanion.ui.components.RubElHizbBadge
 import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
+import qurancompanion.shared.generated.resources.daily_habit_badge
 import qurancompanion.shared.generated.resources.home_begin_journey
 import qurancompanion.shared.generated.resources.home_duration
 import qurancompanion.shared.generated.resources.home_loading
@@ -43,77 +45,125 @@ fun ReadyStateContent(
         modifier = modifier.fillMaxWidth()
     ) {
         // Today's Journey label
-        Text(
-            text = stringResource(Res.string.home_todays_journey),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-            letterSpacing = 1.sp
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = stringResource(Res.string.home_todays_journey),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.sp
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Journey card
+        // Journey card with Islamic arch styling & gold border
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+            shape = RoundedCornerShape(20.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    1.dp,
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                    RoundedCornerShape(16.dp)
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.35f),
+                    shape = RoundedCornerShape(20.dp)
                 )
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
                 if (journey != null) {
-                    // Category badge
-                    Box(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+                        // Category badge
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = MaterialTheme.colorScheme.primaryContainer,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(horizontal = 10.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = journey.category,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+
+                        // Daily Habit Badge (10 min habit)
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
+                                    shape = RoundedCornerShape(20.dp)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+                                    shape = RoundedCornerShape(20.dp)
+                                )
+                                .padding(horizontal = 10.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.daily_habit_badge),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.secondary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        RubElHizbBadge(
+                            number = "1",
+                            badgeSize = 36.dp,
+                            starColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+
                         Text(
-                            text = journey.category,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold
+                            text = journey.title,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.weight(1f)
                         )
                     }
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    Text(
-                        text = journey.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        Text(text = "⏱", fontSize = 14.sp)
+                        Text(text = "⏳", fontSize = 14.sp)
                         Text(
                             text = stringResource(Res.string.home_duration, journey.durationMinutes),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = "·",
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
                         )
                         Text(
                             text = stringResource(Res.string.home_steps_count, journey.steps.size),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 } else {
@@ -127,13 +177,13 @@ fun ReadyStateContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
-        // Begin CTA
+        // Begin CTA Button
         Button(
             onClick = onBeginClick,
             enabled = journey != null,
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(18.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -145,8 +195,9 @@ fun ReadyStateContent(
             Text(
                 text = stringResource(Res.string.home_begin_journey),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
+

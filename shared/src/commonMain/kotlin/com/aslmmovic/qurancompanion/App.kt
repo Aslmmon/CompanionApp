@@ -26,6 +26,9 @@ import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyUiEvent
 import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageUiEvent
 import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
+import com.aslmmovic.qurancompanion.presentation.screens.SplashScreen
+import com.aslmmovic.qurancompanion.presentation.viewmodel.SplashUiEvent
+import com.aslmmovic.qurancompanion.presentation.viewmodel.SplashViewModel
 import com.aslmmovic.qurancompanion.ui.theme.QuranCompanionTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -49,17 +52,36 @@ fun App() {
     ) {
         val navController = rememberNavController()
 
-        state.startDestination?.let { startDest ->
+        state.startDestination?.let { targetDest ->
             Box(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
                     .safeContentPadding()
                     .fillMaxSize()
             ) {
+                com.aslmmovic.qurancompanion.ui.components.IslamicBackgroundLattice()
+
                 NavHost(
                     navController = navController,
-                    startDestination = startDest
+                    startDestination = AppRoute.Splash.route
                 ) {
+                    composable(AppRoute.Splash.route) {
+                        val vm: SplashViewModel = koinViewModel()
+
+                        LaunchedEffect(vm) {
+                            vm.uiEvents.collect { event ->
+                                when (event) {
+                                    SplashUiEvent.NavigateNext ->
+                                        navController.navigate(targetDest) {
+                                            popUpTo(AppRoute.Splash.route) { inclusive = true }
+                                        }
+                                }
+                            }
+                        }
+
+                        SplashScreen(vm)
+                    }
+
                     composable(AppRoute.Welcome.route) {
                         val vm: LanguageViewModel = koinViewModel()
 

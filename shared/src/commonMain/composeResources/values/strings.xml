@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App-wide -->
-    <string name="welcome_title">Quran Companion</string>
+    <string name="welcome_title">Sahaba Companion</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
+    <string name="daily_habit_badge">10 Min Daily Habit</string>
 
     <!-- Home Screen -->
-    <string name="home_begin_journey">Begin Today's Journey</string>
-    <string name="home_completed_title">Journey Complete for Today</string>
-    <string name="home_completed_subtitle">See you tomorrow insha'Allah.</string>
+    <string name="home_begin_journey">Discover Today\'s Sahabi (~10 min)</string>
+    <string name="home_completed_title">Daily Sahabi Habit Complete</string>
+    <string name="home_completed_subtitle">See you tomorrow with a new Sahabi insha\'Allah.</string>
     <string name="home_reset_journey">Reset &amp; Start Again</string>
     <string name="home_duration">~%1$d mins</string>
-    <string name="home_todays_journey">Today's Journey</string>
-    <string name="home_action_label">Today's Action</string>
-    <string name="home_loading">Loading today's journey…</string>
+    <string name="home_todays_journey">Today\'s Sahabi Discovery</string>
+    <string name="home_action_label">Today\'s Action</string>
+    <string name="home_loading">Loading today\'s Sahabi story…</string>
     <string name="home_steps_count">%1$d steps</string>
 
     <!-- Journey Flow Screen -->
@@ -23,11 +24,11 @@
 
     <!-- Completion Screen -->
     <string name="completion_heading">Alhamdulillah</string>
-    <string name="completion_minutes_spent">You invested %1$d meaningful minutes today.</string>
-    <string name="completion_reward">May Allah reward your effort.</string>
-    <string name="completion_next_day">We'll prepare another journey tomorrow.</string>
+    <string name="completion_minutes_spent">You invested %1$d minutes learning from the Sahaba today.</string>
+    <string name="completion_reward">May Allah reward your effort and bless your learning.</string>
+    <string name="completion_next_day">We\'ll prepare another Sahabi discovery tomorrow.</string>
     <string name="completion_done">Done</string>
-    <string name="completion_action_label">Today's Action</string>
+    <string name="completion_action_label">Today\'s Action</string>
 
     <!-- Reminder status -->
     <string name="reminders_label">Reminders:</string>
@@ -35,7 +36,7 @@
     <string name="reminders_disabled">Disabled</string>
 
     <!-- Weekly Tracker -->
-    <string name="home_weekly_tracker">Weekly Progress</string>
+    <string name="home_weekly_tracker">Daily Habit Streak</string>
     <string name="home_weekly_monday">M</string>
     <string name="home_weekly_tuesday">T</string>
     <string name="home_weekly_wednesday">W</string>
@@ -45,7 +46,7 @@
     <string name="home_weekly_sunday">S</string>
 
     <!-- Tomorrow Preview -->
-    <string name="home_tomorrow_preview">Tomorrow's Preview</string>
+    <string name="home_tomorrow_preview">Tomorrow\'s Preview</string>
     <string name="home_tomorrow_badge">Tomorrow</string>
 
     <!-- Language & Settings -->
@@ -57,8 +58,14 @@
     <string name="settings_title">Settings</string>
     <string name="menu_content_description">Menu</string>
     <string name="settings_change_language">Change Language</string>
+    <string name="settings_theme_palette">Atmospheric Theme</string>
     <string name="theme_light_mode">Light Mode</string>
     <string name="theme_dark_mode">Dark Mode</string>
+    <string name="theme_mushaf_parchment">Mushaf Parchment</string>
+    <string name="theme_emerald_andalus">Emerald Andalus</string>
+    <string name="theme_midnight_crescent">Midnight Crescent</string>
+    <string name="theme_golden_dune">Golden Dune</string>
+    <string name="theme_ocean_breeze">Ocean Breeze</string>
     <string name="settings_debug_options">Developer Options</string>
     <string name="settings_simulate_next_day">Simulate Next Day</string>
 
@@ -67,6 +74,6 @@
     <string name="step_type_story">Story</string>
     <string name="step_type_key_lessons">Key Lessons</string>
     <string name="step_type_reflection">Reflection</string>
-    <string name="step_type_action">Today's Action</string>
+    <string name="step_type_action">Today\'s Action</string>
     <string name="step_type_references">References</string>
 </resources>
