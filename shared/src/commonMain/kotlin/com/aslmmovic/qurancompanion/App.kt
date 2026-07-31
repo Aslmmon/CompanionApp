@@ -59,6 +59,8 @@ fun App() {
                     .safeContentPadding()
                     .fillMaxSize()
             ) {
+                com.aslmmovic.qurancompanion.ui.components.IslamicBackgroundLattice()
+
                 NavHost(
                     navController = navController,
                     startDestination = AppRoute.Splash.route

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App-wide -->
-    <string name="welcome_title">رفيق القرآن</string>
+    <string name="welcome_title">رفيق الصحابة</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
+    <string name="daily_habit_badge">عادة ١٠ دقائق يومياً</string>
 
     <!-- Home Screen -->
-    <string name="home_begin_journey">ابدأ رحلة اليوم</string>
-    <string name="home_completed_title">اكتملت رحلة اليوم</string>
-    <string name="home_completed_subtitle">إلى اللقاء غداً إن شاء الله.</string>
+    <string name="home_begin_journey">تعرّف على صحابي اليوم (~١٠ دقائق)</string>
+    <string name="home_completed_title">اكتملت عادة اليوم مع الصحابة</string>
+    <string name="home_completed_subtitle">إلى اللقاء غداً مع صحابي جديد إن شاء الله.</string>
     <string name="home_reset_journey">إعادة البدء</string>
     <string name="home_duration">~%1$d دقائق</string>
-    <string name="home_todays_journey">رحلة اليوم</string>
+    <string name="home_todays_journey">صحابي اليوم</string>
     <string name="home_action_label">عمل اليوم</string>
-    <string name="home_loading">جارٍ تحميل رحلة اليوم…</string>
+    <string name="home_loading">جارٍ تحميل قصة صحابي اليوم…</string>
     <string name="home_steps_count">%1$d خطوات</string>
 
     <!-- Journey Flow Screen -->
@@ -23,9 +24,9 @@
 
     <!-- Completion Screen -->
     <string name="completion_heading">الحمد لله</string>
-    <string name="completion_minutes_spent">لقد استثمرت %1$d دقائق قيّمة اليوم.</string>
-    <string name="completion_reward">تقبل الله طاعتك وضاعف أجرك.</string>
-    <string name="completion_next_day">سنجهز لك رحلة أخرى غداً إن شاء الله.</string>
+    <string name="completion_minutes_spent">استثمرت %1$d دقائق قيّمة في التعرف على الصحابة اليوم.</string>
+    <string name="completion_reward">تقبل الله طاعتك وبارك في علمك وعملك.</string>
+    <string name="completion_next_day">سنجهز لك قصة صحابي جديد غداً إن شاء الله.</string>
     <string name="completion_done">تم</string>
     <string name="completion_action_label">عمل اليوم</string>
 
@@ -35,7 +36,7 @@
     <string name="reminders_disabled">معطّلة</string>
 
     <!-- Weekly Tracker -->
-    <string name="home_weekly_tracker">التقدم الأسبوعي</string>
+    <string name="home_weekly_tracker">سلسلة العادة اليومية</string>
     <string name="home_weekly_monday">ن</string>
     <string name="home_weekly_tuesday">ث</string>
     <string name="home_weekly_wednesday">ر</string>
@@ -57,8 +58,14 @@
     <string name="settings_title">الإعدادات</string>
     <string name="menu_content_description">القائمة</string>
     <string name="settings_change_language">تغيير اللغة</string>
+    <string name="settings_theme_palette">مظهر التطبيق</string>
     <string name="theme_light_mode">المظهر الفاتح</string>
     <string name="theme_dark_mode">المظهر الداكن</string>
+    <string name="theme_mushaf_parchment">ورق المصحف</string>
+    <string name="theme_emerald_andalus">زمرد الأندلس</string>
+    <string name="theme_midnight_crescent">هلال الليل</string>
+    <string name="theme_golden_dune">الكثبان الذهبية</string>
+    <string name="theme_ocean_breeze">نسيم المحيط</string>
     <string name="settings_debug_options">خيارات المطور</string>
     <string name="settings_simulate_next_day">محاكاة اليوم التالي</string>
 

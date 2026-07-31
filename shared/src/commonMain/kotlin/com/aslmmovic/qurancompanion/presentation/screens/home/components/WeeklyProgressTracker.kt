@@ -25,16 +25,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.aslmmovic.qurancompanion.ui.components.RubElHizbBadge
 import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
-import qurancompanion.shared.generated.resources.home_weekly_tracker
-import qurancompanion.shared.generated.resources.home_weekly_monday
-import qurancompanion.shared.generated.resources.home_weekly_tuesday
-import qurancompanion.shared.generated.resources.home_weekly_wednesday
-import qurancompanion.shared.generated.resources.home_weekly_thursday
 import qurancompanion.shared.generated.resources.home_weekly_friday
+import qurancompanion.shared.generated.resources.home_weekly_monday
 import qurancompanion.shared.generated.resources.home_weekly_saturday
 import qurancompanion.shared.generated.resources.home_weekly_sunday
+import qurancompanion.shared.generated.resources.home_weekly_thursday
+import qurancompanion.shared.generated.resources.home_weekly_tracker
+import qurancompanion.shared.generated.resources.home_weekly_tuesday
+import qurancompanion.shared.generated.resources.home_weekly_wednesday
 
 @Composable
 fun WeeklyProgressTracker(
@@ -55,10 +56,14 @@ fun WeeklyProgressTracker(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
         ),
-        shape = RoundedCornerShape(16.dp),
-        modifier = modifier
+        shape = RoundedCornerShape(20.dp),
+        modifier = modifier.border(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.25f),
+            shape = RoundedCornerShape(20.dp)
+        )
     ) {
         Column(
             modifier = Modifier.padding(20.dp),
@@ -88,33 +93,28 @@ fun WeeklyProgressTracker(
                             text = stringResource(labelRes),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Bold
                         )
 
-                        Box(
-                            modifier = Modifier
-                                .size(28.dp)
-                                .clip(CircleShape)
-                                .background(
-                                    if (isCompleted) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.surfaceVariant
-                                )
-                                .border(
-                                    width = 1.dp,
-                                    color = if (isCompleted) MaterialTheme.colorScheme.primary 
-                                            else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                                    shape = CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (isCompleted) {
-                                Text(
-                                    text = "✓",
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                        if (isCompleted) {
+                            RubElHizbBadge(
+                                number = "✓",
+                                badgeSize = 30.dp,
+                                starColor = MaterialTheme.colorScheme.secondary,
+                                contentColor = MaterialTheme.colorScheme.onSecondary
+                            )
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                                    .border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
+                                        shape = CircleShape
+                                    )
+                            )
                         }
                     }
                 }
@@ -122,3 +122,4 @@ fun WeeklyProgressTracker(
         }
     }
 }
+
