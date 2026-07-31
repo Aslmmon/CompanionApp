@@ -32,7 +32,7 @@ import com.aslmmovic.qurancompanion.presentation.screens.home.components.Bismill
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.CompletedStateContent
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.HomeHeader
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.ReadyStateContent
-import com.aslmmovic.qurancompanion.presentation.screens.home.components.SettingsDialog
+import com.aslmmovic.qurancompanion.presentation.screens.home.components.SettingsBottomSheet
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.WeeklyProgressTracker
 import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.resources.stringResource
@@ -53,7 +53,7 @@ fun HomeContent(
     onThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showSettingsDialog by remember { mutableStateOf(false) }
+    var showSettingsBottomSheet by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -77,7 +77,7 @@ fun HomeContent(
             HomeHeader(
                 isDarkMode = userPreferences.isDarkMode ?: isSystemInDarkTheme(),
                 onThemeToggleClick = onThemeToggle,
-                onSettingsClick = { showSettingsDialog = true }
+                onSettingsClick = { showSettingsBottomSheet = true }
             )
 
             if (!isCompleted) {
@@ -129,12 +129,12 @@ fun HomeContent(
             Spacer(modifier = Modifier.height(32.dp))
         }
 
-        if (showSettingsDialog) {
-            SettingsDialog(
+        if (showSettingsBottomSheet) {
+            SettingsBottomSheet(
                 preferredLanguage = userPreferences.preferredLanguage,
                 onLanguageSelected = onLanguageSelected,
                 onSimulateNextDay = onNextJourneyClick,
-                onDismissRequest = { showSettingsDialog = false }
+                onDismissRequest = { showSettingsBottomSheet = false }
             )
         }
     }
