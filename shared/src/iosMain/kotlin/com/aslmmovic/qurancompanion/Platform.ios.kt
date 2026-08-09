@@ -4,6 +4,7 @@ import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
 import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
+import platform.Foundation.NSDateFormatter
 import platform.Foundation.preferredLanguages
 import platform.UIKit.UIDevice
 
@@ -33,4 +34,10 @@ actual fun getCurrentDayOfWeek(): Int {
     val calendar = NSCalendar.currentCalendar
     val dayOfWeek = calendar.component(NSCalendarUnitWeekday, NSDate()).toInt()
     return if (dayOfWeek == 1) 7 else dayOfWeek - 1
+}
+
+actual fun getCurrentDateString(): String {
+    val formatter = NSDateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter.stringFromDate(NSDate())
 }

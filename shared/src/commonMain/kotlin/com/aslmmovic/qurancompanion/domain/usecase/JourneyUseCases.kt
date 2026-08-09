@@ -9,15 +9,18 @@ class GetTodayJourneyUseCase(private val repository: JourneyRepository) {
 }
 
 class IsJourneyCompletedUseCase(private val repository: JourneyRepository) {
-    operator fun invoke(journeyId: String): Flow<Boolean> = repository.isCompleted(journeyId)
+    operator fun invoke(journeyId: String, date: String): Flow<Boolean> =
+        repository.isCompleted(journeyId, date)
 }
 
 class MarkJourneyCompletedUseCase(private val repository: JourneyRepository) {
-    suspend operator fun invoke(journeyId: String) = repository.markCompleted(journeyId)
+    suspend operator fun invoke(journeyId: String, date: String) =
+        repository.markCompleted(journeyId, date)
 }
 
 class ResetJourneyUseCase(private val repository: JourneyRepository) {
-    suspend operator fun invoke(journeyId: String) = repository.resetCompletion(journeyId)
+    suspend operator fun invoke(journeyId: String, date: String) =
+        repository.resetCompletion(journeyId, date)
 }
 
 class GetTomorrowJourneyUseCase(private val repository: JourneyRepository) {

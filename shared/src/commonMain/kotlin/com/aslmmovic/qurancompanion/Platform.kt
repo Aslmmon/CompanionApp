@@ -12,3 +12,6 @@ expect fun getCurrentDayOfYear(): Int
 
 /** Returns the current day of the week (1 = Monday, 7 = Sunday). Implemented per platform. */
 expect fun getCurrentDayOfWeek(): Int
+
+/** Returns the current date as an ISO-8601 string (YYYY-MM-DD). Implemented per platform. */
+expect fun getCurrentDateString(): String

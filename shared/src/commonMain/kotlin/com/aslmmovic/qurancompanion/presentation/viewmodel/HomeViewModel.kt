@@ -30,6 +30,8 @@ import kotlinx.coroutines.flow.first
 
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 
+import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val getTodayJourneyUseCase: GetTodayJourneyUseCase,
@@ -41,6 +43,7 @@ class HomeViewModel(
     private val savePreferencesUseCase: SavePreferencesUseCase,
     private val getDebugDayOffsetUseCase: GetDebugDayOffsetUseCase,
     private val incrementDebugDayOffsetUseCase: IncrementDebugDayOffsetUseCase,
+    private val dateTimeProvider: DateTimeProvider,
     private val localeProvider: LocaleProvider
 ) : ViewModel() {
 
@@ -55,7 +58,7 @@ class HomeViewModel(
 
     val isCompleted: StateFlow<Boolean> = _journey
         .flatMapLatest { journey ->
-            if (journey != null) isJourneyCompletedUseCase(journey.id)
+            if (journey != null) isJourneyCompletedUseCase(journey.id, dateTimeProvider.getCurrentDateString())
             else flowOf(false)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
@@ -89,7 +92,7 @@ class HomeViewModel(
 
     fun onResetCompletionClick() {
         viewModelScope.launch {
-            _journey.value?.let { resetJourneyUseCase(it.id) }
+            _journey.value?.let { resetJourneyUseCase(it.id, dateTimeProvider.getCurrentDateString()) }
         }
     }
 
