@@ -59,6 +59,6 @@ val appModule = module {
     viewModel { SplashViewModel() }
     viewModel { AppViewModel(get(), get(), get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { JourneyViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { JourneyViewModel(get(), get(), get()) }
 }

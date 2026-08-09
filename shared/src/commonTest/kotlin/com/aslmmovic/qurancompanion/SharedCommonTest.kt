@@ -52,16 +52,16 @@ class IsJourneyCompletedUseCaseTest {
 
     @Test
     fun `returns false for a journey that has never been marked completed`() = runTest {
-        val result = useCase("unknown-id").first()
+        val result = useCase("unknown-id", "2026-01-01").first()
         assertFalse(result)
     }
 
     @Test
     fun `returns true after journey is marked completed`() = runTest {
         val journeyId = "day-1"
-        repo.markCompleted(journeyId)
+        repo.markCompleted(journeyId, "2026-01-01")
 
-        val result = useCase(journeyId).first()
+        val result = useCase(journeyId, "2026-01-01").first()
 
         assertTrue(result)
     }
@@ -80,11 +80,11 @@ class MarkJourneyCompletedUseCaseTest {
     @Test
     fun `marks a journey as completed in the repository`() = runTest {
         val journeyId = "day-2"
-        assertFalse(isCompleted(journeyId).first())
+        assertFalse(isCompleted(journeyId, "2026-01-01").first())
 
-        markCompleted(journeyId)
+        markCompleted(journeyId, "2026-01-01")
 
-        assertTrue(isCompleted(journeyId).first())
+        assertTrue(isCompleted(journeyId, "2026-01-01").first())
     }
 }
 
@@ -102,18 +102,18 @@ class ResetJourneyUseCaseTest {
     @Test
     fun `resets a previously completed journey`() = runTest {
         val journeyId = "day-3"
-        markCompleted(journeyId)
-        assertTrue(isCompleted(journeyId).first())
+        markCompleted(journeyId, "2026-01-01")
+        assertTrue(isCompleted(journeyId, "2026-01-01").first())
 
-        resetJourney(journeyId)
+        resetJourney(journeyId, "2026-01-01")
 
-        assertFalse(isCompleted(journeyId).first())
+        assertFalse(isCompleted(journeyId, "2026-01-01").first())
     }
 
     @Test
     fun `resetting a never-completed journey leaves it as not completed`() = runTest {
         val journeyId = "day-4"
-        resetJourney(journeyId)
-        assertFalse(isCompleted(journeyId).first())
+        resetJourney(journeyId, "2026-01-01")
+        assertFalse(isCompleted(journeyId, "2026-01-01").first())
     }
 }

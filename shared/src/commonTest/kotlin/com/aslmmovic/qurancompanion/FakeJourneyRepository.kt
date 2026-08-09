@@ -27,8 +27,8 @@ class FakeJourneyRepository : JourneyRepository {
 
     override suspend fun getTomorrowJourney(): Journey? = todayJourney
 
-    override fun isCompleted(journeyId: String): Flow<Boolean> =
-        completions.map { it[journeyId] ?: false }
+    override fun isCompleted(journeyId: String, date: String): Flow<Boolean> =
+        completions.map { it["$journeyId|$date"] ?: false }
 
     override fun getWeeklyProgress(): Flow<List<Boolean>> =
         completions.map { completedMap ->
@@ -40,12 +40,12 @@ class FakeJourneyRepository : JourneyRepository {
             }
         }
 
-    override suspend fun markCompleted(journeyId: String) {
-        completions.value = completions.value + (journeyId to true)
+    override suspend fun markCompleted(journeyId: String, date: String) {
+        completions.value = completions.value + ("$journeyId|$date" to true)
     }
 
-    override suspend fun resetCompletion(journeyId: String) {
-        completions.value = completions.value + (journeyId to false)
+    override suspend fun resetCompletion(journeyId: String, date: String) {
+        completions.value = completions.value + ("$journeyId|$date" to false)
     }
 
     override fun getDebugDayOffset(): Flow<Int> = debugOffset

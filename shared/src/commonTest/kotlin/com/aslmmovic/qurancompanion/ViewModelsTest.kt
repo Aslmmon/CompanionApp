@@ -17,6 +17,7 @@ import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,6 +56,11 @@ class ViewModelsTest {
         override var currentLocale = "en"
         override fun changeLocale(locale: String) { currentLocale = locale }
     }
+    private val fakeDateTimeProvider = object : DateTimeProvider {
+        override fun getCurrentDayOfYear(): Int = 1
+        override fun getCurrentDayOfWeek(): Int = 1
+        override fun getCurrentDateString(): String = "2026-01-01"
+    }
 
     @BeforeTest
     fun setUp() {
@@ -84,6 +90,7 @@ class ViewModelsTest {
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
             getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
             incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider,
             localeProvider = fakeLocaleProvider
         )
 
@@ -105,6 +112,7 @@ class ViewModelsTest {
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
             getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
             incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider,
             localeProvider = fakeLocaleProvider
         )
 
@@ -129,6 +137,7 @@ class ViewModelsTest {
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
             getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
             incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider,
             localeProvider = fakeLocaleProvider
         )
 
@@ -149,7 +158,7 @@ class ViewModelsTest {
     fun `HomeViewModel onResetCompletionClick resets completion status`() = runTest {
         val today = testJourney(id = "today")
         repo.todayJourney = today
-        repo.markCompleted(today.id)
+        repo.markCompleted(today.id, "2026-01-01")
 
         val viewModel = HomeViewModel(
             getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
@@ -161,6 +170,7 @@ class ViewModelsTest {
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
             getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
             incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider,
             localeProvider = fakeLocaleProvider
         )
 
@@ -186,7 +196,8 @@ class ViewModelsTest {
 
         val viewModel = JourneyViewModel(
             getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo)
+            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider
         )
 
         advanceUntilIdle()
@@ -218,7 +229,8 @@ class ViewModelsTest {
 
         val viewModel = JourneyViewModel(
             getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo)
+            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider
         )
 
         advanceUntilIdle()
@@ -231,7 +243,7 @@ class ViewModelsTest {
         viewModel.onFinish()
         advanceUntilIdle()
 
-        assertTrue(repo.isCompleted(today.id).first())
+        assertTrue(repo.isCompleted(today.id, "2026-01-01").first())
         assertEquals(1, events.size)
         assertEquals(JourneyUiEvent.NavigateToCompletion, events.first())
 
@@ -245,7 +257,8 @@ class ViewModelsTest {
 
         val viewModel = JourneyViewModel(
             getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo)
+            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider
         )
 
         advanceUntilIdle()
@@ -279,6 +292,7 @@ class ViewModelsTest {
             savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
             getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
             incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
+            dateTimeProvider = fakeDateTimeProvider,
             localeProvider = fakeLocaleProvider
         )
 

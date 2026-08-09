@@ -13,9 +13,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
+
 class JourneyViewModel(
     private val getTodayJourneyUseCase: GetTodayJourneyUseCase,
-    private val markJourneyCompletedUseCase: MarkJourneyCompletedUseCase
+    private val markJourneyCompletedUseCase: MarkJourneyCompletedUseCase,
+    private val dateTimeProvider: DateTimeProvider
 ) : ViewModel() {
 
     private val _journey = MutableStateFlow<Journey?>(null)
@@ -49,7 +52,7 @@ class JourneyViewModel(
 
     fun onFinish() {
         viewModelScope.launch {
-            _journey.value?.let { markJourneyCompletedUseCase(it.id) }
+            _journey.value?.let { markJourneyCompletedUseCase(it.id, dateTimeProvider.getCurrentDateString()) }
             _uiEvents.emit(JourneyUiEvent.NavigateToCompletion)
         }
     }

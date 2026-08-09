@@ -107,19 +107,22 @@ class JourneyRepositoryImplTest {
         
         fakeDateTimeProvider.dayOfWeek = 3
         fakeDateTimeProvider.dayOfYear = 10
+        fakeDateTimeProvider.dateString = "2026-01-10" // Day 10 of year = Jan 10 (Wednesday)
 
         // Populate database with all journeys to trigger state cache initialization
         repository.getAllJourneys()
 
-        // Complete Journey "3" (Mon & Sat) and Journey "5" (Wed)
-        repository.markCompleted("3")
-        repository.markCompleted("5")
+        // Complete Journey "3" on Monday (Jan 8) and Journey "5" on Wednesday (Jan 10)
+        // With date-keyed storage, J3 on Jan8 does NOT bleed into Sat Jan13 even though Sat also maps to J3
+        repository.markCompleted("3", "2026-01-08") // Monday of that week
+        repository.markCompleted("5", "2026-01-10") // Wednesday of that week
 
         val progress = repository.getWeeklyProgress().first()
-        
-        // Expected progress: [Mon=true (J3), Tue=false (J4), Wed=true (J5), Thu=false (J1), Fri=false (J2), Sat=true (J3), Sun=false (J4)]
+
+        // Expected: [Mon=true (J3@Jan8), Tue=false (J4), Wed=true (J5@Jan10), Thu=false, Fri=false,
+        //            Sat=false (J3@Jan13 NOT marked — different date from Mon!), Sun=false]
         assertEquals(
-            listOf(true, false, true, false, false, true, false),
+            listOf(true, false, true, false, false, false, false),
             progress
         )
     }
@@ -131,15 +134,15 @@ class JourneyRepositoryImplTest {
         fakeDataSource.journeys = journeys
         repository.getAllJourneys()
 
-        assertFalse(repository.isCompleted("test-id").first())
+        assertFalse(repository.isCompleted("test-id", "2026-01-01").first())
 
-        repository.markCompleted("test-id")
-        assertTrue(repository.isCompleted("test-id").first())
-        assertTrue(fakeStorage.getBoolean("journey_completed_test-id", false))
+        repository.markCompleted("test-id", "2026-01-01")
+        assertTrue(repository.isCompleted("test-id", "2026-01-01").first())
+        assertTrue(fakeStorage.getBoolean("journey_completed_test-id_2026-01-01", false))
 
-        repository.resetCompletion("test-id")
-        assertFalse(repository.isCompleted("test-id").first())
-        assertFalse(fakeStorage.getBoolean("journey_completed_test-id", true))
+        repository.resetCompletion("test-id", "2026-01-01")
+        assertFalse(repository.isCompleted("test-id", "2026-01-01").first())
+        assertFalse(fakeStorage.getBoolean("journey_completed_test-id_2026-01-01", true))
     }
 
     @Test
@@ -152,14 +155,16 @@ class JourneyRepositoryImplTest {
         )
         fakeDataSource.journeys = journeys
 
-        // Setup: Wednesday (3rd day of week), Day 10 of year
+        // Setup: Wednesday (3rd day of week), Day 10 of year = Jan 10 2026
         fakeDateTimeProvider.dayOfWeek = 3
         fakeDateTimeProvider.dayOfYear = 10
+        fakeDateTimeProvider.dateString = "2026-01-10"
         repository.getAllJourneys()
 
-        // Complete Journey "1" (will map to Wednesday) and Journey "2" (will map to Monday)
-        repository.markCompleted("1")
-        repository.markCompleted("2")
+        // Mark J1 completed on Wednesday Jan 10, J2 completed on Monday Jan 8
+        // With date-keyed storage, completions are pinned to the specific date.
+        repository.markCompleted("1", "2026-01-10") // Wednesday
+        repository.markCompleted("2", "2026-01-08") // Monday
 
         val progressList = mutableListOf<List<Boolean>>()
         val job = launch {
@@ -167,19 +172,51 @@ class JourneyRepositoryImplTest {
         }
         advanceUntilIdle()
 
-        // Increment day offset: this should shift the virtual day of year for the week by +1
+        // Increment day offset: shifts which journey appears on each slot but dates stay week-relative
         repository.incrementDebugDayOffset()
         advanceUntilIdle()
 
         job.cancel()
 
-        // Verify that the flow emitted at least twice and the second one has shifted results
+        // Verify that the flow emitted at least twice (offset change triggers recompute)
         println("PROGRESS LIST CONTENTS: $progressList")
         assertTrue(progressList.size >= 2)
-        // First emission (offset 0): Mon(J2)=true, Tue(J3)=false, Wed(J1)=true, Thu(J2)=true, Fri(J3)=false, Sat(J1)=true, Sun(J2)=true
-        assertEquals(listOf(true, false, true, true, false, true, true), progressList[0])
-        // Second emission (offset 1): Mon(J3)=false, Tue(J1)=true, Wed(J2)=true, Thu(J3)=false, Fri(J1)=true, Sat(J2)=true, Sun(J3)=false
-        assertEquals(listOf(false, true, true, false, true, true, false), progressList[1])
+        // offset 0: Mon(J2@Jan8)=true, Tue(J3@Jan9)=false, Wed(J1@Jan10)=true, Thu(J2@Jan11)=false,
+        //           Fri(J3@Jan12)=false, Sat(J1@Jan13)=false, Sun(J2@Jan14)=false
+        // J2 only marked for Jan8, not Jan11/Jan14; J1 only for Jan10, not Jan13
+        assertEquals(listOf(true, false, true, false, false, false, false), progressList[0])
+        // offset 1: all slots shift by 1 day-of-year → different (journey,date) pairs, none marked
+        assertEquals(listOf(false, false, false, false, false, false, false), progressList[1])
+    }
+
+    @Test
+    fun `completing today journey only ticks today in weekly progress`() = runTest {
+        val repository = createRepository()
+        fakeDataSource.journeys = listOf(
+            createJourneyDto("1"), createJourneyDto("2"), createJourneyDto("3")
+        )
+
+        // Wednesday = day 3 of week, day 221 of year — today maps to journey index (221-1)%3 = 1 → "2"
+        fakeDateTimeProvider.dayOfYear = 221
+        fakeDateTimeProvider.dayOfWeek = 3
+        fakeDateTimeProvider.dateString = "2026-08-08"
+        repository.getAllJourneys()
+
+        repository.markCompleted("2", "2026-08-08")
+        val progress = repository.getWeeklyProgress().first()
+
+        // Only Wednesday (index 2, 0-based) must be true — no other day shares the tick
+        assertEquals(listOf(false, false, true, false, false, false, false), progress)
+    }
+
+    @Test
+    fun `offsetDate helper correctly shifts dates across month and year boundaries`() {
+        assertEquals("2026-09-01", JourneyRepositoryImpl.offsetDate("2026-08-31", 1))
+        assertEquals("2026-08-31", JourneyRepositoryImpl.offsetDate("2026-09-01", -1))
+        assertEquals("2027-01-01", JourneyRepositoryImpl.offsetDate("2026-12-31", 1))
+        assertEquals("2026-12-31", JourneyRepositoryImpl.offsetDate("2027-01-01", -1))
+        assertEquals("2026-02-28", JourneyRepositoryImpl.offsetDate("2026-03-01", -1))
+        assertEquals("2026-03-01", JourneyRepositoryImpl.offsetDate("2026-02-28", 1))
     }
 
     // Helper functions and fakes
@@ -231,7 +268,9 @@ class JourneyRepositoryImplTest {
     private class FakeDateTimeProvider : DateTimeProvider {
         var dayOfYear = 1
         var dayOfWeek = 1
+        var dateString = "2026-01-01"
         override fun getCurrentDayOfYear(): Int = dayOfYear
         override fun getCurrentDayOfWeek(): Int = dayOfWeek
+        override fun getCurrentDateString(): String = dateString
     }
 }
