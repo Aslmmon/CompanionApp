@@ -30,10 +30,16 @@
     <string name="completion_done">تم</string>
     <string name="completion_action_label">عمل اليوم</string>
 
-    <!-- Reminder status -->
+    <!-- Reminder status & Settings -->
     <string name="reminders_label">التذكيرات:</string>
     <string name="reminders_enabled_at">مفعّلة الساعة %1$s</string>
     <string name="reminders_disabled">معطّلة</string>
+    <string name="settings_daily_reminders">التذكير اليومي</string>
+    <string name="settings_reminder_time">وقت التذكير</string>
+    <string name="reminder_time_6am">٠٦:٠٠ صباحاً (بعد الفجر)</string>
+    <string name="reminder_time_8am">٠٨:٠٠ صباحاً (الصباح)</string>
+    <string name="reminder_time_8pm">٠٨:٠٠ مساءً (المساء)</string>
+    <string name="notification_title_pattern">تعرّف على صحابي اليوم: %1$s 🌟</string>
 
     <!-- Weekly Tracker -->
     <string name="home_weekly_tracker">سلسلة العادة اليومية</string>

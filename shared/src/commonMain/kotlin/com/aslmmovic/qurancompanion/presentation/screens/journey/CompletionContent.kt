@@ -1,4 +1,4 @@
-package com.aslmmovic.qurancompanion.presentation.screens
+package com.aslmmovic.qurancompanion.presentation.screens.journey
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -37,10 +37,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.model.StepType
-import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.completion_action_label
@@ -49,16 +47,6 @@ import qurancompanion.shared.generated.resources.completion_heading
 import qurancompanion.shared.generated.resources.completion_minutes_spent
 import qurancompanion.shared.generated.resources.completion_next_day
 import qurancompanion.shared.generated.resources.completion_reward
-
-@Composable
-fun CompletionScreen(viewModel: JourneyViewModel) {
-    val journey by viewModel.journey.collectAsStateWithLifecycle()
-
-    CompletionContent(
-        journey = journey,
-        onReturnHome = viewModel::onReturnHome
-    )
-}
 
 @Composable
 fun CompletionContent(

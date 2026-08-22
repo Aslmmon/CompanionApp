@@ -1,4 +1,4 @@
-package com.aslmmovic.qurancompanion.presentation.screens
+package com.aslmmovic.qurancompanion.presentation.screens.language
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,7 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
 import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.language_arabic
@@ -41,13 +40,6 @@ import qurancompanion.shared.generated.resources.language_confirm
 import qurancompanion.shared.generated.resources.language_english
 import qurancompanion.shared.generated.resources.language_selection_subtitle
 import qurancompanion.shared.generated.resources.welcome_title
-
-@Composable
-fun LanguageSelectionScreen(viewModel: LanguageViewModel) {
-    LanguageSelectionContent(
-        onLanguageSelected = viewModel::selectLanguage
-    )
-}
 
 @Composable
 fun LanguageSelectionContent(

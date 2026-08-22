@@ -30,10 +30,16 @@
     <string name="completion_done">Done</string>
     <string name="completion_action_label">Today\'s Action</string>
 
-    <!-- Reminder status -->
+    <!-- Reminder status & Settings -->
     <string name="reminders_label">Reminders:</string>
     <string name="reminders_enabled_at">Enabled at %1$s</string>
     <string name="reminders_disabled">Disabled</string>
+    <string name="settings_daily_reminders">Daily Reminder</string>
+    <string name="settings_reminder_time">Reminder Time</string>
+    <string name="reminder_time_6am">06:00 AM (Post-Fajr)</string>
+    <string name="reminder_time_8am">08:00 AM (Morning)</string>
+    <string name="reminder_time_8pm">08:00 PM (Evening)</string>
+    <string name="notification_title_pattern">Discover Today\'s Sahabi: %1$s 🌟</string>
 
     <!-- Weekly Tracker -->
     <string name="home_weekly_tracker">Daily Habit Streak</string>

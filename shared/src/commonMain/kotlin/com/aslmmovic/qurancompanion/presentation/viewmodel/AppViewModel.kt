@@ -3,8 +3,6 @@ package com.aslmmovic.qurancompanion.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
-import com.aslmmovic.qurancompanion.domain.model.Journey
-import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import com.aslmmovic.qurancompanion.domain.usecase.GetTodayJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
@@ -16,15 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-data class AppUiState(
-    val isInitialized: Boolean = false,
-    val userPreferences: UserPreferences? = null,
-    val todayJourney: Journey? = null,
-    val isDarkMode: Boolean? = null,
-    val isArabic: Boolean = false,
-    val startDestination: String? = null
-)
 
 class AppViewModel(
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,

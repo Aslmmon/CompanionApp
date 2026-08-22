@@ -15,12 +15,15 @@ This is a Kotlin Multiplatform (KMP) project utilizing Compose Multiplatform for
 ## 2. Modular Guidelines Directory
 Refer to these topic-specific guidelines for detailed rules, code conventions, and implementation instructions:
 * 🏗️ **[Clean Architecture & Layer Isolation Guidelines](file:///.agents/rules/architecture.md)**
+* 📋 **[Spec-Driven Development Workflow](file:///.agents/skills/spec-driven-dev/SKILL.md)**
 * 📱 **[Compose Multiplatform UI Guidelines](file:///.agents/rules/compose.md)**
 * 🔌 **[Dependency Injection Guidelines (Koin)](file:///.agents/rules/di.md)**
 * ⚡ **[Coroutines & Concurrency Guidelines](file:///.agents/rules/concurrency.md)**
 * 🗺️ **[Navigation Architecture Guidelines](file:///.agents/rules/navigation.md)**
 * 🧪 **[Testing Architecture & Guidelines](file:///.agents/rules/testing.md)**
 * 📝 **[Naming Conventions Guidelines](file:///.agents/rules/naming_conventions.md)**
+* ⚙️ **[Build Configuration Guidelines](file:///.agents/rules/build_config.md)**
+* 🔀 **[KMP expect/actual Platform Bridge](file:///.agents/skills/kmp-expect-actual/SKILL.md)** *(Dormant — activate only for new hardware APIs)*
 
 ---
 

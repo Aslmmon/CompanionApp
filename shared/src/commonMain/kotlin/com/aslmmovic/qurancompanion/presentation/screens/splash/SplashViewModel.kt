@@ -1,4 +1,4 @@
-package com.aslmmovic.qurancompanion.presentation.viewmodel
+package com.aslmmovic.qurancompanion.presentation.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,13 +9,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-sealed class SplashUiEvent {
-    data object NavigateNext : SplashUiEvent()
-}
-
 class SplashViewModel : ViewModel() {
-    private val _uiEvents = MutableSharedFlow<SplashUiEvent>()
-    val uiEvents: SharedFlow<SplashUiEvent> = _uiEvents.asSharedFlow()
+    private val _uiEffects = MutableSharedFlow<SplashUiEffect>()
+    val uiEffects: SharedFlow<SplashUiEffect> = _uiEffects.asSharedFlow()
 
     init {
         startSplashTimer()
@@ -24,7 +20,7 @@ class SplashViewModel : ViewModel() {
     private fun startSplashTimer() {
         viewModelScope.launch {
             delay(SPLASH_DELAY_MS.milliseconds)
-            _uiEvents.emit(SplashUiEvent.NavigateNext)
+            _uiEffects.emit(SplashUiEffect.NavigateNext)
         }
     }
 
@@ -32,5 +28,3 @@ class SplashViewModel : ViewModel() {
         private const val SPLASH_DELAY_MS = 5000L
     }
 }
-
-

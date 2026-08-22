@@ -1,4 +1,4 @@
-package com.aslmmovic.qurancompanion.presentation.screens
+package com.aslmmovic.qurancompanion.presentation.screens.journey
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -6,8 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -32,21 +30,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aslmmovic.qurancompanion.domain.model.Journey
 import com.aslmmovic.qurancompanion.domain.model.JourneyStep
 import com.aslmmovic.qurancompanion.domain.model.StepType
-import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
 import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.home_loading
@@ -60,20 +57,6 @@ import qurancompanion.shared.generated.resources.step_type_key_lessons
 import qurancompanion.shared.generated.resources.step_type_references
 import qurancompanion.shared.generated.resources.step_type_reflection
 import qurancompanion.shared.generated.resources.step_type_story
-
-@Composable
-fun JourneyFlowScreen(viewModel: JourneyViewModel) {
-    val journey by viewModel.journey.collectAsStateWithLifecycle()
-    val currentStepIndex by viewModel.currentStepIndex.collectAsStateWithLifecycle()
-
-    JourneyFlowContent(
-        journey = journey,
-        currentStepIndex = currentStepIndex,
-        onPreviousStep = viewModel::onPreviousStep,
-        onNextStep = viewModel::onNextStep,
-        onFinish = viewModel::onFinish
-    )
-}
 
 @Composable
 fun JourneyFlowContent(
@@ -299,17 +282,17 @@ private fun StepProgressMap(
                         .clip(CircleShape)
                         .background(
                             color = when {
-                                isActive -> MaterialTheme.colorScheme.primary
-                                isCompleted -> MaterialTheme.colorScheme.primaryContainer
-                                else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                isActive     -> MaterialTheme.colorScheme.primary
+                                isCompleted  -> MaterialTheme.colorScheme.primaryContainer
+                                else         -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                             }
                         )
                         .border(
                             width = if (isActive) 2.dp else 1.dp,
                             color = when {
-                                isActive -> MaterialTheme.colorScheme.primary
+                                isActive    -> MaterialTheme.colorScheme.primary
                                 isCompleted -> MaterialTheme.colorScheme.primary
-                                else -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                                else        -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                             },
                             shape = CircleShape
                         ),
@@ -344,12 +327,12 @@ private fun StepProgressMap(
 @Composable
 private fun getStepTypeLabel(type: StepType): String {
     return when (type) {
-        StepType.INTRO -> stringResource(Res.string.step_type_intro)
-        StepType.STORY -> stringResource(Res.string.step_type_story)
-        StepType.KEY_LESSONS -> stringResource(Res.string.step_type_key_lessons)
-        StepType.REFLECTION -> stringResource(Res.string.step_type_reflection)
-        StepType.ACTION -> stringResource(Res.string.step_type_action)
-        StepType.REFERENCES -> stringResource(Res.string.step_type_references)
+        StepType.INTRO        -> stringResource(Res.string.step_type_intro)
+        StepType.STORY        -> stringResource(Res.string.step_type_story)
+        StepType.KEY_LESSONS  -> stringResource(Res.string.step_type_key_lessons)
+        StepType.REFLECTION   -> stringResource(Res.string.step_type_reflection)
+        StepType.ACTION       -> stringResource(Res.string.step_type_action)
+        StepType.REFERENCES   -> stringResource(Res.string.step_type_references)
     }
 }
 

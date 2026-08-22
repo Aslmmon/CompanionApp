@@ -51,6 +51,8 @@ fun HomeContent(
     onNextJourneyClick: () -> Unit,
     onLanguageSelected: (String) -> Unit,
     onThemeToggle: (Boolean) -> Unit,
+    onToggleReminder: (Boolean) -> Unit,
+    onUpdateReminderTime: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var showSettingsBottomSheet by remember { mutableStateOf(false) }
@@ -131,7 +133,9 @@ fun HomeContent(
 
         if (showSettingsBottomSheet) {
             SettingsBottomSheet(
-                preferredLanguage = userPreferences.preferredLanguage,
+                userPreferences = userPreferences,
+                onToggleReminder = onToggleReminder,
+                onUpdateReminderTime = onUpdateReminderTime,
                 onLanguageSelected = onLanguageSelected,
                 onSimulateNextDay = onNextJourneyClick,
                 onDismissRequest = { showSettingsBottomSheet = false }
@@ -153,6 +157,8 @@ fun HomeContentPreview() {
         onResetClick = {},
         onNextJourneyClick = {},
         onLanguageSelected = {},
-        onThemeToggle = {}
+        onThemeToggle = {},
+        onToggleReminder = {},
+        onUpdateReminderTime = { _, _ -> }
     )
 }

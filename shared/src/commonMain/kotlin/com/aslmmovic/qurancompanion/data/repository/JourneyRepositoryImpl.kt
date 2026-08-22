@@ -175,7 +175,10 @@ class JourneyRepositoryImpl(
             val d = parts[2].toInt()
             val jdn = toJulian(y, m, d) + days
             val (ny, nm, nd) = fromJulian(jdn)
-            return "%04d-%02d-%02d".format(ny, nm, nd)
+            val yStr = ny.toString().padStart(4, '0')
+            val mStr = nm.toString().padStart(2, '0')
+            val dStr = nd.toString().padStart(2, '0')
+            return "$yStr-$mStr-$dStr"
         }
 
         private fun toJulian(y: Int, m: Int, d: Int): Int {
