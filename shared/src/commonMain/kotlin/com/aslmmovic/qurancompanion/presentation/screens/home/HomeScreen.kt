@@ -3,12 +3,15 @@ package com.aslmmovic.qurancompanion.presentation.screens.home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
     onNavigateToJourneyFlow: () -> Unit,
+    onNavigateToSettings: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -17,6 +20,7 @@ fun HomeScreen(
         viewModel.uiEffects.collect { effect ->
             when (effect) {
                 HomeUiEffect.NavigateToJourneyFlow -> onNavigateToJourneyFlow()
+                HomeUiEffect.NavigateToSettings -> onNavigateToSettings()
             }
         }
     }
@@ -29,10 +33,8 @@ fun HomeScreen(
         tomorrowJourney = uiState.tomorrowJourney,
         onBeginClick = viewModel::onBeginJourneyClick,
         onResetClick = viewModel::onResetCompletionClick,
-        onNextJourneyClick = viewModel::onNextJourneyClick,
-        onLanguageSelected = viewModel::onLanguageSelected,
+        onSettingsClick = viewModel::onSettingsClick,
         onThemeToggle = viewModel::onToggleTheme,
-        onToggleReminder = viewModel::onToggleReminder,
-        onUpdateReminderTime = viewModel::onUpdateReminderTime,
+        modifier = modifier,
     )
 }

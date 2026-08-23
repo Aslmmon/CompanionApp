@@ -21,6 +21,7 @@ import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
 import com.aslmmovic.qurancompanion.presentation.screens.home.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageViewModel
+import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import kotlinx.serialization.json.Json
@@ -65,6 +66,7 @@ val appModule = module {
     viewModel { SplashViewModel() }
     viewModel { AppViewModel(get(), get(), get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get()) }
 }

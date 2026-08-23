@@ -18,6 +18,7 @@ import com.aslmmovic.qurancompanion.presentation.screens.home.HomeScreen
 import com.aslmmovic.qurancompanion.presentation.screens.journey.CompletionScreen
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyFlowScreen
 import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageSelectionScreen
+import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashScreen
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import com.aslmmovic.qurancompanion.ui.theme.QuranCompanionTheme
@@ -80,6 +81,9 @@ fun App() {
                         HomeScreen(
                             onNavigateToJourneyFlow = {
                                 navController.navigate(AppRoute.JourneyFlow.route)
+                            },
+                            onNavigateToSettings = {
+                                navController.navigate(AppRoute.Settings.route)
                             }
                         )
                     }
@@ -105,6 +109,14 @@ fun App() {
                                     route = AppRoute.Home.route,
                                     inclusive = false
                                 )
+                            }
+                        )
+                    }
+
+                    composable(AppRoute.Settings.route) {
+                        SettingsScreen(
+                            onNavigateBack = {
+                                navController.popBackStack()
                             }
                         )
                     }

@@ -6,4 +6,5 @@ package com.aslmmovic.qurancompanion.presentation.screens.home
  */
 sealed class HomeUiEffect {
     data object NavigateToJourneyFlow : HomeUiEffect()
+    data object NavigateToSettings : HomeUiEffect()
 }

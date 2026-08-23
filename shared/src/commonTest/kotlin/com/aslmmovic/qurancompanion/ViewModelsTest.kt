@@ -12,15 +12,9 @@ import com.aslmmovic.qurancompanion.presentation.screens.home.HomeUiEffect
 import com.aslmmovic.qurancompanion.presentation.screens.home.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyUiEffect
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyViewModel
-import com.aslmmovic.qurancompanion.domain.model.UserPreferences
-import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
-import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -36,30 +30,15 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-
-import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
-import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ViewModelsTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private val repo = FakeJourneyRepository()
-    private val fakeScheduler = FakeNotificationScheduler()
-    private val prefsRepo = object : UserPreferencesRepository {
-        private val _preferences = MutableStateFlow(UserPreferences())
-        override fun getUserPreferences(): Flow<UserPreferences> = _preferences.asStateFlow()
-        override suspend fun saveUserPreferences(preferences: UserPreferences) {
-            _preferences.value = preferences
-        }
-    }
-    private val fakeLocaleProvider = object : LocaleProvider {
-        override var currentLocale = "en"
-        override fun changeLocale(locale: String) { currentLocale = locale }
-    }
+    private val prefsRepo = FakeUserPreferencesRepository()
     private val fakeDateTimeProvider = object : DateTimeProvider {
         override fun getCurrentDayOfYear(): Int = 1
         override fun getCurrentDayOfWeek(): Int = 1
@@ -76,10 +55,7 @@ class ViewModelsTest {
         savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
         getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
-        dateTimeProvider = fakeDateTimeProvider,
-        localeProvider = fakeLocaleProvider,
-        scheduleDailyReminderUseCase = ScheduleDailyReminderUseCase(fakeScheduler, prefsRepo, repo),
-        requestNotificationPermissionUseCase = RequestNotificationPermissionUseCase(fakeScheduler)
+        dateTimeProvider = fakeDateTimeProvider
     )
 
     @BeforeTest
@@ -124,45 +100,6 @@ class ViewModelsTest {
     }
 
     @Test
-    fun `HomeViewModel onToggleReminder updates preferences and reschedules`() = runTest {
-        val viewModel = createHomeViewModel()
-        val collectJob = launch { viewModel.uiState.collect {} }
-        advanceUntilIdle()
-
-        assertTrue(viewModel.uiState.value.userPreferences.isReminderEnabled)
-        assertEquals(8, viewModel.uiState.value.userPreferences.reminderHour)
-
-        viewModel.onToggleReminder(false)
-        advanceUntilIdle()
-
-        assertFalse(viewModel.uiState.value.userPreferences.isReminderEnabled)
-        assertTrue(fakeScheduler.isCancelled)
-
-        viewModel.onToggleReminder(true)
-        advanceUntilIdle()
-
-        assertTrue(viewModel.uiState.value.userPreferences.isReminderEnabled)
-        assertFalse(fakeScheduler.isCancelled)
-        collectJob.cancel()
-    }
-
-    @Test
-    fun `HomeViewModel onUpdateReminderTime updates reminder hour and schedules`() = runTest {
-        val viewModel = createHomeViewModel()
-        val collectJob = launch { viewModel.uiState.collect {} }
-        advanceUntilIdle()
-
-        viewModel.onUpdateReminderTime(20, 0)
-        advanceUntilIdle()
-
-        assertEquals(20, viewModel.uiState.value.userPreferences.reminderHour)
-        assertEquals(0, viewModel.uiState.value.userPreferences.reminderMinute)
-        assertEquals(20, fakeScheduler.scheduledHour)
-        assertEquals(0, fakeScheduler.scheduledMinute)
-        collectJob.cancel()
-    }
-
-    @Test
     fun `HomeViewModel onBeginJourneyClick emits NavigateToJourneyFlow event`() = runTest {
         val viewModel = createHomeViewModel()
 
@@ -176,6 +113,23 @@ class ViewModelsTest {
 
         assertEquals(1, effects.size)
         assertEquals(HomeUiEffect.NavigateToJourneyFlow, effects.first())
+        job.cancel()
+    }
+
+    @Test
+    fun `HomeViewModel onSettingsClick emits NavigateToSettings event`() = runTest {
+        val viewModel = createHomeViewModel()
+
+        val effects = mutableListOf<HomeUiEffect>()
+        val job = launch {
+            viewModel.uiEffects.toList(effects)
+        }
+
+        viewModel.onSettingsClick()
+        advanceUntilIdle()
+
+        assertEquals(1, effects.size)
+        assertEquals(HomeUiEffect.NavigateToSettings, effects.first())
         job.cancel()
     }
 

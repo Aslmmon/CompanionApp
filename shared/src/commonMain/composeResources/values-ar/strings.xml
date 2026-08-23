@@ -4,6 +4,7 @@
     <string name="welcome_title">رفيق الصحابة</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
     <string name="daily_habit_badge">عادة ١٠ دقائق يومياً</string>
+    <string name="action_back">رجوع</string>
 
     <!-- Home Screen -->
     <string name="home_begin_journey">تعرّف على صحابي اليوم (~١٠ دقائق)</string>

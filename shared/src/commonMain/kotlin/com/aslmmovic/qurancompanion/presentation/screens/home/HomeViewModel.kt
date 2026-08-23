@@ -2,7 +2,6 @@ package com.aslmmovic.qurancompanion.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetTodayJourneyUseCase
@@ -11,10 +10,8 @@ import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IsJourneyCompletedUseCase
-import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ResetJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
-import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,10 +38,7 @@ class HomeViewModel(
     private val savePreferencesUseCase: SavePreferencesUseCase,
     private val getDebugDayOffsetUseCase: GetDebugDayOffsetUseCase,
     private val incrementDebugDayOffsetUseCase: IncrementDebugDayOffsetUseCase,
-    private val dateTimeProvider: DateTimeProvider,
-    private val localeProvider: LocaleProvider,
-    private val scheduleDailyReminderUseCase: ScheduleDailyReminderUseCase,
-    private val requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase
+    private val dateTimeProvider: DateTimeProvider
 ) : ViewModel() {
 
     private val _uiEffects = MutableSharedFlow<HomeUiEffect>()
@@ -81,18 +75,6 @@ class HomeViewModel(
         initialValue = HomeUiState(isLoading = true)
     )
 
-    init {
-        viewModelScope.launch {
-            combine(
-                getUserPreferencesUseCase(),
-                getDebugDayOffsetUseCase()
-            ) { _, _ -> Unit }
-                .collect {
-                    scheduleDailyReminderUseCase()
-                }
-        }
-    }
-
     private suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences) {
         val current = getUserPreferencesUseCase().first()
         savePreferencesUseCase(transform(current))
@@ -100,6 +82,10 @@ class HomeViewModel(
 
     fun onBeginJourneyClick() {
         viewModelScope.launch { _uiEffects.emit(HomeUiEffect.NavigateToJourneyFlow) }
+    }
+
+    fun onSettingsClick() {
+        viewModelScope.launch { _uiEffects.emit(HomeUiEffect.NavigateToSettings) }
     }
 
     fun onResetCompletionClick() {
@@ -116,31 +102,9 @@ class HomeViewModel(
         }
     }
 
-    fun onLanguageSelected(languageCode: String) {
-        viewModelScope.launch {
-            updatePreferences { it.copy(preferredLanguage = languageCode) }
-            localeProvider.changeLocale(languageCode)
-        }
-    }
-
     fun onToggleTheme(isDarkMode: Boolean) {
         viewModelScope.launch {
             updatePreferences { it.copy(isDarkMode = isDarkMode) }
-        }
-    }
-
-    fun onToggleReminder(isEnabled: Boolean) {
-        viewModelScope.launch {
-            if (isEnabled) {
-                requestNotificationPermissionUseCase()
-            }
-            updatePreferences { it.copy(isReminderEnabled = isEnabled) }
-        }
-    }
-
-    fun onUpdateReminderTime(hour: Int, minute: Int) {
-        viewModelScope.launch {
-            updatePreferences { it.copy(reminderHour = hour, reminderMinute = minute) }
         }
     }
 }

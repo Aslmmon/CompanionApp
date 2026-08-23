@@ -11,4 +11,5 @@ sealed class AppRoute(val route: String) {
     data object Home : AppRoute("home")
     data object JourneyFlow : AppRoute("journey_flow")
     data object Completion : AppRoute("completion")
+    data object Settings : AppRoute("settings")
 }

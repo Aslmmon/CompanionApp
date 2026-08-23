@@ -66,14 +66,3 @@ class ScheduleDailyReminderUseCaseTest {
         assertTrue(fakeScheduler.isCancelled)
     }
 }
-
-class FakeUserPreferencesRepository(
-    private var preferences: UserPreferences
-) : com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository {
-
-    override fun getUserPreferences() = flowOf(preferences)
-
-    override suspend fun saveUserPreferences(preferences: UserPreferences) {
-        this.preferences = preferences
-    }
-}
