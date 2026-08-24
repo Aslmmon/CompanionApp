@@ -68,3 +68,36 @@ These guidelines define the Clean Architecture standards for the project.
 * **Relational / Complex Persistent Data**: When introducing features requiring search, bookmarks, audio sync, or historical analytics, implement a KMP database (SQLDelight or Room KMP) inside `data/datasource/db/`.
 * **Database Isolation**: SQL driver setups, table adapters, and generated entity classes must remain private to `data/`. Map all entities to pure domain models before returning from repositories.
 
+---
+
+## 8. Spec-Driven Development (SDD) Standard
+* All non-trivial feature additions or multi-layer modifications must be preceded by a formal specification in `docs/specs/SPEC-XXX-<name>/spec.md` using the template at `docs/specs/templates/SPEC_TEMPLATE.md`.
+* Specifications must establish domain models, repository contracts, and presentation state machines before any implementation code is written.
+* Anti-hallucination guardrails: The spec must explicitly state out-of-scope non-goals, and AI agents must not generate classes or dependencies outside of the approved spec.
+* Unit tests in `commonTest` must directly map 1:1 to the scenarios in the spec's Acceptance Criteria Matrix.
+
+---
+
+## 9. Presentation File Co-location
+* Each screen's ViewModel, UiState, UiEffect, and Screen/Content composables must live together in the same feature package:
+  `presentation/screens/<feature>/`
+  ```
+  presentation/screens/home/
+    HomeScreen.kt
+    HomeContent.kt
+    HomeViewModel.kt
+    HomeUiState.kt
+    HomeUiEffect.kt
+    components/
+  ```
+* The `presentation/viewmodel/` package is reserved for **app-wide** ViewModels only (e.g., `AppViewModel`, `AppUiState`).
+* Do NOT create a shared flat `presentation/viewmodel/` package for screen-specific classes.
+
+---
+
+## 10. UiEffect Naming & Actions
+* One-shot side effects (navigation, snackbars, dialogs) are named `<Feature>UiEffect` and exposed via `SharedFlow<*UiEffect>`.
+* Do NOT name them `*UiEvent` — use `*UiEffect` consistently across all screens and the spec template.
+* The flow field is named `uiEffects: SharedFlow<*UiEffect>` (not `uiEvents`).
+* ViewModels expose explicit named action methods (e.g., `fun onBeginJourneyClick()`), avoiding verbose MVI action enums unless explicitly necessary.
+

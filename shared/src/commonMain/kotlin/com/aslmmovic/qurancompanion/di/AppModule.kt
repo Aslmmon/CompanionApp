@@ -16,11 +16,15 @@ import com.aslmmovic.qurancompanion.domain.usecase.GetTomorrowJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetWeeklyProgressUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.TriggerImmediateNotificationUseCase
+import com.aslmmovic.qurancompanion.presentation.screens.home.HomeViewModel
+import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyViewModel
+import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageViewModel
+import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsViewModel
+import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
-import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
-import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
-import com.aslmmovic.qurancompanion.presentation.viewmodel.LanguageViewModel
-import com.aslmmovic.qurancompanion.presentation.viewmodel.SplashViewModel
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
@@ -55,10 +59,16 @@ val appModule = module {
     single { GetDebugDayOffsetUseCase(get()) }
     single { IncrementDebugDayOffsetUseCase(get()) }
 
+    // Domain layer — notifications
+    single { ScheduleDailyReminderUseCase(get(), get(), get()) }
+    single { RequestNotificationPermissionUseCase(get()) }
+    single { TriggerImmediateNotificationUseCase(get(), get()) }
+
     // Presentation layer
     viewModel { SplashViewModel() }
-    viewModel { AppViewModel(get(), get(), get(), get(), get()) }
+    viewModel { AppViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }

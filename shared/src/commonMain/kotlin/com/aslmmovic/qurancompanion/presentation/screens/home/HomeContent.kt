@@ -18,10 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -32,7 +28,6 @@ import com.aslmmovic.qurancompanion.presentation.screens.home.components.Bismill
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.CompletedStateContent
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.HomeHeader
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.ReadyStateContent
-import com.aslmmovic.qurancompanion.presentation.screens.home.components.SettingsBottomSheet
 import com.aslmmovic.qurancompanion.presentation.screens.home.components.WeeklyProgressTracker
 import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.resources.stringResource
@@ -48,13 +43,10 @@ fun HomeContent(
     tomorrowJourney: Journey?,
     onBeginClick: () -> Unit,
     onResetClick: () -> Unit,
-    onNextJourneyClick: () -> Unit,
-    onLanguageSelected: (String) -> Unit,
+    onSettingsClick: () -> Unit,
     onThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showSettingsBottomSheet by remember { mutableStateOf(false) }
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -77,7 +69,7 @@ fun HomeContent(
             HomeHeader(
                 isDarkMode = userPreferences.isDarkMode ?: isSystemInDarkTheme(),
                 onThemeToggleClick = onThemeToggle,
-                onSettingsClick = { showSettingsBottomSheet = true }
+                onSettingsClick = onSettingsClick
             )
 
             if (!isCompleted) {
@@ -128,15 +120,6 @@ fun HomeContent(
 
             Spacer(modifier = Modifier.height(32.dp))
         }
-
-        if (showSettingsBottomSheet) {
-            SettingsBottomSheet(
-                preferredLanguage = userPreferences.preferredLanguage,
-                onLanguageSelected = onLanguageSelected,
-                onSimulateNextDay = onNextJourneyClick,
-                onDismissRequest = { showSettingsBottomSheet = false }
-            )
-        }
     }
 }
 
@@ -151,8 +134,7 @@ fun HomeContentPreview() {
         tomorrowJourney = null,
         onBeginClick = {},
         onResetClick = {},
-        onNextJourneyClick = {},
-        onLanguageSelected = {},
+        onSettingsClick = {},
         onThemeToggle = {}
     )
 }

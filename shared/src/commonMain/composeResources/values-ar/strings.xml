@@ -4,6 +4,7 @@
     <string name="welcome_title">رفيق الصحابة</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
     <string name="daily_habit_badge">عادة ١٠ دقائق يومياً</string>
+    <string name="action_back">رجوع</string>
 
     <!-- Home Screen -->
     <string name="home_begin_journey">تعرّف على صحابي اليوم (~١٠ دقائق)</string>
@@ -30,10 +31,16 @@
     <string name="completion_done">تم</string>
     <string name="completion_action_label">عمل اليوم</string>
 
-    <!-- Reminder status -->
+    <!-- Reminder status & Settings -->
     <string name="reminders_label">التذكيرات:</string>
     <string name="reminders_enabled_at">مفعّلة الساعة %1$s</string>
     <string name="reminders_disabled">معطّلة</string>
+    <string name="settings_daily_reminders">التذكير اليومي</string>
+    <string name="settings_reminder_time">وقت التذكير</string>
+    <string name="reminder_time_6am">٠٦:٠٠ صباحاً (بعد الفجر)</string>
+    <string name="reminder_time_8am">٠٨:٠٠ صباحاً (الصباح)</string>
+    <string name="reminder_time_8pm">٠٨:٠٠ مساءً (المساء)</string>
+    <string name="notification_title_pattern">تعرّف على صحابي اليوم: %1$s 🌟</string>
 
     <!-- Weekly Tracker -->
     <string name="home_weekly_tracker">سلسلة العادة اليومية</string>
@@ -68,6 +75,7 @@
     <string name="theme_ocean_breeze">نسيم المحيط</string>
     <string name="settings_debug_options">خيارات المطور</string>
     <string name="settings_simulate_next_day">محاكاة اليوم التالي</string>
+    <string name="settings_trigger_notification">إرسال إشعار فوري</string>
 
     <!-- Step Types -->
     <string name="step_type_intro">مقدمة</string>

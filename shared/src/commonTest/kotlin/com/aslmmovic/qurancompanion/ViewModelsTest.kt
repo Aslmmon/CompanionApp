@@ -8,19 +8,16 @@ import com.aslmmovic.qurancompanion.domain.usecase.MarkJourneyCompletedUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ResetJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
-import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeUiEvent
-import com.aslmmovic.qurancompanion.presentation.viewmodel.HomeViewModel
-import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyUiEvent
-import com.aslmmovic.qurancompanion.presentation.viewmodel.JourneyViewModel
-import com.aslmmovic.qurancompanion.domain.model.UserPreferences
-import com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository
+import com.aslmmovic.qurancompanion.presentation.screens.home.HomeUiEffect
+import com.aslmmovic.qurancompanion.presentation.screens.home.HomeViewModel
+import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyUiEffect
+import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyViewModel
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
-import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
+import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -36,7 +33,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -45,13 +41,8 @@ class ViewModelsTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private val repo = FakeJourneyRepository()
-    private val prefsRepo = object : UserPreferencesRepository {
-        private val _preferences = MutableStateFlow(UserPreferences())
-        override fun getUserPreferences(): Flow<UserPreferences> = _preferences.asStateFlow()
-        override suspend fun saveUserPreferences(preferences: UserPreferences) {
-            _preferences.value = preferences
-        }
-    }
+    private val prefsRepo = FakeUserPreferencesRepository()
+    private val fakeScheduler = FakeNotificationScheduler()
     private val fakeLocaleProvider = object : LocaleProvider {
         override var currentLocale = "en"
         override fun changeLocale(locale: String) { currentLocale = locale }
@@ -61,6 +52,29 @@ class ViewModelsTest {
         override fun getCurrentDayOfWeek(): Int = 1
         override fun getCurrentDateString(): String = "2026-01-01"
     }
+
+    private fun createHomeViewModel() = HomeViewModel(
+        getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
+        getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
+        getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
+        isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
+        resetJourneyUseCase = ResetJourneyUseCase(repo),
+        getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+        savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+        getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+        incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
+        dateTimeProvider = fakeDateTimeProvider
+    )
+
+    private fun createAppViewModel() = AppViewModel(
+        getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+        savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+        getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
+        getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+        scheduleDailyReminderUseCase = ScheduleDailyReminderUseCase(fakeScheduler, prefsRepo, repo),
+        requestNotificationPermissionUseCase = com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase(fakeScheduler),
+        localeProvider = fakeLocaleProvider
+    )
 
     @BeforeTest
     fun setUp() {
@@ -78,79 +92,62 @@ class ViewModelsTest {
         val tomorrow = testJourney(id = "tomorrow")
         repo.todayJourney = today
         repo.allJourneys = listOf(today, tomorrow)
-        // Note: in FakeJourneyRepository we return todayJourney for tomorrow's journey too, let's keep it simple
 
-        val viewModel = HomeViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
-            getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
-            isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo),
-            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
-            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
-            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider,
-            localeProvider = fakeLocaleProvider
-        )
-
+        val viewModel = createHomeViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
-        assertEquals(today, viewModel.journey.value)
-        assertEquals(today, viewModel.tomorrowJourney.value)
+        assertEquals(today, viewModel.uiState.value.journey)
+        assertEquals(today, viewModel.uiState.value.tomorrowJourney)
+        collectJob.cancel()
     }
 
     @Test
     fun `HomeViewModel onToggleTheme updates preferences`() = runTest {
-        val viewModel = HomeViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
-            getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
-            isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo),
-            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
-            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
-            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider,
-            localeProvider = fakeLocaleProvider
-        )
-
+        val viewModel = createHomeViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
-        assertNull(viewModel.userPreferences.value.isDarkMode)
+
+        assertNull(viewModel.uiState.value.userPreferences.isDarkMode)
 
         viewModel.onToggleTheme(true)
         advanceUntilIdle()
 
-        assertTrue(viewModel.userPreferences.value.isDarkMode == true)
+        assertTrue(viewModel.uiState.value.userPreferences.isDarkMode == true)
+        collectJob.cancel()
     }
 
     @Test
     fun `HomeViewModel onBeginJourneyClick emits NavigateToJourneyFlow event`() = runTest {
-        val viewModel = HomeViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
-            getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
-            isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo),
-            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
-            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
-            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider,
-            localeProvider = fakeLocaleProvider
-        )
+        val viewModel = createHomeViewModel()
 
-        val events = mutableListOf<HomeUiEvent>()
+        val effects = mutableListOf<HomeUiEffect>()
         val job = launch {
-            viewModel.uiEvents.toList(events)
+            viewModel.uiEffects.toList(effects)
         }
 
         viewModel.onBeginJourneyClick()
         advanceUntilIdle()
 
-        assertEquals(1, events.size)
-        assertEquals(HomeUiEvent.NavigateToJourneyFlow, events.first())
+        assertEquals(1, effects.size)
+        assertEquals(HomeUiEffect.NavigateToJourneyFlow, effects.first())
+        job.cancel()
+    }
+
+    @Test
+    fun `HomeViewModel onSettingsClick emits NavigateToSettings event`() = runTest {
+        val viewModel = createHomeViewModel()
+
+        val effects = mutableListOf<HomeUiEffect>()
+        val job = launch {
+            viewModel.uiEffects.toList(effects)
+        }
+
+        viewModel.onSettingsClick()
+        advanceUntilIdle()
+
+        assertEquals(1, effects.size)
+        assertEquals(HomeUiEffect.NavigateToSettings, effects.first())
         job.cancel()
     }
 
@@ -160,32 +157,16 @@ class ViewModelsTest {
         repo.todayJourney = today
         repo.markCompleted(today.id, "2026-01-01")
 
-        val viewModel = HomeViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
-            getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
-            isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo),
-            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
-            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
-            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider,
-            localeProvider = fakeLocaleProvider
-        )
-
-        advanceUntilIdle()
-        val collectJob = launch {
-            viewModel.isCompleted.collect {}
-        }
+        val viewModel = createHomeViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
-        assertTrue(viewModel.isCompleted.value)
+        assertTrue(viewModel.uiState.value.isCompleted)
 
         viewModel.onResetCompletionClick()
         advanceUntilIdle()
 
-        assertFalse(viewModel.isCompleted.value)
+        assertFalse(viewModel.uiState.value.isCompleted)
         collectJob.cancel()
     }
 
@@ -235,17 +216,17 @@ class ViewModelsTest {
 
         advanceUntilIdle()
 
-        val events = mutableListOf<JourneyUiEvent>()
+        val effects = mutableListOf<JourneyUiEffect>()
         val job = launch {
-            viewModel.uiEvents.toList(events)
+            viewModel.uiEffects.toList(effects)
         }
 
         viewModel.onFinish()
         advanceUntilIdle()
 
         assertTrue(repo.isCompleted(today.id, "2026-01-01").first())
-        assertEquals(1, events.size)
-        assertEquals(JourneyUiEvent.NavigateToCompletion, events.first())
+        assertEquals(1, effects.size)
+        assertEquals(JourneyUiEffect.NavigateToCompletion, effects.first())
 
         job.cancel()
     }
@@ -265,36 +246,24 @@ class ViewModelsTest {
         viewModel.onNextStep()
         assertEquals(1, viewModel.currentStepIndex.value)
 
-        val events = mutableListOf<JourneyUiEvent>()
+        val effects = mutableListOf<JourneyUiEffect>()
         val job = launch {
-            viewModel.uiEvents.toList(events)
+            viewModel.uiEffects.toList(effects)
         }
 
         viewModel.onReturnHome()
         advanceUntilIdle()
 
         assertEquals(0, viewModel.currentStepIndex.value)
-        assertEquals(1, events.size)
-        assertEquals(JourneyUiEvent.NavigateToHome, events.first())
+        assertEquals(1, effects.size)
+        assertEquals(JourneyUiEffect.NavigateToHome, effects.first())
 
         job.cancel()
     }
 
     @Test
     fun `HomeViewModel onNextJourneyClick increments offset`() = runTest {
-        val viewModel = HomeViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            getTomorrowJourneyUseCase = GetTomorrowJourneyUseCase(repo),
-            getWeeklyProgressUseCase = GetWeeklyProgressUseCase(repo),
-            isJourneyCompletedUseCase = IsJourneyCompletedUseCase(repo),
-            resetJourneyUseCase = ResetJourneyUseCase(repo),
-            getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
-            savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
-            getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
-            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider,
-            localeProvider = fakeLocaleProvider
-        )
+        val viewModel = createHomeViewModel()
 
         advanceUntilIdle()
         
@@ -309,6 +278,31 @@ class ViewModelsTest {
         advanceUntilIdle()
 
         assertEquals(1, offsetValue)
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `AppViewModel initialization schedules daily reminder and loads state`() = runTest {
+        val today = testJourney(id = "today", title = "Abu Bakr", subtitle = "The Truthful")
+        repo.todayJourney = today
+        prefsRepo.saveUserPreferences(
+            com.aslmmovic.qurancompanion.domain.model.UserPreferences(
+                isReminderEnabled = true,
+                reminderHour = 8,
+                reminderMinute = 0
+            )
+        )
+
+        val viewModel = createAppViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isInitialized)
+        assertEquals(8, fakeScheduler.scheduledHour)
+        assertEquals(0, fakeScheduler.scheduledMinute)
+        assertEquals("Sahaba Companion: Abu Bakr", fakeScheduler.scheduledTitle)
+        assertEquals("The Truthful", fakeScheduler.scheduledBody)
+
         collectJob.cancel()
     }
 }
