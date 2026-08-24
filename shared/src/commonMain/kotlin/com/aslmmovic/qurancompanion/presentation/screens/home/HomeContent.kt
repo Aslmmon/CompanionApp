@@ -34,6 +34,9 @@ import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.home_loading
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+
 @Composable
 fun HomeContent(
     journey: Journey?,
@@ -47,6 +50,8 @@ fun HomeContent(
     onThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -55,6 +60,7 @@ fun HomeContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
                 .padding(horizontal = 24.dp, vertical = if (isCompleted) 8.dp else 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

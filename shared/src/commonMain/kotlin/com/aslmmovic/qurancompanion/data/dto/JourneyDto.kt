@@ -29,7 +29,7 @@ data class JourneyDto(
 
 @Serializable
 data class CoverDto(
-    val type: String,
+    val type: String = "illustration",
     val asset: String
 )
 
