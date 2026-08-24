@@ -7,6 +7,7 @@ import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCas
 import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.TriggerImmediateNotificationUseCase
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsUiEffect
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,7 @@ class SettingsViewModelTest {
         savePreferencesUseCase = SavePreferencesUseCase(fakePrefsRepo),
         scheduleDailyReminderUseCase = ScheduleDailyReminderUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
         requestNotificationPermissionUseCase = RequestNotificationPermissionUseCase(fakeScheduler),
+        triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakeJourneyRepo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
         localeProvider = fakeLocaleProvider
     )
@@ -192,5 +194,18 @@ class SettingsViewModelTest {
         assertEquals(SettingsUiEffect.NavigateBack, effects.first())
 
         collectJob.cancel()
+    }
+
+    @Test
+    fun `SettingsViewModel onTriggerNotification triggers immediate notification`() = runTest {
+        fakeJourneyRepo.todayJourney = testJourney(title = "Uthman ibn Affan", subtitle = "The Possessor of Two Lights")
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onTriggerNotification()
+        advanceUntilIdle()
+
+        assertEquals("Sahaba Companion: Uthman ibn Affan", fakeScheduler.immediateNotificationTitle)
+        assertEquals("The Possessor of Two Lights", fakeScheduler.immediateNotificationBody)
     }
 }

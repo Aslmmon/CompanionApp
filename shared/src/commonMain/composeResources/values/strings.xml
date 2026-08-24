@@ -75,6 +75,7 @@
     <string name="theme_ocean_breeze">Ocean Breeze</string>
     <string name="settings_debug_options">Developer Options</string>
     <string name="settings_simulate_next_day">Simulate Next Day</string>
+    <string name="settings_trigger_notification">Trigger Notification Now</string>
 
     <!-- Step Types -->
     <string name="step_type_intro">Introduction</string>

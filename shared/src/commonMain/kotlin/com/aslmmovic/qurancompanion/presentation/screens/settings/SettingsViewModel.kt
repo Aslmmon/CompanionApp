@@ -9,6 +9,7 @@ import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCas
 import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.TriggerImmediateNotificationUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,6 +25,7 @@ class SettingsViewModel(
     private val savePreferencesUseCase: SavePreferencesUseCase,
     private val scheduleDailyReminderUseCase: ScheduleDailyReminderUseCase,
     private val requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase,
+    private val triggerImmediateNotificationUseCase: TriggerImmediateNotificationUseCase,
     private val incrementDebugDayOffsetUseCase: IncrementDebugDayOffsetUseCase,
     private val localeProvider: LocaleProvider
 ) : ViewModel() {
@@ -82,6 +84,12 @@ class SettingsViewModel(
     fun onSimulateNextDay() {
         viewModelScope.launch {
             incrementDebugDayOffsetUseCase()
+        }
+    }
+
+    fun onTriggerNotification() {
+        viewModelScope.launch {
+            triggerImmediateNotificationUseCase()
         }
     }
 

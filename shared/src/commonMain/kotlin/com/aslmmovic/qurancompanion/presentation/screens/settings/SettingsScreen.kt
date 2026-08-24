@@ -26,11 +26,11 @@ fun SettingsScreen(
     SettingsContent(
         uiState = uiState,
         onBackClick = viewModel::onBackClick,
-        onToggleReminder = viewModel::onToggleReminder,
         onUpdateReminderTime = viewModel::onUpdateReminderTime,
         onLanguageSelected = viewModel::onLanguageSelected,
         onThemeToggle = viewModel::onToggleTheme,
         onSimulateNextDay = viewModel::onSimulateNextDay,
+        onTriggerNotification = viewModel::onTriggerNotification,
         modifier = modifier
     )
 }

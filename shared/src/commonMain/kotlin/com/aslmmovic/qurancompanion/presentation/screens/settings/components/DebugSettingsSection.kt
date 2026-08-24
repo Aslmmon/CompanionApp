@@ -19,10 +19,12 @@ import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.settings_debug_options
 import qurancompanion.shared.generated.resources.settings_simulate_next_day
+import qurancompanion.shared.generated.resources.settings_trigger_notification
 
 @Composable
 fun DebugSettingsSection(
     onSimulateNextDay: () -> Unit,
+    onTriggerNotification: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -42,6 +44,22 @@ fun DebugSettingsSection(
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
+
+            Button(
+                onClick = onTriggerNotification,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            ) {
+                Text(
+                    text = stringResource(Res.string.settings_trigger_notification),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
 
             Button(
                 onClick = onSimulateNextDay,

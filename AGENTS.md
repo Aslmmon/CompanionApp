@@ -34,6 +34,7 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 * **Map Data Layers**: Fully map DTO/entity representations to domain models inside data layers using mapping extension functions (e.g., `toDomain()`) before returning.
 * **Main Safety**: Always ensure all Use Cases and Repository interfaces are main-safe and run non-blocking.
 * **Localization Resources**: Define all user-facing strings in Multiplatform XML resources (providing English in `values/strings.xml` and Arabic in `values-ar/strings.xml`).
+* **Concise Code Comments**: Write only very short, concise comments (1 line max) for non-obvious logic when generating code. Avoid verbose explanations.
 
 ### Don't
 * **No Platform Imports in Domain**: Do not import Android SDK libraries (like `android.*`) or platform components in `commonMain` or the `domain` module.

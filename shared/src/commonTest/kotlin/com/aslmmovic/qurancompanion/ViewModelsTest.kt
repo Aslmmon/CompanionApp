@@ -14,7 +14,10 @@ import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyUiEffect
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyViewModel
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
+import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
+import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -39,6 +42,11 @@ class ViewModelsTest {
     private val testDispatcher = StandardTestDispatcher()
     private val repo = FakeJourneyRepository()
     private val prefsRepo = FakeUserPreferencesRepository()
+    private val fakeScheduler = FakeNotificationScheduler()
+    private val fakeLocaleProvider = object : LocaleProvider {
+        override var currentLocale = "en"
+        override fun changeLocale(locale: String) { currentLocale = locale }
+    }
     private val fakeDateTimeProvider = object : DateTimeProvider {
         override fun getCurrentDayOfYear(): Int = 1
         override fun getCurrentDayOfWeek(): Int = 1
@@ -56,6 +64,16 @@ class ViewModelsTest {
         getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
         dateTimeProvider = fakeDateTimeProvider
+    )
+
+    private fun createAppViewModel() = AppViewModel(
+        getUserPreferencesUseCase = GetUserPreferencesUseCase(prefsRepo),
+        savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
+        getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
+        getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
+        scheduleDailyReminderUseCase = ScheduleDailyReminderUseCase(fakeScheduler, prefsRepo, repo),
+        requestNotificationPermissionUseCase = com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase(fakeScheduler),
+        localeProvider = fakeLocaleProvider
     )
 
     @BeforeTest
@@ -260,6 +278,31 @@ class ViewModelsTest {
         advanceUntilIdle()
 
         assertEquals(1, offsetValue)
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `AppViewModel initialization schedules daily reminder and loads state`() = runTest {
+        val today = testJourney(id = "today", title = "Abu Bakr", subtitle = "The Truthful")
+        repo.todayJourney = today
+        prefsRepo.saveUserPreferences(
+            com.aslmmovic.qurancompanion.domain.model.UserPreferences(
+                isReminderEnabled = true,
+                reminderHour = 8,
+                reminderMinute = 0
+            )
+        )
+
+        val viewModel = createAppViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isInitialized)
+        assertEquals(8, fakeScheduler.scheduledHour)
+        assertEquals(0, fakeScheduler.scheduledMinute)
+        assertEquals("Sahaba Companion: Abu Bakr", fakeScheduler.scheduledTitle)
+        assertEquals("The Truthful", fakeScheduler.scheduledBody)
+
         collectJob.cancel()
     }
 }

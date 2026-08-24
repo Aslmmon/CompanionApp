@@ -6,7 +6,9 @@ import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import com.aslmmovic.qurancompanion.domain.usecase.GetTodayJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
 import com.aslmmovic.qurancompanion.presentation.navigation.AppRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +22,8 @@ class AppViewModel(
     private val savePreferencesUseCase: SavePreferencesUseCase,
     private val getTodayJourneyUseCase: GetTodayJourneyUseCase,
     private val getDebugDayOffsetUseCase: GetDebugDayOffsetUseCase,
+    private val scheduleDailyReminderUseCase: ScheduleDailyReminderUseCase,
+    private val requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase,
     private val localeProvider: LocaleProvider
 ) : ViewModel() {
 
@@ -27,6 +31,13 @@ class AppViewModel(
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            // Explicitly prompt notification permission on app startup
+            requestNotificationPermissionUseCase()
+            // Ensure daily reminder is scheduled
+            scheduleDailyReminderUseCase()
+        }
+
         viewModelScope.launch {
             combine(
                 getUserPreferencesUseCase(),

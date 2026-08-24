@@ -26,11 +26,11 @@ import com.aslmmovic.qurancompanion.presentation.screens.settings.components.The
 fun SettingsContent(
     uiState: SettingsUiState,
     onBackClick: () -> Unit,
-    onToggleReminder: (Boolean) -> Unit,
     onUpdateReminderTime: (Int, Int) -> Unit,
     onLanguageSelected: (String) -> Unit,
     onThemeToggle: (Boolean) -> Unit,
     onSimulateNextDay: () -> Unit,
+    onTriggerNotification: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -49,13 +49,6 @@ fun SettingsContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            ReminderSettingsSection(
-                isReminderEnabled = uiState.userPreferences.isReminderEnabled,
-                reminderHour = uiState.userPreferences.reminderHour,
-                reminderMinute = uiState.userPreferences.reminderMinute,
-                onToggleReminder = onToggleReminder,
-                onUpdateReminderTime = onUpdateReminderTime
-            )
 
             LanguageSettingsSection(
                 preferredLanguage = uiState.userPreferences.preferredLanguage,
@@ -68,7 +61,8 @@ fun SettingsContent(
             )
 
             DebugSettingsSection(
-                onSimulateNextDay = onSimulateNextDay
+                onSimulateNextDay = onSimulateNextDay,
+                onTriggerNotification = onTriggerNotification
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -90,10 +84,10 @@ fun SettingsContentPreview() {
             )
         ),
         onBackClick = {},
-        onToggleReminder = {},
         onUpdateReminderTime = { _, _ -> },
         onLanguageSelected = {},
         onThemeToggle = {},
-        onSimulateNextDay = {}
+        onSimulateNextDay = {},
+        onTriggerNotification = {}
     )
 }

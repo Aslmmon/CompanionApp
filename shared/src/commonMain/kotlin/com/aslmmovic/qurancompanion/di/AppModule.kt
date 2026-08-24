@@ -18,6 +18,7 @@ import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.TriggerImmediateNotificationUseCase
 import com.aslmmovic.qurancompanion.presentation.screens.home.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageViewModel
@@ -61,12 +62,13 @@ val appModule = module {
     // Domain layer — notifications
     single { ScheduleDailyReminderUseCase(get(), get(), get()) }
     single { RequestNotificationPermissionUseCase(get()) }
+    single { TriggerImmediateNotificationUseCase(get(), get()) }
 
     // Presentation layer
     viewModel { SplashViewModel() }
-    viewModel { AppViewModel(get(), get(), get(), get(), get()) }
+    viewModel { AppViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get(), get()) }
-    viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }

@@ -75,6 +75,7 @@
     <string name="theme_ocean_breeze">نسيم المحيط</string>
     <string name="settings_debug_options">خيارات المطور</string>
     <string name="settings_simulate_next_day">محاكاة اليوم التالي</string>
+    <string name="settings_trigger_notification">إرسال إشعار فوري</string>
 
     <!-- Step Types -->
     <string name="step_type_intro">مقدمة</string>

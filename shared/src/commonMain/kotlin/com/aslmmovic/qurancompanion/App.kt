@@ -21,6 +21,7 @@ import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageSelect
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashScreen
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
+import com.aslmmovic.qurancompanion.ui.components.IslamicBackgroundLattice
 import com.aslmmovic.qurancompanion.ui.theme.QuranCompanionTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -32,9 +33,9 @@ fun App() {
     if (!state.isInitialized) return
 
     val isDarkMode = when (state.isDarkMode) {
-        true  -> true
+        true -> true
         false -> false
-        null  -> isSystemInDarkTheme()
+        null -> isSystemInDarkTheme()
     }
 
     QuranCompanionTheme(
@@ -51,7 +52,7 @@ fun App() {
                     .safeContentPadding()
                     .fillMaxSize()
             ) {
-                com.aslmmovic.qurancompanion.ui.components.IslamicBackgroundLattice()
+                IslamicBackgroundLattice()
 
                 NavHost(
                     navController = navController,

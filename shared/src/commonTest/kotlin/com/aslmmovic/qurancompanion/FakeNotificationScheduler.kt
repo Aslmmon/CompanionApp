@@ -9,6 +9,8 @@ class FakeNotificationScheduler : NotificationScheduler {
     var scheduledBody: String? = null
     var isCancelled: Boolean = false
     var permissionGranted: Boolean = true
+    var immediateNotificationTitle: String? = null
+    var immediateNotificationBody: String? = null
 
     override fun scheduleDailyReminder(hour: Int, minute: Int, title: String, body: String) {
         scheduledHour = hour
@@ -28,5 +30,10 @@ class FakeNotificationScheduler : NotificationScheduler {
 
     override suspend fun requestNotificationPermission(): Boolean {
         return permissionGranted
+    }
+
+    override fun showImmediateNotification(title: String, body: String) {
+        immediateNotificationTitle = title
+        immediateNotificationBody = body
     }
 }

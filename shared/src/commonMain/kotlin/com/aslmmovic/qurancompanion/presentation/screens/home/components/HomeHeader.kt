@@ -69,20 +69,6 @@ fun HomeHeader(
                 modifier = Modifier.background(MaterialTheme.colorScheme.surface)
             ) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(if (isDarkMode) Res.string.theme_light_mode else Res.string.theme_dark_mode)) },
-                    onClick = {
-                        showMenu = false
-                        onThemeToggleClick(!isDarkMode)
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(if (isDarkMode) Res.drawable.ic_light_mode else Res.drawable.ic_dark_mode),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                )
-                DropdownMenuItem(
                     text = { Text(stringResource(Res.string.settings_title)) },
                     onClick = {
                         showMenu = false

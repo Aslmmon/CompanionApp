@@ -41,3 +41,21 @@ class RequestNotificationPermissionUseCase(
         return notificationScheduler.requestNotificationPermission()
     }
 }
+
+class TriggerImmediateNotificationUseCase(
+    private val notificationScheduler: NotificationScheduler,
+    private val journeyRepository: JourneyRepository
+) {
+    suspend operator fun invoke(customTitle: String? = null, customBody: String? = null) {
+        notificationScheduler.requestNotificationPermission()
+        val todayJourney = journeyRepository.getTodayJourney()
+        val title = customTitle ?: if (todayJourney != null) {
+            "Sahaba Companion: ${todayJourney.title}"
+        } else {
+            "Sahaba Companion"
+        }
+        val body = customBody ?: (todayJourney?.subtitle ?: "Discover today's journey with the Sahaba.")
+
+        notificationScheduler.showImmediateNotification(title = title, body = body)
+    }
+}
