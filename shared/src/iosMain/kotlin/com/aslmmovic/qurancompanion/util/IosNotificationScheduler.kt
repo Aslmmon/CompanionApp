@@ -20,6 +20,34 @@ class IosNotificationScheduler : NotificationScheduler {
         private const val NOTIFICATION_IDENTIFIER = "daily_companion_reminder"
     }
 
+    override fun schedulePeriodicReminder(intervalMinutes: Long, title: String, body: String) {
+        val center = UNUserNotificationCenter.currentNotificationCenter()
+        center.removePendingNotificationRequestsWithIdentifiers(listOf(NOTIFICATION_IDENTIFIER))
+
+        val content = UNMutableNotificationContent().apply {
+            setTitle(title)
+            setBody(body)
+            setSound(UNNotificationSound.defaultSound())
+        }
+
+        val trigger = UNTimeIntervalNotificationTrigger.triggerWithTimeInterval(
+            timeInterval = intervalMinutes * 60.0,
+            repeats = true
+        )
+
+        val request = UNNotificationRequest.requestWithIdentifier(
+            identifier = NOTIFICATION_IDENTIFIER,
+            content = content,
+            trigger = trigger
+        )
+
+        center.addNotificationRequest(request) { error ->
+            if (error != null) {
+                println("Failed to schedule periodic notification: ${error.localizedDescription}")
+            }
+        }
+    }
+
     override fun scheduleDailyReminder(hour: Int, minute: Int, title: String, body: String) {
         val center = UNUserNotificationCenter.currentNotificationCenter()
         center.removePendingNotificationRequestsWithIdentifiers(listOf(NOTIFICATION_IDENTIFIER))

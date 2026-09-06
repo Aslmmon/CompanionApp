@@ -1,6 +1,7 @@
 package com.aslmmovic.qurancompanion.util
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 
@@ -15,7 +16,7 @@ class DailyReminderWorker(
         val body = inputData.getString(AndroidNotificationScheduler.EXTRA_BODY)
             ?: "Time for your daily Sahabi discovery."
 
-        // Post system notification banner on background worker execution
+        Log.d("DailyReminderWorker", "WorkManager executing reminder: title=$title, body=$body")
         AndroidNotificationScheduler(applicationContext).showImmediateNotification(title, body)
         return Result.success()
     }

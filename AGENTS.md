@@ -14,6 +14,8 @@ This is a Kotlin Multiplatform (KMP) project utilizing Compose Multiplatform for
 
 ## 2. Modular Guidelines Directory
 Refer to these topic-specific guidelines for detailed rules, code conventions, and implementation instructions:
+* 📖 **[Feature Registry (Single Source of Truth)](file:///docs/features/FEATURE_REGISTRY.md)**
+* 🧪 **[Test-Driven Development (TDD) Workflow Guide](file:///docs/dev/TDD_WORKFLOW.md)**
 * 🏗️ **[Clean Architecture & Layer Isolation Guidelines](file:///.agents/rules/architecture.md)**
 * 📋 **[Spec-Driven Development Workflow](file:///.agents/skills/spec-driven-dev/SKILL.md)**
 * 📱 **[Compose Multiplatform UI Guidelines](file:///.agents/rules/compose.md)**

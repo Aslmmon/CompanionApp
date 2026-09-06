@@ -222,7 +222,7 @@ class JourneyPipeline(
             journey.person?.substringAfter(" / ")?.substringAfter("/ ")?.trim()
         } ?: journey.person
 
-        val sanitizedSteps = journey.steps.map { step ->
+        val sanitizedSteps = journey.steps.mapIndexed { index, step ->
             val rawTitle = step.title.trim()
             val cleanTitle = if (isArabic) {
                 when {
@@ -243,7 +243,23 @@ class JourneyPipeline(
                     else -> rawTitle
                 }
             }
-            step.copy(title = cleanTitle)
+
+            val canonicalType = when {
+                step.type.equals("INTRO", ignoreCase = true) || step.type.equals("Introduction", ignoreCase = true) -> "INTRO"
+                step.type.equals("KEY_LESSONS", ignoreCase = true) || step.type.contains("Lesson", ignoreCase = true) -> "KEY_LESSONS"
+                step.type.equals("REFLECTION", ignoreCase = true) || step.type.contains("Reflect", ignoreCase = true) -> "REFLECTION"
+                step.type.equals("ACTION", ignoreCase = true) || step.type.contains("Action", ignoreCase = true) -> "ACTION"
+                step.type.equals("REFERENCES", ignoreCase = true) || step.type.contains("Reference", ignoreCase = true) -> "REFERENCES"
+                step.type.equals("STORY", ignoreCase = true) -> "STORY"
+                index == 0 -> "INTRO"
+                index == 1 -> "STORY"
+                index == 2 -> "KEY_LESSONS"
+                index == 3 -> "REFLECTION"
+                index == 4 -> "ACTION"
+                else -> "STORY"
+            }
+
+            step.copy(type = canonicalType, title = cleanTitle)
         }
 
         return journey.copy(

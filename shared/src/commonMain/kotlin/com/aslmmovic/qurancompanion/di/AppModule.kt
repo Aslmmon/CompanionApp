@@ -18,6 +18,7 @@ import com.aslmmovic.qurancompanion.domain.usecase.GetDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.SchedulePeriodicReminderUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.TriggerImmediateNotificationUseCase
 import com.aslmmovic.qurancompanion.presentation.screens.home.HomeViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyViewModel
@@ -61,6 +62,7 @@ val appModule = module {
 
     // Domain layer — notifications
     single { ScheduleDailyReminderUseCase(get(), get(), get()) }
+    single { SchedulePeriodicReminderUseCase(get(), get(), get()) }
     single { RequestNotificationPermissionUseCase(get()) }
     single { TriggerImmediateNotificationUseCase(get(), get()) }
 

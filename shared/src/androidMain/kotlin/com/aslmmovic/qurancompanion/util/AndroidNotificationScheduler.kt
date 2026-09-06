@@ -15,7 +15,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.aslmmovic.qurancompanion.domain.util.NotificationScheduler
-import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class AndroidNotificationScheduler(
@@ -42,6 +41,8 @@ class AndroidNotificationScheduler(
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
+                enableLights(true)
+                enableVibration(true)
             }
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -49,27 +50,15 @@ class AndroidNotificationScheduler(
         }
     }
 
-    override fun scheduleDailyReminder(hour: Int, minute: Int, title: String, body: String) {
-        val now = Calendar.getInstance()
-        val target = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-            if (before(now)) {
-                add(Calendar.DAY_OF_YEAR, 1)
-            }
-        }
-        val initialDelayMs = target.timeInMillis - now.timeInMillis
-
+    override fun schedulePeriodicReminder(intervalMinutes: Long, title: String, body: String) {
         val inputData = Data.Builder()
             .putString(EXTRA_TITLE, title)
             .putString(EXTRA_BODY, body)
             .build()
 
-        // 24-hour periodic work with initial delay calculated to target reminder time
-        val workRequest = PeriodicWorkRequestBuilder<DailyReminderWorker>(24, TimeUnit.HOURS)
-            .setInitialDelay(initialDelayMs, TimeUnit.MILLISECONDS)
+        // Minimum WorkManager periodic interval is 15 minutes
+        val effectiveInterval = intervalMinutes.coerceAtLeast(15L)
+        val workRequest = PeriodicWorkRequestBuilder<DailyReminderWorker>(effectiveInterval, TimeUnit.MINUTES)
             .setInputData(inputData)
             .build()
 
@@ -78,6 +67,11 @@ class AndroidNotificationScheduler(
             ExistingPeriodicWorkPolicy.UPDATE,
             workRequest
         )
+    }
+
+    override fun scheduleDailyReminder(hour: Int, minute: Int, title: String, body: String) {
+        // Scheduled as 15-minute periodic reminder for testing functionality as requested
+        schedulePeriodicReminder(15L, title, body)
     }
 
     override fun cancelDailyReminder() {
@@ -89,33 +83,23 @@ class AndroidNotificationScheduler(
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val areNotificationsEnabled = notificationManager.areNotificationsEnabled()
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val hasPermission = context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) ==
                     android.content.pm.PackageManager.PERMISSION_GRANTED
 
-            if (!hasPermission || !areNotificationsEnabled) {
+            if (!hasPermission) {
                 if (activity != null) {
                     activity.runOnUiThread {
-                        val shouldShowRationale = activity.shouldShowRequestPermissionRationale(
-                            android.Manifest.permission.POST_NOTIFICATIONS
+                        activity.requestPermissions(
+                            arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                            REQUEST_CODE_POST_NOTIFICATIONS
                         )
-
-                        // Request system dialog if available, otherwise show settings redirect dialog
-                        if (shouldShowRationale || areNotificationsEnabled) {
-                            activity.requestPermissions(
-                                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                                REQUEST_CODE_POST_NOTIFICATIONS
-                            )
-                        } else {
-                            showSettingsRedirectDialog(activity)
-                        }
                     }
                 }
                 return false
             }
         } else {
+            val areNotificationsEnabled = notificationManager.areNotificationsEnabled()
             if (!areNotificationsEnabled && activity != null) {
                 activity.runOnUiThread {
                     showSettingsRedirectDialog(activity)
@@ -178,15 +162,23 @@ class AndroidNotificationScheduler(
             )
         } else null
 
+        val iconRes = if (context.applicationInfo.icon != 0) {
+            context.applicationInfo.icon
+        } else {
+            android.R.drawable.stat_notify_chat
+        }
+
         val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             android.app.Notification.Builder(context, CHANNEL_ID)
         } else {
             @Suppress("DEPRECATION")
             android.app.Notification.Builder(context)
+                .setPriority(android.app.Notification.PRIORITY_HIGH)
+                .setDefaults(android.app.Notification.DEFAULT_ALL)
         }
 
         val notification = builder
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(iconRes)
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)

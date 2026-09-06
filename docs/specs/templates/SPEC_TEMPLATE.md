@@ -119,14 +119,18 @@ sealed class ExampleUiEffect {
 
 ---
 
-## 5. Acceptance Criteria & Test Matrix
+## 5. Acceptance Criteria & Test Matrix (TDD Single Source of Truth)
 
-| Scenario ID | Precondition (Given) | Trigger / Action (When) | Expected State / Effect (Then) | Target Layer |
-|:---|:---|:---|:---|:---|
-| **AC-01** | Repository has cached data | ViewModel `init` executed | `UiState` transitions to `Content` | Presentation |
-| **AC-02** | Repository fails with exception | `Refresh` action dispatched | `UiState` is `Error`, no crash | Presentation |
-| **AC-03** | Valid DTO received from source | `toDomain()` mapping called | Returns mapped Domain Model | Data |
-| **AC-04** | Use Case executed with valid ID | `invoke(id)` called | Returns `Result.success(model)` | Domain |
+> [!NOTE]
+> Every row in this matrix MUST map 1:1 to an automated test in `commonTest` named `test_<SCENARIO_ID>_<description>()`.
+> Following TDD, these tests must be written FIRST (RED) before production layer code is implemented (GREEN).
+
+| Scenario ID | Precondition (Given) | Trigger / Action (When) | Expected State / Effect (Then) | Target Layer | Automated Test Function |
+|:---|:---|:---|:---|:---|:---|
+| **AC-01** | Repository has cached data | ViewModel `init` executed | `UiState` transitions to `Content` | Presentation | `fun test_AC01_givenCachedData_whenInit_thenStateIsContent()` |
+| **AC-02** | Repository fails with exception | `Refresh` action dispatched | `UiState` is `Error`, no crash | Presentation | `fun test_AC02_givenRepoError_whenRefresh_thenStateIsError()` |
+| **AC-03** | Valid DTO received from source | `toDomain()` mapping called | Returns mapped Domain Model | Data | `fun test_AC03_givenValidDto_whenToDomain_thenMapsCorrectly()` |
+| **AC-04** | Use Case executed with valid ID | `invoke(id)` called | Returns `Result.success(model)` | Domain | `fun test_AC04_givenValidId_whenInvoke_thenReturnsSuccess()` |
 
 ---
 

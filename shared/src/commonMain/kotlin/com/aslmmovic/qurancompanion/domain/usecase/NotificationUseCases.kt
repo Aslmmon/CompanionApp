@@ -59,3 +59,35 @@ class TriggerImmediateNotificationUseCase(
         notificationScheduler.showImmediateNotification(title = title, body = body)
     }
 }
+
+class SchedulePeriodicReminderUseCase(
+    private val notificationScheduler: NotificationScheduler,
+    private val preferencesRepository: UserPreferencesRepository,
+    private val journeyRepository: JourneyRepository
+) {
+    suspend operator fun invoke(
+        intervalMinutes: Long = 15L,
+        customTitle: String? = null,
+        customBody: String? = null
+    ) {
+        val preferences = preferencesRepository.getUserPreferences().first()
+        if (!preferences.isReminderEnabled) {
+            notificationScheduler.cancelDailyReminder()
+            return
+        }
+
+        val todayJourney = journeyRepository.getTodayJourney()
+        val title = customTitle ?: if (todayJourney != null) {
+            "Sahaba Companion: ${todayJourney.title}"
+        } else {
+            "Sahaba Companion"
+        }
+        val body = customBody ?: (todayJourney?.subtitle ?: "Discover today's journey with the Sahaba.")
+
+        notificationScheduler.schedulePeriodicReminder(
+            intervalMinutes = intervalMinutes,
+            title = title,
+            body = body
+        )
+    }
+}

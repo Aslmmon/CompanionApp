@@ -110,9 +110,9 @@ class JourneySerializationTest {
     }
 
     @Test
-    fun `sanitize and clean existing journeys_ar json files`() {
+    fun `sanitize and clean existing journeys json files`() {
         val pipeline = JourneyPipeline(GeneratorConfig(apiKey = "dummy"))
-        val candidatePaths = listOf(
+        val arPaths = listOf(
             File("journey_generation/output_json/journeys_ar.json"),
             File("output_json/journeys_ar.json"),
             File("../journey_generation/output_json/journeys_ar.json"),
@@ -120,11 +120,28 @@ class JourneySerializationTest {
             File("../shared/src/commonMain/composeResources/files/ar/journeys.json")
         )
 
-        for (file in candidatePaths) {
+        for (file in arPaths) {
             if (file.exists()) {
                 val raw = file.readText()
                 val list = json.decodeFromString<List<GeneratedJourney>>(raw)
                 val sanitized = list.map { pipeline.sanitizeJourney(it, "ar") }
+                file.writeText(json.encodeToString(sanitized))
+            }
+        }
+
+        val enPaths = listOf(
+            File("journey_generation/output_json/journeys_en.json"),
+            File("output_json/journeys_en.json"),
+            File("../journey_generation/output_json/journeys_en.json"),
+            File("shared/src/commonMain/composeResources/files/en/journeys.json"),
+            File("../shared/src/commonMain/composeResources/files/en/journeys.json")
+        )
+
+        for (file in enPaths) {
+            if (file.exists()) {
+                val raw = file.readText()
+                val list = json.decodeFromString<List<GeneratedJourney>>(raw)
+                val sanitized = list.map { pipeline.sanitizeJourney(it, "en") }
                 file.writeText(json.encodeToString(sanitized))
             }
         }
