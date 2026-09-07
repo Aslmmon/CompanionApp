@@ -1,11 +1,11 @@
-# Quran Companion
+# Sahaba Companions
 
 ![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin%20Multiplatform-1.9.0-blue)
 ![Koin](https://img.shields.io/badge/DI-Koin-3.5.0-brightgreen)
 
 ## 🎯 Project Overview
 
-**Quran Companion** is a Kotlin Multiplatform project that provides a modern, cross‑platform Quran experience.  The codebase targets **Android** and **iOS** while sharing the majority of the logic in the `shared` module.
+**Sahaba Companions** is a Kotlin Multiplatform project that provides a modern, cross‑platform experience.  The codebase targets **Android** and **iOS** while sharing the majority of the logic in the `shared` module.
 
 - **Android** – Fully Jetpack‑Compose based UI.
 - **iOS** – SwiftUI entry point with shared Compose UI for business logic.

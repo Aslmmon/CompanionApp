@@ -9,7 +9,7 @@ applies_to: [commonMain, androidMain, iosMain]
 > [!NOTE]
 > **Status: Dormant** — No `expect`/`actual` declarations beyond `Platform.kt` currently exist in this project.
 > Activate this skill only when adding new hardware APIs (audio, haptics, sensors, permissions).
-> Adapt examples to Quran Companion domain before using — current examples use generic sensor patterns.
+> Adapt examples to Sahaba Companions domain before using — current examples use generic sensor patterns.
 
 # KMP expect/actual Platform Bridge Guide
 

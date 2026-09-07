@@ -1,4 +1,4 @@
-# Quran Companion Developer & Agent Guidelines
+# Sahaba Companions Developer & Agent Guidelines
 
 This document provides a high-level overview of the project and serves as an index to our modular engineering guidelines.
 

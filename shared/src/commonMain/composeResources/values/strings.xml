@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App-wide -->
-    <string name="welcome_title">Sahaba Companion</string>
+    <string name="welcome_title">Sahaba Companions</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
     <string name="daily_habit_badge">10 Min Daily Habit</string>
     <string name="action_back">Back</string>

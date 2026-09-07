@@ -6,6 +6,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.ic_app_logo
+import qurancompanion.shared.generated.resources.shalat
 
 @Composable
 fun SplashScreen(
@@ -21,6 +22,6 @@ fun SplashScreen(
     }
 
     SplashContent(
-        painter = painterResource(Res.drawable.ic_app_logo),
+        painter = painterResource(Res.drawable.shalat),
     )
 }

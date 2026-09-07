@@ -1,6 +1,6 @@
 # Journey Generation Tool (`:journey_generation`)
 
-A CLI & automation tool that extracts stories of the Sahaba (Companions) from PDF books using Google Gemini AI, structuring them into the exact JSON schema required by the Quran Companion mobile app.
+A CLI & automation tool that extracts stories of the Sahaba (Companions) from PDF books using Google Gemini AI, structuring them into the exact JSON schema required by the Sahaba Companions mobile app.
 
 ---
 

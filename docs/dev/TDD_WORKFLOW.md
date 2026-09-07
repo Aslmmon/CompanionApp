@@ -1,6 +1,6 @@
 # Test-Driven & Spec-Driven Development (TDD/SDD) Workflow
 
-This document outlines the standard TDD inner loop and Spec-Driven Development workflow for the Quran Companion project.
+This document outlines the standard TDD inner loop and Spec-Driven Development workflow for the Sahaba Companions project.
 
 ---
 

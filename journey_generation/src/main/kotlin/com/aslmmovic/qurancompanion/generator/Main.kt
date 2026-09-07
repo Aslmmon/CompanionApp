@@ -7,7 +7,7 @@ import java.io.File
 
 fun main(args: Array<String>) = runBlocking {
     println("==========================================================")
-    println("  Quran Companion - Sahaba Journey AI Generation Tool    ")
+    println("  Sahaba Companions - Sahaba Journey AI Generation Tool  ")
     println("==========================================================")
 
     var pdfPath: String? = null

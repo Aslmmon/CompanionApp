@@ -1,6 +1,6 @@
 # Feature Registry (Single Source of Truth)
 
-This registry is the authoritative inventory of all functional capabilities within the Quran Companion application. Every feature must have a corresponding specification, domain contracts, and acceptance criteria tests.
+This registry is the authoritative inventory of all functional capabilities within the Sahaba Companions application. Every feature must have a corresponding specification, domain contracts, and acceptance criteria tests.
 
 ---
 
