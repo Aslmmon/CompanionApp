@@ -23,6 +23,8 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 * ⚡ **[Coroutines & Concurrency Guidelines](file:///.agents/rules/concurrency.md)**
 * 🗺️ **[Navigation Architecture Guidelines](file:///.agents/rules/navigation.md)**
 * 🧪 **[Testing Architecture & Guidelines](file:///.agents/rules/testing.md)**
+* 🤖 **[TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md)**
+* 🛠️ **[TDD Subagent Orchestration Skill](file:///.agents/skills/tdd-agent/SKILL.md)**
 * 📝 **[Naming Conventions Guidelines](file:///.agents/rules/naming_conventions.md)**
 * ⚙️ **[Build Configuration Guidelines](file:///.agents/rules/build_config.md)**
 * 🔀 **[KMP expect/actual Platform Bridge](file:///.agents/skills/kmp-expect-actual/SKILL.md)** *(Dormant — activate only for new hardware APIs)*
@@ -32,6 +34,7 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 ## 3. Core Developer Checklist
 
 ### Do
+* **Spawn Dedicated Subagents for TDD**: Always produce a dedicated subagent for any feature development or bug fix task rather than implementing in the primary thread.
 * **Recreate Host Activities**: Trigger full resource reloads (e.g. `activity.recreate()`) on dynamic configuration shifts such as language/locale switches.
 * **Map Data Layers**: Fully map DTO/entity representations to domain models inside data layers using mapping extension functions (e.g., `toDomain()`) before returning.
 * **Main Safety**: Always ensure all Use Cases and Repository interfaces are main-safe and run non-blocking.

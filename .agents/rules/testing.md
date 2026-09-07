@@ -7,6 +7,7 @@ These guidelines define the project's testing principles.
 ## 1. Test Structure
 * Write unit tests under the `commonTest` source set using the pure Kotlin `kotlin.test` library (avoiding platform-specific test libraries).
 * Verify ViewModels by passing fakes into UseCases and injecting those UseCases into ViewModels.
+* **TDD Subagent Production**: For all feature development and bug fixes, follow [TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md) — the primary agent acts as orchestrator and produces a dedicated subagent to execute the RED -> GREEN -> REFACTOR inner loop.
 
 ---
 

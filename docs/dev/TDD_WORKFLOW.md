@@ -9,6 +9,7 @@ This document outlines the standard TDD inner loop and Spec-Driven Development w
 2. **Tests Before Code (RED)**: Write unit tests against test fakes using the exact Acceptance Criteria scenarios before implementing the production logic.
 3. **Pure Kotlin Fakes**: Never import mock frameworks (MockK, Mockito). Always maintain clean, deterministic in-memory fakes in `commonTest/.../fakes/`.
 4. **Fast Local Inner Loop**: Run tests locally with sub-3s JVM execution.
+5. **Dedicated Subagent Production**: For all feature development and bug fixes, the primary agent acts as an orchestrator and produces a dedicated subagent specifically tasked with executing the TDD inner loop. See [TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md).
 
 ---
 
@@ -89,3 +90,48 @@ All test fakes live in:
 - **FakeUserPreferencesRepository**: In-memory preference persistence with `MutableStateFlow<UserPreferences>`.
 - **FakeNotificationScheduler**: Records scheduled hours, titles, and cancellation flags.
 - **TestFixtures**: Factory methods like `testJourney(...)` with sensible defaults.
+
+---
+
+## 5. Multi-Agent TDD Orchestration
+
+For all feature development and bug fixing tasks, the project follows a two-tier multi-agent orchestration architecture:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Developer as Developer
+    participant Orchestrator as Primary Agent (Architect)
+    participant Subagent as Dedicated TDD Subagent
+    participant Gradle as Local Gradle Daemon (:shared)
+
+    Developer->>Orchestrator: Feature Request or Bug Report
+    Note over Orchestrator: Formulate AC Matrix or Bug Reproduction Contract
+    Orchestrator->>Subagent: invoke_subagent(Role="TDD Specialist", Contract)
+    
+    rect rgb(240, 248, 255)
+        Note over Subagent: Phase 1: RED
+        Subagent->>Subagent: Write failing test in commonTest using fakes
+        Subagent->>Gradle: ./gradlew :shared:testAndroidHostTest --tests "*..."
+        Gradle-->>Subagent: FAILED (Expected RED)
+        
+        Note over Subagent: Phase 2: GREEN
+        Subagent->>Subagent: Implement minimal code (Domain -> Data -> Presentation -> DI -> Strings)
+        Subagent->>Gradle: ./gradlew :shared:testAndroidHostTest --tests "*..."
+        Gradle-->>Subagent: PASSED (GREEN)
+        
+        Note over Subagent: Phase 3: REFACTOR
+        Subagent->>Subagent: Clean architecture & immutability audit
+        Subagent->>Gradle: ./gradlew :shared:testAndroidHostTest
+        Gradle-->>Subagent: All Tests PASSED
+    end
+    
+    Subagent-->>Orchestrator: Structured Completion Report
+    Note over Orchestrator: Run arch-audit & verify layer guardrails
+    Orchestrator->>Developer: Present Final Walkthrough
+```
+
+### Delegation Rules
+1. **Primary Agent**: Strictly coordinates scope, contracts, and architecture. Never writes production or test code directly in the primary conversation thread for features or bugfixes.
+2. **Dedicated TDD Subagent**: Produced via `invoke_subagent` using the prompt contracts defined in [TDD Subagent Orchestration Skill](file:///.agents/skills/tdd-agent/SKILL.md) and governed by [TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md).
+
