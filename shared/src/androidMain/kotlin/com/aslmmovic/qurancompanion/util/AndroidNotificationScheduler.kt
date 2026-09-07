@@ -64,7 +64,7 @@ class AndroidNotificationScheduler(
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             WORK_NAME_DAILY_REMINDER,
-            ExistingPeriodicWorkPolicy.UPDATE,
+            ExistingPeriodicWorkPolicy.KEEP,
             workRequest
         )
     }

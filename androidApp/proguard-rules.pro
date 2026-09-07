@@ -19,3 +19,43 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Kotlinx Serialization
+-keep @kotlinx.serialization.Serializable class ** { *; }
+-keepclassmembers class * {
+    *** Companion;
+}
+-keepattributes *Annotation*, Signature, Exception, InnerClasses, EnclosingMethod
+
+# Koin Dependency Injection
+-keep class org.koin.** { *; }
+-keepclassmembers class * {
+    @org.koin.** *;
+}
+
+# Preserve stacktraces for crash logs
+-keepattributes SourceFile, LineNumberTable
+
+# AndroidX Startup
+-keep class * extends androidx.startup.Initializer {
+    public <init>();
+}
+
+# WorkManager & Room
+-keep class * extends androidx.work.ListenableWorker {
+    public <init>(android.content.Context, androidx.work.WorkerParameters);
+}
+-keep class * extends androidx.work.Worker {
+    public <init>(android.content.Context, androidx.work.WorkerParameters);
+}
+-keep class * extends androidx.work.InputMerger {
+    public <init>();
+}
+-dontwarn androidx.work.impl.**
+-keep class androidx.work.impl.** { *; }
+-keep class * extends androidx.room.RoomDatabase {
+    public <init>();
+}
+-keepclassmembers class * extends androidx.room.RoomDatabase {
+    *;
+}

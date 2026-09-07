@@ -6,6 +6,11 @@ val versionProps = Properties().apply {
     if (file.exists()) load(file.inputStream())
 }
 
+val keystoreProps = Properties().apply {
+    val file = rootProject.file("keystore.properties")
+    if (file.exists()) load(file.inputStream())
+}
+
 val vCode = (versionProps["VERSION_CODE"] as? String)?.toInt() ?: 1
 val vMajor = versionProps["MAJOR"] ?: "0"
 val vMinor = versionProps["MINOR"] ?: "1"
@@ -47,16 +52,23 @@ android {
 
     signingConfigs {
         create("release") {
-            val storeFilePath = System.getenv("KEYSTORE_FILE_PATH") 
+            val storeFileName = (keystoreProps["storeFile"] as? String)
+                ?: System.getenv("KEYSTORE_FILE_PATH") 
                 ?: project.findProperty("KEYSTORE_FILE")?.toString()
-            if (storeFilePath != null && file(storeFilePath).exists()) {
-                storeFile = file(storeFilePath)
-                storePassword = System.getenv("KEYSTORE_PASSWORD") 
-                    ?: project.findProperty("KEYSTORE_PASSWORD")?.toString() ?: ""
-                keyAlias = System.getenv("KEY_ALIAS") 
-                    ?: project.findProperty("KEY_ALIAS")?.toString() ?: ""
-                keyPassword = System.getenv("KEY_PASSWORD") 
-                    ?: project.findProperty("KEY_PASSWORD")?.toString() ?: ""
+            if (storeFileName != null) {
+                val resolved = rootProject.file(storeFileName)
+                if (resolved.exists()) {
+                    storeFile = resolved
+                    storePassword = (keystoreProps["storePassword"] as? String)
+                        ?: System.getenv("KEYSTORE_PASSWORD") 
+                        ?: project.findProperty("KEYSTORE_PASSWORD")?.toString() ?: ""
+                    keyAlias = (keystoreProps["keyAlias"] as? String) 
+                        ?: System.getenv("KEY_ALIAS") 
+                        ?: project.findProperty("KEY_ALIAS")?.toString() ?: ""
+                    keyPassword = (keystoreProps["keyPassword"] as? String) 
+                        ?: System.getenv("KEY_PASSWORD") 
+                        ?: project.findProperty("KEY_PASSWORD")?.toString() ?: ""
+                }
             }
         }
     }
@@ -68,7 +80,8 @@ android {
     }
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -86,4 +99,22 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+val storeReleaseDir = layout.projectDirectory.dir("../docs/store/release")
+
+tasks.register<Copy>("exportReleaseBundleToStore") {
+    group = "publishing"
+    description = "Builds and copies the signed release AAB into docs/store/release/"
+    dependsOn("bundleRelease")
+    val bundleDir = layout.buildDirectory.dir("outputs/bundle/release")
+    from(bundleDir) {
+        include("*.aab")
+        rename(".*\\.aab", "sahaba-companions-v${vName}-release.aab")
+    }
+    from(bundleDir) {
+        include("*.aab")
+        rename(".*\\.aab", "app-release.aab")
+    }
+    into(storeReleaseDir)
 }

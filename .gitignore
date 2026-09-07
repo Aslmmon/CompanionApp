@@ -17,3 +17,15 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+
+# Release bundle & APK outputs in docs/store
+docs/store/*.aab
+docs/store/*.apk
+docs/store/release/
+*.aab
+*.apk
+
+# Signing keys & credentials
+*.jks
+*.keystore
+keystore.properties
