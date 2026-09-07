@@ -1,5 +1,8 @@
 package com.aslmmovic.qurancompanion.data.datasource
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import platform.Foundation.NSLocale
 import platform.Foundation.preferredLanguages
 
@@ -8,14 +11,18 @@ import platform.Foundation.preferredLanguages
  * Returns the preferred language code (e.g. "en", "ar").
  */
 class IosLocaleProvider(private val storage: KeyValueStorage) : LocaleProvider {
+    private val _currentLocale = MutableStateFlow(
+        storage.getString("pref_preferred_language")
+            ?: (NSLocale.preferredLanguages.firstOrNull() as? String)?.split("-")?.firstOrNull()
+            ?: "en"
+    )
+
     override val currentLocale: String
-        get() {
-            storage.getString("pref_preferred_language")?.let { return it }
-            val preferred = NSLocale.preferredLanguages.firstOrNull() as? String ?: "en"
-            return preferred.split("-").firstOrNull() ?: "en"
-        }
+        get() = _currentLocale.value
+
+    override val currentLocaleFlow: StateFlow<String> = _currentLocale.asStateFlow()
 
     override fun changeLocale(locale: String) {
-        // iOS platform stub
+        _currentLocale.value = locale
     }
 }

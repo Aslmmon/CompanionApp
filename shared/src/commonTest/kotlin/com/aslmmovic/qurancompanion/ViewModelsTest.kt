@@ -20,6 +20,9 @@ import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -44,7 +47,11 @@ class ViewModelsTest {
     private val prefsRepo = FakeUserPreferencesRepository()
     private val fakeScheduler = FakeNotificationScheduler()
     private val fakeLocaleProvider = object : LocaleProvider {
-        override var currentLocale = "en"
+        private val _currentLocaleFlow = MutableStateFlow("en")
+        override val currentLocaleFlow: StateFlow<String> = _currentLocaleFlow.asStateFlow()
+        override var currentLocale: String
+            get() = _currentLocaleFlow.value
+            set(value) { _currentLocaleFlow.value = value }
         override fun changeLocale(locale: String) { currentLocale = locale }
     }
     private val fakeDateTimeProvider = object : DateTimeProvider {

@@ -29,8 +29,9 @@ class JourneyRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : JourneyRepository {
 
-    // Cached journey list — loaded ONCE in init, never re-parsed at runtime
+    // Cached journey list — reloaded dynamically on locale changes
     private val _cachedJourneys = MutableStateFlow<List<Journey>>(emptyList())
+    private var _cachedLocale: String? = null
 
     // Completion key: "$journeyId|$date"  e.g. "day_003|2026-08-08"
     // Keyed by date so the same journey completed on different days is tracked independently
@@ -44,24 +45,34 @@ class JourneyRepositoryImpl(
     init {
         scope.launch {
             _debugDayOffset.value = storage.getInt(KEY_DEBUG_DAY_OFFSET, 0)
-            // Load and cache the journey list once — avoids repeated JSON parsing
-            _cachedJourneys.value = loadJourneysFromSource()
+        }
+        scope.launch {
+            localeProvider.currentLocaleFlow.collect { locale ->
+                val normalized = if (locale.startsWith("ar", ignoreCase = true)) "ar" else "en"
+                if (_cachedLocale != normalized || _cachedJourneys.value.isEmpty()) {
+                    _cachedLocale = normalized
+                    _cachedJourneys.value = loadJourneysFromSource(normalized)
+                }
+            }
         }
     }
 
-    private suspend fun loadJourneysFromSource(): List<Journey> =
+    private suspend fun loadJourneysFromSource(locale: String = localeProvider.currentLocale): List<Journey> =
         try {
-            localDataSource.loadJourneys(localeProvider.currentLocale).map { it.toDomain() }
+            localDataSource.loadJourneys(locale).map { it.toDomain() }
         } catch (e: Exception) {
             emptyList()
         }
 
     override suspend fun getAllJourneys(): List<Journey> = withContext(ioDispatcher) {
-        // Return from cache; reload only if empty (e.g. first call before init completes)
-        _cachedJourneys.value.ifEmpty {
-            val journeys = loadJourneysFromSource()
+        val currentLocale = if (localeProvider.currentLocale.startsWith("ar", ignoreCase = true)) "ar" else "en"
+        if (_cachedJourneys.value.isEmpty() || _cachedLocale != currentLocale) {
+            val journeys = loadJourneysFromSource(currentLocale)
+            _cachedLocale = currentLocale
             _cachedJourneys.value = journeys
             journeys
+        } else {
+            _cachedJourneys.value
         }
     }
 

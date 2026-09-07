@@ -8,6 +8,9 @@ import com.aslmmovic.qurancompanion.data.dto.JourneyDto
 import com.aslmmovic.qurancompanion.data.dto.JourneyStepDto
 import com.aslmmovic.qurancompanion.data.repository.JourneyRepositoryImpl
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -219,11 +222,60 @@ class JourneyRepositoryImplTest {
         assertEquals("2026-03-01", JourneyRepositoryImpl.offsetDate("2026-02-28", 1))
     }
 
+    @Test
+    fun `when locale changes to arabic, cached journeys reload with arabic journeys`() = runTest {
+        val repository = createRepository()
+        val enJourneys = listOf(createJourneyDto("1", title = "Abu Bakr"))
+        val arJourneys = listOf(createJourneyDto("1", title = "أبو بكر الصديق"))
+        fakeDataSource.journeysByLocale = mapOf("en" to enJourneys, "ar" to arJourneys)
+        fakeLocaleProvider.changeLocale("en")
+        advanceUntilIdle()
+
+        assertEquals("Abu Bakr", repository.getAllJourneys().first().title)
+        assertEquals("Abu Bakr", repository.getTodayJourney()?.title)
+
+        fakeLocaleProvider.changeLocale("ar")
+        advanceUntilIdle()
+
+        assertEquals("أبو بكر الصديق", repository.getAllJourneys().first().title)
+        assertEquals("أبو بكر الصديق", repository.getTodayJourney()?.title)
+    }
+
+    @Test
+    fun `getAllJourneys reloads if active locale differs from cached locale`() = runTest {
+        val repository = createRepository()
+        val enJourneys = listOf(createJourneyDto("1", title = "Abu Bakr"))
+        val arJourneys = listOf(createJourneyDto("1", title = "أبو بكر الصديق"))
+        fakeDataSource.journeysByLocale = mapOf("en" to enJourneys, "ar" to arJourneys)
+        fakeLocaleProvider.changeLocale("en")
+        advanceUntilIdle()
+
+        assertEquals("Abu Bakr", repository.getAllJourneys().first().title)
+
+        fakeLocaleProvider.changeLocale("ar")
+        assertEquals("أبو بكر الصديق", repository.getAllJourneys().first().title)
+    }
+
+    @Test
+    fun `when locale is regional arabic variant, it normalizes to ar and loads arabic journeys`() = runTest {
+        val repository = createRepository()
+        val enJourneys = listOf(createJourneyDto("1", title = "Abu Bakr"))
+        val arJourneys = listOf(createJourneyDto("1", title = "أبو بكر الصديق"))
+        fakeDataSource.journeysByLocale = mapOf("en" to enJourneys, "ar" to arJourneys)
+        fakeLocaleProvider.changeLocale("en")
+        advanceUntilIdle()
+
+        fakeLocaleProvider.changeLocale("ar-SA")
+        advanceUntilIdle()
+
+        assertEquals("أبو بكر الصديق", repository.getAllJourneys().first().title)
+    }
+
     // Helper functions and fakes
-    private fun createJourneyDto(id: String) = JourneyDto(
+    private fun createJourneyDto(id: String, title: String = "Journey $id") = JourneyDto(
         id = id,
         dayNumber = 1,
-        title = "Journey $id",
+        title = title,
         subtitle = "Subtitle $id",
         category = "Category",
         person = "Person $id",
@@ -242,11 +294,21 @@ class JourneyRepositoryImplTest {
 
     private class FakeJourneyLocalDataSource : JourneyLocalDataSource {
         var journeys: List<JourneyDto> = emptyList()
-        override suspend fun loadJourneys(locale: String): List<JourneyDto> = journeys
+        var journeysByLocale: Map<String, List<JourneyDto>> = emptyMap()
+        override suspend fun loadJourneys(locale: String): List<JourneyDto> =
+            journeysByLocale[locale] ?: journeys
     }
 
     private class FakeLocaleProvider : LocaleProvider {
-        override var currentLocale: String = "en"
+        private val _currentLocaleFlow = MutableStateFlow("en")
+        override val currentLocaleFlow: StateFlow<String> = _currentLocaleFlow.asStateFlow()
+
+        override var currentLocale: String
+            get() = _currentLocaleFlow.value
+            set(value) {
+                _currentLocaleFlow.value = value
+            }
+
         override fun changeLocale(locale: String) {
             currentLocale = locale
         }

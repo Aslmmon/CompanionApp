@@ -7,20 +7,20 @@ import qurancompanion.shared.generated.resources.Res
 
 /**
  * Loads journey data from bundled JSON files (Compose Resources).
- * Caches the last result per locale to avoid redundant file reads.
+ * Caches parsed results per normalized locale to avoid redundant file reads.
  */
 class ResourceJourneyLocalDataSource(private val json: Json) : JourneyLocalDataSource {
 
-    // Pair of (locale → parsed list) — simple single-entry cache
-    private var cache: Pair<String, List<JourneyDto>>? = null
+    private val cache = mutableMapOf<String, List<JourneyDto>>()
 
     @OptIn(ExperimentalResourceApi::class)
     override suspend fun loadJourneys(locale: String): List<JourneyDto> {
-        cache?.takeIf { it.first == locale }?.let { return it.second }
+        val normalizedLocale = if (locale.startsWith("ar", ignoreCase = true)) "ar" else "en"
+        cache[normalizedLocale]?.let { return it }
 
-        val path = if (locale == "ar") "files/ar/journeys.json" else "files/en/journeys.json"
+        val path = if (normalizedLocale == "ar") "files/ar/journeys.json" else "files/en/journeys.json"
         val result = json.decodeFromString<List<JourneyDto>>(Res.readBytes(path).decodeToString())
-        cache = locale to result
+        cache[normalizedLocale] = result
         return result
     }
 }
