@@ -20,7 +20,7 @@ class SplashViewModel : ViewModel() {
     private fun startSplashTimer() {
         viewModelScope.launch {
             delay(SPLASH_DELAY_MS.milliseconds)
-       //     _uiEffects.emit(SplashUiEffect.NavigateNext)
+            _uiEffects.emit(SplashUiEffect.NavigateNext)
         }
     }
 
