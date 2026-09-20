@@ -23,7 +23,7 @@ This document is the authoritative execution blueprint for refactoring the **Sah
 ## 2. Master Progress Tracker
 
 - [x] **Phase 1: Design System & Color Tokens**
-- [ ] **Phase 2: Fonts & Typography Scaling**
+- [x] **Phase 2: Fonts & Typography Scaling**
 - [ ] **Phase 3: App Navigation Shell (Persistent 4-Tab Scaffold)**
 - [ ] **Phase 4: Screen by Screen Implementation (Data + Domain + Presentation)**
   - [ ] **4.1 Splash Screen** (Page 6)
@@ -112,8 +112,8 @@ Align typography with the elegant serif and sans-serif styling in the PDF, suppo
   * `QuranArabicTextStyle`: `24.sp`, line height `46.sp` to comfortably clear Arabic vowel signs (tashkeel).
 
 #### Acceptance Criteria
-* [ ] Typography correctly switches between Outfit and El Messiri based on `isArabic`.
-* [ ] Line heights prevent Arabic tashkeel clipping.
+* [x] Typography correctly switches between Outfit and El Messiri based on `isArabic`.
+* [x] Line heights prevent Arabic tashkeel clipping.
 
 ---
 

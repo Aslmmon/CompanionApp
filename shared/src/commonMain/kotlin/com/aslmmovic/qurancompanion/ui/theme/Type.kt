@@ -30,66 +30,129 @@ val OutfitFontFamily: FontFamily
         Font(Res.font.outfit, FontWeight.Bold)
     )
 
-// Define base typography with dynamic font selection based on active language
-@Composable
-fun getSahabaTypography(isArabic: Boolean): Typography {
-    val fontFamily = if (isArabic) ElMessiriFontFamily else OutfitFontFamily
+// Build typography token scale for specified font family
+fun createSahabaTypography(fontFamily: FontFamily = FontFamily.Default): Typography {
     val defaultTypography = Typography()
     return Typography(
         displayLarge = defaultTypography.displayLarge.copy(fontFamily = fontFamily),
-        displayMedium = defaultTypography.displayMedium.copy(fontFamily = fontFamily),
+        displayMedium = defaultTypography.displayMedium.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 32.sp,
+            lineHeight = 40.sp
+        ),
         displaySmall = defaultTypography.displaySmall.copy(fontFamily = fontFamily),
         headlineLarge = defaultTypography.headlineLarge.copy(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Bold,
-            fontSize = 28.sp,
-            lineHeight = 36.sp,
-            letterSpacing = 0.sp
+            fontSize = 26.sp,
+            lineHeight = 34.sp,
+            letterSpacing = (-0.5).sp
         ),
-        headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = fontFamily),
-        headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = fontFamily),
+        headlineMedium = defaultTypography.headlineMedium.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            lineHeight = 28.sp
+        ),
+        headlineSmall = defaultTypography.headlineSmall.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 18.sp,
+            lineHeight = 24.sp
+        ),
         titleLarge = defaultTypography.titleLarge.copy(
             fontFamily = fontFamily,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
-            lineHeight = 28.sp,
-            letterSpacing = 0.sp
+            fontSize = 18.sp,
+            lineHeight = 24.sp
         ),
-        titleMedium = defaultTypography.titleMedium.copy(fontFamily = fontFamily),
-        titleSmall = defaultTypography.titleSmall.copy(fontFamily = fontFamily),
+        titleMedium = defaultTypography.titleMedium.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+            lineHeight = 22.sp
+        ),
+        titleSmall = defaultTypography.titleSmall.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            lineHeight = 20.sp
+        ),
         bodyLarge = defaultTypography.bodyLarge.copy(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.5.sp
+            fontSize = 15.sp,
+            lineHeight = 26.sp,
+            letterSpacing = 0.2.sp
         ),
         bodyMedium = defaultTypography.bodyMedium.copy(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             lineHeight = 20.sp,
-            letterSpacing = 0.25.sp
+            letterSpacing = 0.1.sp
         ),
-        bodySmall = defaultTypography.bodySmall.copy(fontFamily = fontFamily),
-        labelLarge = defaultTypography.labelLarge.copy(fontFamily = fontFamily),
-        labelMedium = defaultTypography.labelMedium.copy(
+        bodySmall = defaultTypography.bodySmall.copy(
             fontFamily = fontFamily,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
-            lineHeight = 16.sp,
+            lineHeight = 16.sp
+        ),
+        labelLarge = defaultTypography.labelLarge.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            lineHeight = 20.sp,
             letterSpacing = 0.5.sp
         ),
-        labelSmall = defaultTypography.labelSmall.copy(fontFamily = fontFamily)
+        labelMedium = defaultTypography.labelMedium.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 11.sp,
+            lineHeight = 16.sp,
+            letterSpacing = 1.2.sp
+        ),
+        labelSmall = defaultTypography.labelSmall.copy(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 10.sp,
+            lineHeight = 14.sp,
+            letterSpacing = 0.5.sp
+        )
     )
 }
+
+// Define base typography with dynamic font selection based on active language
+@Composable
+fun getSahabaTypography(isArabic: Boolean): Typography {
+    val fontFamily = if (isArabic) ElMessiriFontFamily else OutfitFontFamily
+    return createSahabaTypography(fontFamily)
+}
+
+// Tagline text style helper
+fun createSahabaTaglineStyle(fontFamily: FontFamily = FontFamily.Default): TextStyle = TextStyle(
+    fontFamily = fontFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 10.sp,
+    letterSpacing = 3.sp,
+    lineHeight = 16.sp
+)
+
+// Custom text style for taglines / badges
+val SahabaTaglineStyle: TextStyle
+    @Composable
+    get() = createSahabaTaglineStyle(OutfitFontFamily)
+
+// Quran verse style helper
+fun createQuranArabicTextStyle(fontFamily: FontFamily = FontFamily.Default): TextStyle = TextStyle(
+    fontFamily = fontFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 24.sp,
+    lineHeight = 48.sp
+)
 
 // Custom text style specifically designed for Quranic / Arabic verses using El Messiri font
 val QuranArabicTextStyle: TextStyle
     @Composable
-    get() = TextStyle(
-        fontFamily = ElMessiriFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 24.sp,
-        lineHeight = 44.sp // High line-height to accommodate Arabic vowel markings (tashkeel)
-    )
+    get() = createQuranArabicTextStyle(ElMessiriFontFamily)

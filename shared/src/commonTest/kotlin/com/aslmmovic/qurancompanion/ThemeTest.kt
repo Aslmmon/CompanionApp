@@ -3,6 +3,9 @@ package com.aslmmovic.qurancompanion
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.aslmmovic.qurancompanion.ui.theme.DarkColorScheme
 import com.aslmmovic.qurancompanion.ui.theme.LightColorScheme
 import com.aslmmovic.qurancompanion.ui.theme.SahabaCardBorder
@@ -14,6 +17,9 @@ import com.aslmmovic.qurancompanion.ui.theme.SahabaMidnightBorder
 import com.aslmmovic.qurancompanion.ui.theme.SahabaMidnightSurface
 import com.aslmmovic.qurancompanion.ui.theme.SahabaShapes
 import com.aslmmovic.qurancompanion.ui.theme.SahabaWarmGold
+import com.aslmmovic.qurancompanion.ui.theme.createQuranArabicTextStyle
+import com.aslmmovic.qurancompanion.ui.theme.createSahabaTaglineStyle
+import com.aslmmovic.qurancompanion.ui.theme.createSahabaTypography
 import com.aslmmovic.qurancompanion.ui.theme.getThemeColorScheme
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -79,5 +85,82 @@ class ThemeTest {
         assertEquals(RoundedCornerShape(16.dp), SahabaShapes.medium)
         assertEquals(RoundedCornerShape(20.dp), SahabaShapes.large)
         assertEquals(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp), SahabaShapes.extraLarge)
+    }
+
+    @Test
+    fun test_AC05_givenSahabaTypography_thenMatchesDesignTokens() {
+        val typography = createSahabaTypography(FontFamily.Default)
+
+        assertEquals(32.sp, typography.displayMedium.fontSize)
+        assertEquals(FontWeight.Bold, typography.displayMedium.fontWeight)
+        assertEquals(40.sp, typography.displayMedium.lineHeight)
+
+        assertEquals(26.sp, typography.headlineLarge.fontSize)
+        assertEquals(FontWeight.Bold, typography.headlineLarge.fontWeight)
+        assertEquals(34.sp, typography.headlineLarge.lineHeight)
+        assertEquals((-0.5).sp, typography.headlineLarge.letterSpacing)
+
+        assertEquals(22.sp, typography.headlineMedium.fontSize)
+        assertEquals(FontWeight.Bold, typography.headlineMedium.fontWeight)
+        assertEquals(28.sp, typography.headlineMedium.lineHeight)
+
+        assertEquals(18.sp, typography.headlineSmall.fontSize)
+        assertEquals(FontWeight.SemiBold, typography.headlineSmall.fontWeight)
+        assertEquals(24.sp, typography.headlineSmall.lineHeight)
+
+        assertEquals(18.sp, typography.titleLarge.fontSize)
+        assertEquals(FontWeight.SemiBold, typography.titleLarge.fontWeight)
+        assertEquals(24.sp, typography.titleLarge.lineHeight)
+
+        assertEquals(16.sp, typography.titleMedium.fontSize)
+        assertEquals(FontWeight.SemiBold, typography.titleMedium.fontWeight)
+        assertEquals(22.sp, typography.titleMedium.lineHeight)
+
+        assertEquals(14.sp, typography.titleSmall.fontSize)
+        assertEquals(FontWeight.Medium, typography.titleSmall.fontWeight)
+        assertEquals(20.sp, typography.titleSmall.lineHeight)
+
+        assertEquals(15.sp, typography.bodyLarge.fontSize)
+        assertEquals(FontWeight.Normal, typography.bodyLarge.fontWeight)
+        assertEquals(26.sp, typography.bodyLarge.lineHeight)
+        assertEquals(0.2.sp, typography.bodyLarge.letterSpacing)
+
+        assertEquals(14.sp, typography.bodyMedium.fontSize)
+        assertEquals(FontWeight.Normal, typography.bodyMedium.fontWeight)
+        assertEquals(20.sp, typography.bodyMedium.lineHeight)
+        assertEquals(0.1.sp, typography.bodyMedium.letterSpacing)
+
+        assertEquals(12.sp, typography.bodySmall.fontSize)
+        assertEquals(FontWeight.Normal, typography.bodySmall.fontWeight)
+        assertEquals(16.sp, typography.bodySmall.lineHeight)
+
+        assertEquals(15.sp, typography.labelLarge.fontSize)
+        assertEquals(FontWeight.Bold, typography.labelLarge.fontWeight)
+        assertEquals(20.sp, typography.labelLarge.lineHeight)
+        assertEquals(0.5.sp, typography.labelLarge.letterSpacing)
+
+        assertEquals(11.sp, typography.labelMedium.fontSize)
+        assertEquals(FontWeight.Bold, typography.labelMedium.fontWeight)
+        assertEquals(16.sp, typography.labelMedium.lineHeight)
+        assertEquals(1.2.sp, typography.labelMedium.letterSpacing)
+
+        assertEquals(10.sp, typography.labelSmall.fontSize)
+        assertEquals(FontWeight.SemiBold, typography.labelSmall.fontWeight)
+        assertEquals(14.sp, typography.labelSmall.lineHeight)
+        assertEquals(0.5.sp, typography.labelSmall.letterSpacing)
+    }
+
+    @Test
+    fun test_AC06_givenHelperTextStyles_thenMatchDesignTokens() {
+        val tagline = createSahabaTaglineStyle(FontFamily.Default)
+        assertEquals(FontWeight.SemiBold, tagline.fontWeight)
+        assertEquals(10.sp, tagline.fontSize)
+        assertEquals(3.sp, tagline.letterSpacing)
+        assertEquals(16.sp, tagline.lineHeight)
+
+        val quran = createQuranArabicTextStyle(FontFamily.Default)
+        assertEquals(FontWeight.Normal, quran.fontWeight)
+        assertEquals(24.sp, quran.fontSize)
+        assertEquals(48.sp, quran.lineHeight)
     }
 }
