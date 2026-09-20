@@ -21,6 +21,7 @@ kotlinxSerialization = "1.8.1"
 ktor = "3.1.1"
 material3 = "1.11.0-alpha07"
 navigation = "2.9.0-beta03"
+turbine = "1.2.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -56,6 +57,7 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
 compottie-dot = { module = "io.github.alexzhirkevich:compottie-dot", version.ref = "compottie" }
 compottie-resources = { module = "io.github.alexzhirkevich:compottie-resources", version.ref = "compottie" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 
 [plugins]

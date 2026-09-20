@@ -2,15 +2,13 @@ package com.aslmmovic.qurancompanion.presentation.screens.splash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.Modifier
 import org.koin.compose.viewmodel.koinViewModel
-import qurancompanion.shared.generated.resources.Res
-import qurancompanion.shared.generated.resources.ic_app_logo
-import qurancompanion.shared.generated.resources.shalat
 
 @Composable
 fun SplashScreen(
     onNavigateNext: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: SplashViewModel = koinViewModel(),
 ) {
     LaunchedEffect(viewModel.uiEffects) {
@@ -21,7 +19,5 @@ fun SplashScreen(
         }
     }
 
-    SplashContent(
-        painter = painterResource(Res.drawable.shalat),
-    )
+    SplashContent(modifier = modifier)
 }

@@ -36,6 +36,7 @@ import qurancompanion.shared.generated.resources.home_loading
 
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun HomeContent(
@@ -55,7 +56,7 @@ fun HomeContent(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.Transparent)
     ) {
         Column(
             modifier = Modifier

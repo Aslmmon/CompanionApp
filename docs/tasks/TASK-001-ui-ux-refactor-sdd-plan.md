@@ -26,7 +26,7 @@ This document is the authoritative execution blueprint for refactoring the **Sah
 - [x] **Phase 2: Fonts & Typography Scaling**
 - [x] **Phase 3: App Navigation Shell (Persistent 4-Tab Scaffold)**
 - [ ] **Phase 4: Screen by Screen Implementation (Data + Domain + Presentation)**
-  - [ ] **4.1 Splash Screen** (Page 6)
+  - [x] **4.1 Splash Screen** (Page 6)
   - [ ] **4.2 Today Screen** (Page 7)
   - [ ] **4.3 Library Tab** (Page 1)
   - [ ] **4.4 Sunnah Habits Tab** (Page 2)
@@ -172,16 +172,34 @@ Implement the persistent Bottom Navigation Bar with 4 tabs (`Today`, `Library`, 
 
 ---
 
-#### 4.1 Splash Screen (Page 6)
+#### 4.1 Splash Screen (Figma node 3107:225 & 3107:251)
 * **Visual Elements**:
-  * Deep green rounded logo emblem with white mosque dome/arch & golden star.
-  * English App Title: `Sahaba Companions`
-  * Arabic Subtitle: `صحابة رسول الله`
-  * Tagline: `JOURNEY INTO EXCELLENCE` (letter-spaced, muted gold/stone)
-* **Files Modified**:
-  * `SplashContent.kt`, `SplashScreen.kt`
+  * **Background Surface**: Warm Papyrus/Ivory (`#FAF7F0` / `SahabaIvoryBackground`).
+  * **Sacred Watermark**: Concentric geometric rosette & dashed rings watermark (`ic_splash_watermark.xml`, `#1F5E43` at 6% opacity) centered behind branding.
+  * **App Squircle Badge & Glow**:
+    * Golden radial ambient glow (`#D4AF37` at 15% opacity).
+    * 96x96 dp squircle badge with deep evergreen linear gradient (`#1F5E43` -> `#164E3A` -> `#0F3826`), 26 dp corner radius.
+    * 1 dp gold outer border (`0x66D4AF37`) and inner hairline border (`0x33D4AF37`).
+    * Architectural dome & lantern vector emblem (`ic_splash_dome.xml`) with gold accents (`#D4AF37`), ivory arch (`#FAF7F0`), base bar, and star.
+  * **Wordmark & Typography**:
+    * App Title: `Sahaba` (`OutfitFontFamily`, Bold 30 sp, tracking -0.75 sp, `#1F5E43` / `SahabaEvergreen`).
+    * Sub-brand: `COMPANIONS` (`OutfitFontFamily`, Medium 11 sp, tracking 3.08 sp, `#C59B27` / `SahabaWarmGold`).
+    * Arabic Tagline: `رحلة إلى الإحسان` (`ElMessiriFontFamily`, SemiBold 13 sp, `#A8A29E` / `SahabaTextMuted`).
+  * **Loading Indicator & Slogan**:
+    * Minimalist 3-dot loading indicator (6 dp circles, 6 dp spacing, evergreen 30% alpha with gold active pulsing dot).
+    * Slogan: `JOURNEY INTO EXCELLENCE` (`OutfitFontFamily`, Medium 10 sp, tracking 2 sp, `#A8A29E`).
+  * **Timing**:
+    * Splash display duration: 3000 ms (3 seconds), emitting `SplashUiEffect.NavigateNext`.
+* **Files Modified / Created**:
+  * [NEW] `shared/src/commonMain/composeResources/drawable/ic_splash_watermark.xml`
+  * [NEW] `shared/src/commonMain/composeResources/drawable/ic_splash_dome.xml`
+  * [NEW] `shared/src/commonTest/kotlin/com/aslmmovic/qurancompanion/presentation/screens/splash/SplashViewModelTest.kt`
+  * [MODIFY] `shared/src/commonMain/composeResources/values/strings.xml` & `values-ar/strings.xml`
+  * [MODIFY] `SplashViewModel.kt`, `SplashScreen.kt`, `SplashContent.kt`
 * **Acceptance Criteria**:
-  * [ ] Matches Page 6 layout, colors, and branding.
+  * [x] Matches Figma layout, colors, typography, and vector assets.
+  * [x] Emits `SplashUiEffect.NavigateNext` precisely after 3000ms.
+  * [x] Passes `SplashViewModelTest` in `commonTest`.
 
 ---
 

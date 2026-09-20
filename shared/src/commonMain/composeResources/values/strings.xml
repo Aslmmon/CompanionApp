@@ -6,6 +6,12 @@
     <string name="daily_habit_badge">10 Min Daily Habit</string>
     <string name="action_back">Back</string>
 
+    <!-- Splash Screen -->
+    <string name="splash_title">Sahaba</string>
+    <string name="splash_companions">COMPANIONS</string>
+    <string name="splash_tagline_arabic">رحلة إلى الإحسان</string>
+    <string name="splash_slogan">JOURNEY INTO EXCELLENCE</string>
+
     <!-- Home Screen -->
     <string name="home_begin_journey">Discover Today\'s Sahabi (~10 min)</string>
     <string name="home_completed_title">Daily Sahabi Habit Complete</string>

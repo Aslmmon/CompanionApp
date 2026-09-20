@@ -6,6 +6,12 @@
     <string name="daily_habit_badge">عادة ١٠ دقائق يومياً</string>
     <string name="action_back">رجوع</string>
 
+    <!-- Splash Screen -->
+    <string name="splash_title">Sahaba</string>
+    <string name="splash_companions">COMPANIONS</string>
+    <string name="splash_tagline_arabic">رحلة إلى الإحسان</string>
+    <string name="splash_slogan">رحلة نحو الإحسان</string>
+
     <!-- Home Screen -->
     <string name="home_begin_journey">تعرّف على صحابي اليوم (~١٠ دقائق)</string>
     <string name="home_completed_title">اكتملت عادة اليوم مع الصحابة</string>

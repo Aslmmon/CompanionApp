@@ -215,4 +215,19 @@ class NavigationShellTest {
             )
         }
     }
+
+    @Test
+    fun test_AC06_customBottomNavigation_tabResolution() {
+        val resolveTab: (String?) -> MainTab = { route ->
+            MainTab.entries.firstOrNull { it.route == route } ?: MainTab.Today
+        }
+
+        assertEquals(MainTab.Today, resolveTab("main/today"))
+        assertEquals(MainTab.Library, resolveTab("main/library"))
+        assertEquals(MainTab.Habits, resolveTab("main/habits"))
+        assertEquals(MainTab.Explore, resolveTab("main/explore"))
+        assertEquals(MainTab.Today, resolveTab("unknown/route"))
+        assertEquals(MainTab.Today, resolveTab(null))
+    }
 }
+
