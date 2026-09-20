@@ -32,7 +32,7 @@ val OutfitFontFamily: FontFamily
 
 // Define base typography with dynamic font selection based on active language
 @Composable
-fun getQuranCompanionTypography(isArabic: Boolean): Typography {
+fun getSahabaTypography(isArabic: Boolean): Typography {
     val fontFamily = if (isArabic) ElMessiriFontFamily else OutfitFontFamily
     val defaultTypography = Typography()
     return Typography(

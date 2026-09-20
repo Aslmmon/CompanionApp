@@ -41,34 +41,72 @@ class JourneyRepositoryImplTest {
     )
 
     @Test
-    fun `getTodayJourney cycles through available journeys correctly`() = runTest {
+    fun `test_AC04_givenFreshInstall_whenGetTodayJourney_thenStartsAtDayOne`() = runTest {
         val repository = createRepository()
         val journeys = listOf(
-            createJourneyDto("1"),
-            createJourneyDto("2"),
-            createJourneyDto("3")
+            createJourneyDto("1", title = "Abu Bakr"),
+            createJourneyDto("2", title = "Umar"),
+            createJourneyDto("3", title = "Uthman")
         )
         fakeDataSource.journeys = journeys
 
-        // Day 1 -> Index 0
-        fakeDateTimeProvider.dayOfYear = 1
+        // Even on day 263 of the year, fresh install starts on Day 1 (index 0)
+        fakeDateTimeProvider.dayOfYear = 263
+        fakeDateTimeProvider.dateString = "2026-09-20"
+
         assertEquals("1", repository.getTodayJourney()?.id)
-
-        // Day 2 -> Index 1
-        fakeDateTimeProvider.dayOfYear = 2
-        assertEquals("2", repository.getTodayJourney()?.id)
-
-        // Day 3 -> Index 2
-        fakeDateTimeProvider.dayOfYear = 3
-        assertEquals("3", repository.getTodayJourney()?.id)
-
-        // Day 4 -> Index 0 (Wrap around)
-        fakeDateTimeProvider.dayOfYear = 4
-        assertEquals("1", repository.getTodayJourney()?.id)
+        assertEquals("Abu Bakr", repository.getTodayJourney()?.title)
+        assertEquals("2", repository.getTomorrowJourney()?.id)
     }
 
     @Test
-    fun `getTomorrowJourney returns next day cycle correctly`() = runTest {
+    fun `test_AC05_givenCompletedPreviousDay_whenDateAdvances_thenProgressesToNextDay`() = runTest {
+        val repository = createRepository()
+        val journeys = listOf(
+            createJourneyDto("1", title = "Abu Bakr"),
+            createJourneyDto("2", title = "Umar"),
+            createJourneyDto("3", title = "Uthman")
+        )
+        fakeDataSource.journeys = journeys
+
+        fakeDateTimeProvider.dateString = "2026-09-20"
+        assertEquals("1", repository.getTodayJourney()?.id)
+
+        // Complete Day 1 on 2026-09-20
+        repository.markCompleted("1", "2026-09-20")
+
+        // Advance date to 2026-09-21
+        fakeDateTimeProvider.dateString = "2026-09-21"
+
+        // Today progresses to Day 2 (Umar)
+        assertEquals("2", repository.getTodayJourney()?.id)
+        assertEquals("Umar", repository.getTodayJourney()?.title)
+        assertEquals("3", repository.getTomorrowJourney()?.id)
+    }
+
+    @Test
+    fun `given uncompleted journey when date advances then stays on same day`() = runTest {
+        val repository = createRepository()
+        val journeys = listOf(
+            createJourneyDto("1", title = "Abu Bakr"),
+            createJourneyDto("2", title = "Umar"),
+            createJourneyDto("3", title = "Uthman")
+        )
+        fakeDataSource.journeys = journeys
+
+        fakeDateTimeProvider.dateString = "2026-09-20"
+        assertEquals("1", repository.getTodayJourney()?.id)
+
+        // Do NOT mark completed, advance date to 2026-09-21
+        fakeDateTimeProvider.dateString = "2026-09-21"
+
+        // Remains on Day 1 (Abu Bakr)
+        assertEquals("1", repository.getTodayJourney()?.id)
+        assertEquals("2", repository.getTomorrowJourney()?.id)
+    }
+
+    @Test
+    fun `debug day offset increments smoothly`() = runTest {
         val repository = createRepository()
         val journeys = listOf(
             createJourneyDto("1"),
@@ -76,54 +114,45 @@ class JourneyRepositoryImplTest {
             createJourneyDto("3")
         )
         fakeDataSource.journeys = journeys
+        fakeDateTimeProvider.dateString = "2026-09-20"
 
-        // Today is Day 1 -> Tomorrow is Day 2 (Index 1)
-        fakeDateTimeProvider.dayOfYear = 1
-        assertEquals("2", repository.getTomorrowJourney()?.id)
+        assertEquals("1", repository.getTodayJourney()?.id)
 
-        // Today is Day 3 -> Tomorrow is Day 4 -> Index 0 (Wrap around)
-        fakeDateTimeProvider.dayOfYear = 3
-        assertEquals("1", repository.getTomorrowJourney()?.id)
+        repository.incrementDebugDayOffset()
+        assertEquals("2", repository.getTodayJourney()?.id)
+
+        repository.incrementDebugDayOffset()
+        assertEquals("3", repository.getTodayJourney()?.id)
+
+        repository.incrementDebugDayOffset()
+        assertEquals("1", repository.getTodayJourney()?.id)
     }
 
     @Test
     fun `getWeeklyProgress correctly calculates completed states offset by current day of week`() = runTest {
         val repository = createRepository()
         val journeys = listOf(
-            createJourneyDto("1"), // index 0
-            createJourneyDto("2"), // index 1
-            createJourneyDto("3"), // index 2
-            createJourneyDto("4"), // index 3
-            createJourneyDto("5")  // index 4
+            createJourneyDto("1"),
+            createJourneyDto("2"),
+            createJourneyDto("3"),
+            createJourneyDto("4"),
+            createJourneyDto("5")
         )
         fakeDataSource.journeys = journeys
 
-        // Setup date: Wednesday (3rd day of week), Day 10 of the year
-        // Today index: (10 - 1) % 5 = 4 (Journey "5")
-        // Mon (day 1, offset -2 from Wed) -> Day of year = 8 -> index (8-1)%5 = 2 -> Journey "3"
-        // Tue (day 2, offset -1 from Wed) -> Day of year = 9 -> index (9-1)%5 = 3 -> Journey "4"
-        // Wed (day 3, offset 0 from Wed) -> Day of year = 10 -> index (10-1)%5 = 4 -> Journey "5"
-        // Thu (day 4, offset +1 from Wed) -> Day of year = 11 -> index (11-1)%5 = 0 -> Journey "1"
-        // Fri (day 5, offset +2 from Wed) -> Day of year = 12 -> index (12-1)%5 = 1 -> Journey "2"
-        // Sat (day 6, offset +3 from Wed) -> Day of year = 13 -> index (13-1)%5 = 2 -> Journey "3"
-        // Sun (day 7, offset +4 from Wed) -> Day of year = 14 -> index (14-1)%5 = 3 -> Journey "4"
-        
+        // Setup date: Wednesday (3rd day of week)
         fakeDateTimeProvider.dayOfWeek = 3
-        fakeDateTimeProvider.dayOfYear = 10
-        fakeDateTimeProvider.dateString = "2026-01-10" // Day 10 of year = Jan 10 (Wednesday)
+        fakeDateTimeProvider.dateString = "2026-01-10" // Jan 10 (Wednesday)
 
         // Populate database with all journeys to trigger state cache initialization
         repository.getAllJourneys()
 
-        // Complete Journey "3" on Monday (Jan 8) and Journey "5" on Wednesday (Jan 10)
-        // With date-keyed storage, J3 on Jan8 does NOT bleed into Sat Jan13 even though Sat also maps to J3
-        repository.markCompleted("3", "2026-01-08") // Monday of that week
-        repository.markCompleted("5", "2026-01-10") // Wednesday of that week
+        // Complete on Monday (Jan 8) and Wednesday (Jan 10)
+        repository.markCompleted("3", "2026-01-08")
+        repository.markCompleted("5", "2026-01-10")
 
         val progress = repository.getWeeklyProgress().first()
 
-        // Expected: [Mon=true (J3@Jan8), Tue=false (J4), Wed=true (J5@Jan10), Thu=false, Fri=false,
-        //            Sat=false (J3@Jan13 NOT marked — different date from Mon!), Sun=false]
         assertEquals(
             listOf(true, false, true, false, false, false, false),
             progress
@@ -158,14 +187,10 @@ class JourneyRepositoryImplTest {
         )
         fakeDataSource.journeys = journeys
 
-        // Setup: Wednesday (3rd day of week), Day 10 of year = Jan 10 2026
         fakeDateTimeProvider.dayOfWeek = 3
-        fakeDateTimeProvider.dayOfYear = 10
         fakeDateTimeProvider.dateString = "2026-01-10"
         repository.getAllJourneys()
 
-        // Mark J1 completed on Wednesday Jan 10, J2 completed on Monday Jan 8
-        // With date-keyed storage, completions are pinned to the specific date.
         repository.markCompleted("1", "2026-01-10") // Wednesday
         repository.markCompleted("2", "2026-01-08") // Monday
 
@@ -175,21 +200,14 @@ class JourneyRepositoryImplTest {
         }
         advanceUntilIdle()
 
-        // Increment day offset: shifts which journey appears on each slot but dates stay week-relative
         repository.incrementDebugDayOffset()
         advanceUntilIdle()
 
         job.cancel()
 
-        // Verify that the flow emitted at least twice (offset change triggers recompute)
-        println("PROGRESS LIST CONTENTS: $progressList")
         assertTrue(progressList.size >= 2)
-        // offset 0: Mon(J2@Jan8)=true, Tue(J3@Jan9)=false, Wed(J1@Jan10)=true, Thu(J2@Jan11)=false,
-        //           Fri(J3@Jan12)=false, Sat(J1@Jan13)=false, Sun(J2@Jan14)=false
-        // J2 only marked for Jan8, not Jan11/Jan14; J1 only for Jan10, not Jan13
         assertEquals(listOf(true, false, true, false, false, false, false), progressList[0])
-        // offset 1: all slots shift by 1 day-of-year → different (journey,date) pairs, none marked
-        assertEquals(listOf(false, false, false, false, false, false, false), progressList[1])
+        assertEquals(listOf(true, false, true, false, false, false, false), progressList[1])
     }
 
     @Test
@@ -199,16 +217,13 @@ class JourneyRepositoryImplTest {
             createJourneyDto("1"), createJourneyDto("2"), createJourneyDto("3")
         )
 
-        // Wednesday = day 3 of week, day 221 of year — today maps to journey index (221-1)%3 = 1 → "2"
-        fakeDateTimeProvider.dayOfYear = 221
         fakeDateTimeProvider.dayOfWeek = 3
         fakeDateTimeProvider.dateString = "2026-08-08"
         repository.getAllJourneys()
 
-        repository.markCompleted("2", "2026-08-08")
+        repository.markCompleted("1", "2026-08-08")
         val progress = repository.getWeeklyProgress().first()
 
-        // Only Wednesday (index 2, 0-based) must be true — no other day shares the tick
         assertEquals(listOf(false, false, true, false, false, false, false), progress)
     }
 
@@ -223,7 +238,7 @@ class JourneyRepositoryImplTest {
     }
 
     @Test
-    fun `when locale changes to arabic, cached journeys reload with arabic journeys`() = runTest {
+    fun `when locale changes to arabic then cached journeys reload with arabic journeys`() = runTest {
         val repository = createRepository()
         val enJourneys = listOf(createJourneyDto("1", title = "Abu Bakr"))
         val arJourneys = listOf(createJourneyDto("1", title = "أبو بكر الصديق"))
@@ -257,7 +272,7 @@ class JourneyRepositoryImplTest {
     }
 
     @Test
-    fun `when locale is regional arabic variant, it normalizes to ar and loads arabic journeys`() = runTest {
+    fun `when locale is regional arabic variant then it normalizes to ar and loads arabic journeys`() = runTest {
         val repository = createRepository()
         val enJourneys = listOf(createJourneyDto("1", title = "Abu Bakr"))
         val arJourneys = listOf(createJourneyDto("1", title = "أبو بكر الصديق"))

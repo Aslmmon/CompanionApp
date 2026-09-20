@@ -6,5 +6,6 @@ import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 @Immutable
 data class SettingsUiState(
     val userPreferences: UserPreferences = UserPreferences(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isDebug: Boolean = false
 )

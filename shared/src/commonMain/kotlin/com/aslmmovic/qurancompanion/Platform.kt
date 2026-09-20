@@ -3,6 +3,7 @@ package com.aslmmovic.qurancompanion
 interface Platform {
     val name: String
     val languageCode: String
+    val isDebug: Boolean
 }
 
 expect fun getPlatform(): Platform

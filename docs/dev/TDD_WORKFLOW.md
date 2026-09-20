@@ -5,11 +5,11 @@ This document outlines the standard TDD inner loop and Spec-Driven Development w
 ---
 
 ## 1. The Core Philosophy
-1. **Spec is the Contract**: No business logic, use case, or UI state is implemented without an approved specification (`spec.md`) and Acceptance Criteria Matrix.
+1. **Spec is the Contract**: No business logic, use case, or UI state is implemented without a locked specification (`spec.md`) and Acceptance Criteria Matrix (automatically locked during autonomous SDD execution).
 2. **Tests Before Code (RED)**: Write unit tests against test fakes using the exact Acceptance Criteria scenarios before implementing the production logic.
 3. **Pure Kotlin Fakes**: Never import mock frameworks (MockK, Mockito). Always maintain clean, deterministic in-memory fakes in `commonTest/.../fakes/`.
 4. **Fast Local Inner Loop**: Run tests locally with sub-3s JVM execution.
-5. **Dedicated Subagent Production**: For all feature development and bug fixes, the primary agent acts as an orchestrator and produces a dedicated subagent specifically tasked with executing the TDD inner loop. See [TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md).
+5. **Dedicated Subagent Production**: For all feature development and bug fixes, the primary agent acts as an orchestrator and produces a dedicated subagent specifically tasked with executing the TDD inner loop autonomously. See [TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md).
 
 ---
 
@@ -134,4 +134,5 @@ sequenceDiagram
 ### Delegation Rules
 1. **Primary Agent**: Strictly coordinates scope, contracts, and architecture. Never writes production or test code directly in the primary conversation thread for features or bugfixes.
 2. **Dedicated TDD Subagent**: Produced via `invoke_subagent` using the prompt contracts defined in [TDD Subagent Orchestration Skill](file:///.agents/skills/tdd-agent/SKILL.md) and governed by [TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md).
+3. **Zero Intermediate Approval**: Dedicated subagents execute all phases (RED -> GREEN -> REFACTOR -> Verification) completely autonomously without pausing or prompting the developer for intermediate approvals.
 

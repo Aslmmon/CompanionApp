@@ -18,7 +18,7 @@ SDD ensures zero AI hallucination by establishing an unbreachable workflow:
 
 ```mermaid
 flowchart TD
-    Step1["1. Author Spec & Contracts (spec.md)"] --> Step2["2. Developer Review & Lock"]
+    Step1["1. Author Spec & Contracts (spec.md)"] --> Step2["2. Autonomous Spec Freeze & Lock"]
     Step2 --> Step3["3. Layer 1: Domain (Pure Models, Repo Interface, UseCases)"]
     Step3 --> Step4["4. Layer 2: Data (DTOs, Mappers, Repo Impl)"]
     Step4 --> Step5["5. Layer 3: Presentation (UiState, ViewModel, Screen/Content)"]
@@ -42,10 +42,11 @@ Ensure the following sections are strictly defined:
 6. **Acceptance Criteria Matrix**: Tabular scenarios mapping Given/When/Then to target layers.
 7. **Multiplatform Strings**: English & Arabic keys.
 
-### Step 2: User Approval (Spec Freeze)
-Present the spec to the developer. Once approved:
+### Step 2: Autonomous Spec Freeze & Lock
+Lock the specification contracts immediately against requirements and task scope:
 - The specification is **frozen**.
-- Do not introduce unplanned dependencies, models, or layer crossings.
+- **Zero Mid-Task Approval Mandate**: Do NOT pause or prompt the developer for manual approval or confirmation before proceeding. Proceed directly and autonomously into layered implementation (Step 3).
+- Do not introduce unplanned dependencies, models, or layer crossings outside the frozen spec.
 
 ### Step 3: Layered Implementation
 Implement in strict order:

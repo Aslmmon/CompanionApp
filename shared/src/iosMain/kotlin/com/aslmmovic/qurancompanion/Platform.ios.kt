@@ -17,6 +17,8 @@ class IOSPlatform: Platform {
             val preferred = platform.Foundation.NSLocale.preferredLanguages.firstOrNull() as? String ?: "en"
             return preferred.split("-").firstOrNull() ?: "en"
         }
+    override val isDebug: Boolean
+        get() = kotlin.native.Platform.isDebugBinary
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()

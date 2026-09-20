@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
+import com.aslmmovic.qurancompanion.ui.theme.SahabaModernDesignShowcase
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -46,4 +47,5 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppAndroidPreview() {
     App()
+   // SahabaModernDesignShowcase()
 }

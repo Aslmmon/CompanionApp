@@ -1,200 +1,66 @@
 package com.aslmmovic.qurancompanion.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 
-private val LightColorScheme = lightColorScheme(
-    primary = LightPrimary,
-    onPrimary = LightOnPrimary,
-    primaryContainer = LightPrimaryContainer,
-    onPrimaryContainer = LightOnPrimaryContainer,
-    secondary = LightSecondary,
-    onSecondary = LightOnSecondary,
-    background = LightBackground,
-    onBackground = LightOnBackground,
-    surface = LightSurface,
-    onSurface = LightOnSurface
+internal val LightColorScheme = lightColorScheme(
+    primary = SahabaEvergreen,
+    onPrimary = SahabaOnEvergreen,
+    primaryContainer = SahabaMintContainer,
+    onPrimaryContainer = SahabaOnMintContainer,
+    secondary = SahabaWarmGold,
+    onSecondary = SahabaOnWarmGold,
+    background = SahabaIvoryBackground,
+    onBackground = SahabaDarkText,
+    surface = SahabaCardSurface,
+    onSurface = SahabaDarkText,
+    surfaceVariant = SahabaPillBackground,
+    onSurfaceVariant = SahabaTextMuted,
+    outline = SahabaCardBorder,
+    outlineVariant = SahabaCardBorder
 )
 
-private val DarkColorScheme = darkColorScheme(
-    primary = DarkPrimary,
-    onPrimary = DarkOnPrimary,
-    primaryContainer = DarkPrimaryContainer,
-    onPrimaryContainer = DarkOnPrimaryContainer,
-    secondary = DarkSecondary,
-    onSecondary = DarkOnSecondary,
-    background = DarkBackground,
-    onBackground = DarkOnBackground,
-    surface = DarkSurface,
-    onSurface = DarkOnSurface
+internal val DarkColorScheme = darkColorScheme(
+    primary = SahabaGoldAccent,
+    onPrimary = SahabaOnGoldAccent,
+    primaryContainer = Color(0xFF26362C),
+    onPrimaryContainer = Color(0xFFE2F1E8),
+    secondary = SahabaEmeraldHighlight,
+    onSecondary = Color(0xFF061A10),
+    background = SahabaMidnightBackground,
+    onBackground = Color(0xFFF5F7FA),
+    surface = SahabaMidnightSurface,
+    onSurface = Color(0xFFF5F7FA),
+    surfaceVariant = Color(0xFF1B2A44),
+    onSurfaceVariant = Color(0xFF94A3B8),
+    outline = SahabaMidnightBorder,
+    outlineVariant = SahabaMidnightBorder
 )
 
-fun getThemeColorScheme(darkTheme: Boolean, themeName: String?): ColorScheme {
-    if (themeName == null) return if (darkTheme) DarkColorScheme else LightColorScheme
+val SahabaShapes = Shapes(
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(20.dp),
+    extraLarge = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+)
 
-    return when (themeName.lowercase()) {
-        "desert" -> {
-            if (darkTheme) {
-                darkColorScheme(
-                    primary = DesertPrimaryDark,
-                    onPrimary = DesertBackgroundDark,
-                    secondary = DesertSecondaryDark,
-                    onSecondary = DesertBackgroundDark,
-                    background = DesertBackgroundDark,
-                    onBackground = DesertOnBackgroundDark,
-                    surface = DesertSurfaceDark,
-                    onSurface = DesertOnBackgroundDark,
-                    primaryContainer = DesertSurfaceDark,
-                    onPrimaryContainer = DesertPrimaryDark
-                )
-            } else {
-                lightColorScheme(
-                    primary = DesertPrimaryLight,
-                    onPrimary = DesertSurfaceLight,
-                    secondary = DesertSecondaryLight,
-                    onSecondary = DesertOnBackgroundLight,
-                    background = DesertBackgroundLight,
-                    onBackground = DesertOnBackgroundLight,
-                    surface = DesertSurfaceLight,
-                    onSurface = DesertOnBackgroundLight,
-                    primaryContainer = DesertSurfaceLight,
-                    onPrimaryContainer = DesertPrimaryLight
-                )
-            }
-        }
-
-        "emerald" -> {
-            if (darkTheme) {
-                darkColorScheme(
-                    primary = EmeraldPrimaryDark,
-                    onPrimary = EmeraldBackgroundDark,
-                    secondary = EmeraldSecondaryDark,
-                    onSecondary = EmeraldBackgroundDark,
-                    background = EmeraldBackgroundDark,
-                    onBackground = EmeraldOnBackgroundDark,
-                    surface = EmeraldSurfaceDark,
-                    onSurface = EmeraldOnBackgroundDark,
-                    primaryContainer = EmeraldSurfaceDark,
-                    onPrimaryContainer = EmeraldPrimaryDark
-                )
-            } else {
-                lightColorScheme(
-                    primary = EmeraldPrimaryLight,
-                    onPrimary = EmeraldSurfaceLight,
-                    secondary = EmeraldSecondaryLight,
-                    onSecondary = EmeraldSurfaceLight,
-                    background = EmeraldBackgroundLight,
-                    onBackground = EmeraldOnBackgroundLight,
-                    surface = EmeraldSurfaceLight,
-                    onSurface = EmeraldOnBackgroundLight,
-                    primaryContainer = EmeraldSurfaceLight,
-                    onPrimaryContainer = EmeraldPrimaryLight
-                )
-            }
-        }
-
-        "ocean" -> {
-            if (darkTheme) {
-                darkColorScheme(
-                    primary = OceanPrimaryDark,
-                    onPrimary = OceanBackgroundDark,
-                    secondary = OceanSecondaryDark,
-                    onSecondary = OceanBackgroundDark,
-                    background = OceanBackgroundDark,
-                    onBackground = OceanOnBackgroundDark,
-                    surface = OceanSurfaceDark,
-                    onSurface = OceanOnBackgroundDark,
-                    primaryContainer = OceanSurfaceDark,
-                    onPrimaryContainer = OceanPrimaryDark
-                )
-            } else {
-                lightColorScheme(
-                    primary = OceanPrimaryLight,
-                    onPrimary = OceanSurfaceLight,
-                    secondary = OceanSecondaryLight,
-                    onSecondary = OceanSurfaceLight,
-                    background = OceanBackgroundLight,
-                    onBackground = OceanOnBackgroundLight,
-                    surface = OceanSurfaceLight,
-                    onSurface = OceanOnBackgroundLight,
-                    primaryContainer = OceanSurfaceLight,
-                    onPrimaryContainer = OceanPrimaryLight
-                )
-            }
-        }
-
-        "night" -> {
-            if (darkTheme) {
-                darkColorScheme(
-                    primary = NightPrimaryDark,
-                    onPrimary = NightBackgroundDark,
-                    secondary = NightSecondaryDark,
-                    onSecondary = NightBackgroundDark,
-                    background = NightBackgroundDark,
-                    onBackground = NightOnBackgroundDark,
-                    surface = NightSurfaceDark,
-                    onSurface = NightOnBackgroundDark,
-                    primaryContainer = NightSurfaceDark,
-                    onPrimaryContainer = NightPrimaryDark
-                )
-            } else {
-                lightColorScheme(
-                    primary = NightPrimaryLight,
-                    onPrimary = NightSurfaceLight,
-                    secondary = NightSecondaryLight,
-                    onSecondary = NightSurfaceLight,
-                    background = NightBackgroundLight,
-                    onBackground = NightOnBackgroundLight,
-                    surface = NightSurfaceLight,
-                    onSurface = NightOnBackgroundLight,
-                    primaryContainer = NightSurfaceLight,
-                    onPrimaryContainer = NightPrimaryLight
-                )
-            }
-        }
-
-        "gold" -> {
-            if (darkTheme) {
-                darkColorScheme(
-                    primary = GoldPrimaryDark,
-                    onPrimary = GoldBackgroundDark,
-                    secondary = GoldSecondaryDark,
-                    onSecondary = GoldBackgroundDark,
-                    background = GoldBackgroundDark,
-                    onBackground = GoldOnBackgroundDark,
-                    surface = GoldSurfaceDark,
-                    onSurface = GoldOnBackgroundDark,
-                    primaryContainer = GoldSurfaceDark,
-                    onPrimaryContainer = GoldPrimaryDark
-                )
-            } else {
-                lightColorScheme(
-                    primary = GoldPrimaryLight,
-                    onPrimary = GoldSurfaceLight,
-                    secondary = GoldSecondaryLight,
-                    onSecondary = GoldOnBackgroundLight,
-                    background = GoldBackgroundLight,
-                    onBackground = GoldOnBackgroundLight,
-                    surface = GoldSurfaceLight,
-                    onSurface = GoldOnBackgroundLight,
-                    primaryContainer = GoldSurfaceLight,
-                    onPrimaryContainer = GoldPrimaryLight
-                )
-            }
-        }
-
-        else -> if (darkTheme) DarkColorScheme else LightColorScheme
-    }
+fun getThemeColorScheme(darkTheme: Boolean, themeName: String? = null): ColorScheme {
+    return if (darkTheme) DarkColorScheme else LightColorScheme
 }
 
+
 @Composable
-fun QuranCompanionTheme(
+fun SahabaCompanionTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     themeName: String? = null,
     isArabic: Boolean = false,
@@ -208,7 +74,8 @@ fun QuranCompanionTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = getQuranCompanionTypography(isArabic),
+            shapes = SahabaShapes,
+            typography = getSahabaTypography(isArabic),
             content = content
         )
     }

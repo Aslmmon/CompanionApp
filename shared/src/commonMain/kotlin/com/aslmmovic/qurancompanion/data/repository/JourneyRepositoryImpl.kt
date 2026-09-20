@@ -51,10 +51,36 @@ class JourneyRepositoryImpl(
                 val normalized = if (locale.startsWith("ar", ignoreCase = true)) "ar" else "en"
                 if (_cachedLocale != normalized || _cachedJourneys.value.isEmpty()) {
                     _cachedLocale = normalized
-                    _cachedJourneys.value = loadJourneysFromSource(normalized)
+                    val journeys = loadJourneysFromSource(normalized)
+                    _cachedJourneys.value = journeys
+                    if (journeys.isNotEmpty()) {
+                        syncProgressionIndex(journeys)
+                    }
                 }
             }
         }
+    }
+
+    private fun syncProgressionIndex(journeys: List<Journey>): Int {
+        if (journeys.isEmpty()) return 0
+        val currentDate = dateTimeProvider.getCurrentDateString()
+        val lastActiveDate = storage.getString(KEY_LAST_ACTIVE_DATE) ?: ""
+        var progressionIndex = storage.getInt(KEY_PROGRESSION_INDEX, 0)
+
+        if (lastActiveDate.isNotEmpty() && lastActiveDate != currentDate) {
+            val journeyOnLastDate = journeys[((progressionIndex % journeys.size) + journeys.size) % journeys.size]
+            val wasCompleted = storage.getBoolean(completionKey(journeyOnLastDate.id, lastActiveDate), false) ||
+                storage.getBoolean("$KEY_COMPLETED_DATE_PREFIX$lastActiveDate", false) ||
+                _completionStates.value["${journeyOnLastDate.id}|$lastActiveDate"] == true ||
+                _completionStates.value["$KEY_COMPLETED_DATE_PREFIX$lastActiveDate"] == true
+
+            if (wasCompleted) {
+                progressionIndex = (progressionIndex + 1) % journeys.size
+                storage.putInt(KEY_PROGRESSION_INDEX, progressionIndex)
+            }
+        }
+        storage.putString(KEY_LAST_ACTIVE_DATE, currentDate)
+        return progressionIndex
     }
 
     private suspend fun loadJourneysFromSource(locale: String = localeProvider.currentLocale): List<Journey> =
@@ -80,9 +106,9 @@ class JourneyRepositoryImpl(
         try {
             val journeys = getAllJourneys()
             if (journeys.isEmpty()) return@withContext null
+            val progressionIndex = syncProgressionIndex(journeys)
             val offset = _debugDayOffset.value
-            // Cycle through journeys by day-of-year + offset so users see a new journey each day
-            val index = (dateTimeProvider.getCurrentDayOfYear() - 1 + offset) % journeys.size
+            val index = ((progressionIndex + offset) % journeys.size + journeys.size) % journeys.size
             journeys[index]
         } catch (e: Exception) {
             null
@@ -93,8 +119,9 @@ class JourneyRepositoryImpl(
         try {
             val journeys = getAllJourneys()
             if (journeys.isEmpty()) return@withContext null
+            val progressionIndex = syncProgressionIndex(journeys)
             val offset = _debugDayOffset.value
-            val index = (dateTimeProvider.getCurrentDayOfYear() + offset) % journeys.size
+            val index = ((progressionIndex + offset + 1) % journeys.size + journeys.size) % journeys.size
             journeys[index]
         } catch (e: Exception) {
             null
@@ -114,20 +141,24 @@ class JourneyRepositoryImpl(
         return combine(_cachedJourneys, _completionStates, _debugDayOffset) { journeys, states, offset ->
             if (journeys.isEmpty()) return@combine List(7) { false }
 
-            val todayDayOfYear  = dateTimeProvider.getCurrentDayOfYear()
             val todayDayOfWeek  = dateTimeProvider.getCurrentDayOfWeek() // 1 = Mon, 7 = Sun
             val todayDateString = dateTimeProvider.getCurrentDateString()
+            val progressionIndex = storage.getInt(KEY_PROGRESSION_INDEX, 0)
 
             (1..7).map { d ->
-                val slotOffset      = d - todayDayOfWeek
-                val targetDayOfYear = todayDayOfYear + slotOffset + offset
-                val journeyIndex    = ((targetDayOfYear - 1) % journeys.size + journeys.size) % journeys.size
-                val journeyId       = journeys[journeyIndex].id
+                val slotOffset   = d - todayDayOfWeek
+                val targetIndex  = progressionIndex + slotOffset + offset
+                val journeyIndex = ((targetIndex % journeys.size) + journeys.size) % journeys.size
+                val journeyId    = journeys[journeyIndex].id
                 // Compute the calendar date for this specific week slot
-                val slotDate        = offsetDate(todayDateString, slotOffset)
-                // Check in-memory first, fall back to storage (handles cold-start)
-                states["$journeyId|$slotDate"]
+                val slotDate     = offsetDate(todayDateString, slotOffset)
+
+                val journeyCompleted = states["$journeyId|$slotDate"]
                     ?: storage.getBoolean(completionKey(journeyId, slotDate), false)
+                val dateCompleted = states["$KEY_COMPLETED_DATE_PREFIX$slotDate"]
+                    ?: storage.getBoolean("$KEY_COMPLETED_DATE_PREFIX$slotDate", false)
+
+                journeyCompleted || dateCompleted
             }
         }.flowOn(ioDispatcher)
     }
@@ -135,7 +166,11 @@ class JourneyRepositoryImpl(
     override suspend fun markCompleted(journeyId: String, date: String) = withContext(ioDispatcher) {
         try {
             storage.putBoolean(completionKey(journeyId, date), true)
-            _completionStates.value += ("$journeyId|$date" to true)
+            storage.putBoolean("$KEY_COMPLETED_DATE_PREFIX$date", true)
+            _completionStates.value += mapOf(
+                "$journeyId|$date" to true,
+                "$KEY_COMPLETED_DATE_PREFIX$date" to true
+            )
         } catch (e: Exception) {
             // Handle exception silently or log
         }
@@ -144,7 +179,11 @@ class JourneyRepositoryImpl(
     override suspend fun resetCompletion(journeyId: String, date: String) = withContext(ioDispatcher) {
         try {
             storage.putBoolean(completionKey(journeyId, date), false)
-            _completionStates.value += ("$journeyId|$date" to false)
+            storage.putBoolean("$KEY_COMPLETED_DATE_PREFIX$date", false)
+            _completionStates.value += mapOf(
+                "$journeyId|$date" to false,
+                "$KEY_COMPLETED_DATE_PREFIX$date" to false
+            )
         } catch (e: Exception) {
             // Handle exception silently or log
         }
@@ -165,6 +204,9 @@ class JourneyRepositoryImpl(
 
     companion object {
         private const val KEY_DEBUG_DAY_OFFSET = "debug_day_offset"
+        private const val KEY_PROGRESSION_INDEX = "user_journey_progression_index"
+        private const val KEY_LAST_ACTIVE_DATE = "user_journey_last_active_date"
+        private const val KEY_COMPLETED_DATE_PREFIX = "journey_date_completed_"
 
         /**
          * Storage key for a completion entry.

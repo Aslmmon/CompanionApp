@@ -59,7 +59,17 @@ flowchart TD
 
 ---
 
-## 4. Handoff & Orchestrator Verification
+## 4. Zero-Approval Autonomous Execution Mandate
+
+Subagents spawned for TDD or SDD tasks must operate with complete autonomy:
+- **Never Prompt for Intermediate Approval**: The subagent must never pause execution to ask the developer or orchestrator for approval, permission, or feedback between phases (RED, GREEN, REFACTOR), before file creation, or after authoring specs.
+- **No Interactive Tools**: The subagent must not invoke interactive questioning tools (e.g. `ask_question`) to seek permission.
+- **Self-Healing Iteration**: When encountering compilation errors or failing test assertions, the subagent must inspect Gradle output, iterate on the code, and re-run tests self-sufficiently without human intervention.
+- **Single Completion Delivery**: The subagent communicates back to the parent orchestrator via `send_message` only upon completing the task with all tests passing.
+
+---
+
+## 5. Handoff & Orchestrator Verification
 
 Upon receiving the subagent's completion report:
 1. The primary agent reviews the modified files and test verification outputs.

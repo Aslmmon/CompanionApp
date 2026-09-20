@@ -1,11 +1,17 @@
 package com.aslmmovic.qurancompanion
 
+import android.content.pm.ApplicationInfo
 import android.os.Build
+import com.aslmmovic.qurancompanion.util.AndroidActivityProvider
 
 class AndroidPlatform : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
     override val languageCode: String
         get() = java.util.Locale.getDefault().language
+    override val isDebug: Boolean
+        get() = AndroidActivityProvider.currentActivity?.applicationInfo?.let {
+            (it.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        } ?: false
 }
 
 actual fun getPlatform(): Platform = AndroidPlatform()

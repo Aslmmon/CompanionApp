@@ -15,6 +15,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.aslmmovic.qurancompanion.domain.util.NotificationScheduler
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class AndroidNotificationScheduler(
@@ -70,8 +71,33 @@ class AndroidNotificationScheduler(
     }
 
     override fun scheduleDailyReminder(hour: Int, minute: Int, title: String, body: String) {
-        // Scheduled as 15-minute periodic reminder for testing functionality as requested
-        schedulePeriodicReminder(15L, title, body)
+        val now = Calendar.getInstance()
+        val target = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+            if (before(now)) {
+                add(Calendar.DAY_OF_MONTH, 1)
+            }
+        }
+        val initialDelayMs = target.timeInMillis - now.timeInMillis
+
+        val inputData = Data.Builder()
+            .putString(EXTRA_TITLE, title)
+            .putString(EXTRA_BODY, body)
+            .build()
+
+        val workRequest = PeriodicWorkRequestBuilder<DailyReminderWorker>(24, TimeUnit.HOURS)
+            .setInputData(inputData)
+            .setInitialDelay(initialDelayMs, TimeUnit.MILLISECONDS)
+            .build()
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            WORK_NAME_DAILY_REMINDER,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            workRequest
+        )
     }
 
     override fun cancelDailyReminder() {

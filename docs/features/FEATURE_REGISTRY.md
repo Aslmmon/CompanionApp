@@ -33,7 +33,7 @@ Before any code is committed for a new feature:
 1. Assign a new Feature ID (`FEAT-00X`).
 2. Create specification in `docs/specs/SPEC-<ID>-<name>/spec.md` using the [`SPEC_TEMPLATE.md`](../specs/templates/SPEC_TEMPLATE.md).
 3. Register the new feature above with status `Draft`.
-4. Review and approve the specification with the user (transition status to `Approved`).
+4. Auto-lock specification against scope requirements (transition status to `Approved`).
 5. Write Acceptance Tests in `commonTest` following TDD (Red phase).
 6. Implement the Clean Architecture layers (Domain -> Data -> Presentation -> DI -> Localization) until tests pass (Green phase).
 7. Audit architecture using `arch-audit` and update status to `Verified`.

@@ -35,6 +35,7 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 
 ### Do
 * **Spawn Dedicated Subagents for TDD**: Always produce a dedicated subagent for any feature development or bug fix task rather than implementing in the primary thread.
+* **Autonomous Subagent Execution**: Require dedicated subagents (TDD/SDD) to execute end-to-end autonomously (spec lock -> RED -> GREEN -> REFACTOR -> test verification) without requesting intermediate approvals or pausing.
 * **Recreate Host Activities**: Trigger full resource reloads (e.g. `activity.recreate()`) on dynamic configuration shifts such as language/locale switches.
 * **Map Data Layers**: Fully map DTO/entity representations to domain models inside data layers using mapping extension functions (e.g., `toDomain()`) before returning.
 * **Main Safety**: Always ensure all Use Cases and Repository interfaces are main-safe and run non-blocking.
@@ -44,6 +45,7 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 ### Don't
 * **No Platform Imports in Domain**: Do not import Android SDK libraries (like `android.*`) or platform components in `commonMain` or the `domain` module.
 * **No Repository Bypassing**: ViewModels must never directly consume Repositories; always encapsulate business logic in Use Cases.
+* **No Mid-Flight Approval Halts**: Do not configure or prompt subagents to ask for approval between layers, spec drafting, or test phases; subagents run continuously to completion.
 * **No Raw Exceptions in UI**: Never propagate raw SQL, filesystem, or network exceptions up to ViewModels; handle exceptions at repository boundaries.
 * **No Mocking Libraries**: Do not import mock frameworks (like Mockk or Mockito) in `commonTest`; write clean, in-memory fake classes instead.
 * **No Unstable UI Params**: Avoid passing unstable collection types (such as raw, standard `List` objects) directly into stateless composables without stable keys or wrappers.

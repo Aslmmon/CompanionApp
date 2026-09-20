@@ -22,7 +22,7 @@ import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashScreen
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import com.aslmmovic.qurancompanion.ui.components.IslamicBackgroundLattice
-import com.aslmmovic.qurancompanion.ui.theme.QuranCompanionTheme
+import com.aslmmovic.qurancompanion.ui.theme.SahabaCompanionTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -38,7 +38,7 @@ fun App() {
         null -> isSystemInDarkTheme()
     }
 
-    QuranCompanionTheme(
+    SahabaCompanionTheme(
         darkTheme = isDarkMode,
         themeName = state.todayJourney?.theme,
         isArabic = state.isArabic

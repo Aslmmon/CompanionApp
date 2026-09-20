@@ -19,6 +19,7 @@ Use this skill whenever a developer requests a new feature, modifications to an 
   - Produces and invokes the dedicated subagent using `invoke_subagent`.
   - Audits the resulting code changes using `arch-audit` and presents the final walkthrough.
   - **Does NOT** directly write production or test code for features or bugfixes in the primary context.
+  - **Does NOT** prompt the developer for intermediate approvals during SDD/TDD execution.
 
 - **Dedicated Subagent (TDD Specialist)**:
   - Executes in an isolated context (`Workspace: "inherit"` by default).
@@ -87,7 +88,13 @@ Your mission is to implement feature [FEATURE_ID: FEATURE_NAME] following strict
    - Verify: zero platform imports in domain, @Immutable on UI states, main-safe I/O.
    - Run full test suite: ./gradlew :shared:testAndroidHostTest
 
-### 4. Output Report
+### 4. Autonomous Execution Mandate (Zero Intermediate Approval)
+- Execute this task 100% autonomously from start to finish without pausing or asking for permission.
+- NEVER prompt the developer or orchestrator for intermediate approval (e.g. between RED, GREEN, and REFACTOR).
+- If tests or builds fail, inspect the stack trace, self-correct, and re-run without human intervention.
+- Do NOT invoke interactive question tools (`ask_question`).
+
+### 5. Output Report
 When complete, return a concise report with:
 - List of created/modified files
 - Test command output confirming PASS
@@ -116,7 +123,11 @@ Your mission is to resolve bug [BUG_DESCRIPTION] using strict Test-Driven Develo
    - Clean up without expanding scope.
    - Run full test suite: ./gradlew :shared:testAndroidHostTest to verify zero regressions.
 
-### 3. Output Report
+### 3. Autonomous Execution Mandate (Zero Intermediate Approval)
+- Execute this fix autonomously end-to-end without pausing for approval.
+- Self-correct errors and deliver the completion report upon successful verification.
+
+### 4. Output Report
 When complete, return a concise report with:
 - Files modified
 - Before/After behavior summary
