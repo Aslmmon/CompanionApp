@@ -84,4 +84,11 @@
     <string name="step_type_reflection">تأمل</string>
     <string name="step_type_action">عمل اليوم</string>
     <string name="step_type_references">المراجع</string>
+
+    <!-- Navigation Tabs & Explorer -->
+    <string name="tab_today">اليوم</string>
+    <string name="tab_library">المكتبة</string>
+    <string name="tab_habits">السنن</string>
+    <string name="tab_explore">استكشف</string>
+    <string name="map_explorer_title">خريطة المعالم التاريخية</string>
 </resources>

@@ -61,10 +61,10 @@ class AppViewModel(
 
                 // Resolve start destination path
                 val destination = if (finalPrefs.preferredLanguage != null) {
-                    AppRoute.Home.route
+                    AppRoute.Main.route
                 } else {
                     val systemLocale = localeProvider.currentLocale
-                    if (systemLocale == "ar") AppRoute.Home.route else AppRoute.Welcome.route
+                    if (systemLocale == "ar") AppRoute.Main.route else AppRoute.Welcome.route
                 }
 
                 val isArabic = (finalPrefs.preferredLanguage ?: localeProvider.currentLocale) == "ar"

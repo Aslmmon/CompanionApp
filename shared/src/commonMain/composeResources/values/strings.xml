@@ -84,4 +84,11 @@
     <string name="step_type_reflection">Reflection</string>
     <string name="step_type_action">Today\'s Action</string>
     <string name="step_type_references">References</string>
+
+    <!-- Navigation Tabs & Explorer -->
+    <string name="tab_today">Today</string>
+    <string name="tab_library">Library</string>
+    <string name="tab_habits">Habits</string>
+    <string name="tab_explore">Explore</string>
+    <string name="map_explorer_title">Historical Sites Map</string>
 </resources>

@@ -24,7 +24,7 @@ This document is the authoritative execution blueprint for refactoring the **Sah
 
 - [x] **Phase 1: Design System & Color Tokens**
 - [x] **Phase 2: Fonts & Typography Scaling**
-- [ ] **Phase 3: App Navigation Shell (Persistent 4-Tab Scaffold)**
+- [x] **Phase 3: App Navigation Shell (Persistent 4-Tab Scaffold)**
 - [ ] **Phase 4: Screen by Screen Implementation (Data + Domain + Presentation)**
   - [ ] **4.1 Splash Screen** (Page 6)
   - [ ] **4.2 Today Screen** (Page 7)
@@ -163,8 +163,8 @@ Implement the persistent Bottom Navigation Bar with 4 tabs (`Today`, `Library`, 
   * `AppRoute.MapExplorer`
 
 #### Acceptance Criteria
-* [ ] Switching tabs retains scroll position and filter state.
-* [ ] Fullscreen flows (JourneyFlow, Settings) hide the bottom navigation bar.
+* [x] Switching tabs retains scroll position and filter state.
+* [x] Fullscreen flows (JourneyFlow, Settings) hide the bottom navigation bar.
 
 ---
 

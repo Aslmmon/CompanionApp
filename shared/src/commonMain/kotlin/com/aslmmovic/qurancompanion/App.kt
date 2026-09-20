@@ -14,10 +14,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aslmmovic.qurancompanion.presentation.navigation.AppRoute
-import com.aslmmovic.qurancompanion.presentation.screens.home.HomeScreen
+import com.aslmmovic.qurancompanion.presentation.navigation.MainNavigationScaffold
 import com.aslmmovic.qurancompanion.presentation.screens.journey.CompletionScreen
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyFlowScreen
 import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageSelectionScreen
+import com.aslmmovic.qurancompanion.presentation.screens.placeholder.MapExplorerPlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashScreen
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
@@ -71,20 +72,23 @@ fun App() {
                     composable(AppRoute.Welcome.route) {
                         LanguageSelectionScreen(
                             onNavigateToHome = {
-                                navController.navigate(AppRoute.Home.route) {
+                                navController.navigate(AppRoute.Main.route) {
                                     popUpTo(AppRoute.Welcome.route) { inclusive = true }
                                 }
                             }
                         )
                     }
 
-                    composable(AppRoute.Home.route) {
-                        HomeScreen(
+                    composable(AppRoute.Main.route) {
+                        MainNavigationScaffold(
                             onNavigateToJourneyFlow = {
                                 navController.navigate(AppRoute.JourneyFlow.route)
                             },
                             onNavigateToSettings = {
                                 navController.navigate(AppRoute.Settings.route)
+                            },
+                            onNavigateToMapExplorer = {
+                                navController.navigate(AppRoute.MapExplorer.route)
                             }
                         )
                     }
@@ -96,7 +100,7 @@ fun App() {
                             },
                             onNavigateToHome = {
                                 navController.popBackStack(
-                                    route = AppRoute.Home.route,
+                                    route = AppRoute.Main.route,
                                     inclusive = false
                                 )
                             }
@@ -107,7 +111,7 @@ fun App() {
                         CompletionScreen(
                             onNavigateToHome = {
                                 navController.popBackStack(
-                                    route = AppRoute.Home.route,
+                                    route = AppRoute.Main.route,
                                     inclusive = false
                                 )
                             }
@@ -116,6 +120,14 @@ fun App() {
 
                     composable(AppRoute.Settings.route) {
                         SettingsScreen(
+                            onNavigateBack = {
+                                navController.popBackStack()
+                            }
+                        )
+                    }
+
+                    composable(AppRoute.MapExplorer.route) {
+                        MapExplorerPlaceholderScreen(
                             onNavigateBack = {
                                 navController.popBackStack()
                             }
