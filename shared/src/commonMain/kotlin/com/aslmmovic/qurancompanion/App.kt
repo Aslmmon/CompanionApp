@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +21,7 @@ import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyFlowScre
 import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageSelectionScreen
 import com.aslmmovic.qurancompanion.presentation.screens.placeholder.MapExplorerPlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
+import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashContent
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashScreen
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
 import com.aslmmovic.qurancompanion.ui.components.IslamicBackgroundLattice
@@ -30,8 +32,6 @@ import org.koin.compose.viewmodel.koinViewModel
 fun App() {
     val viewModel: AppViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
-    if (!state.isInitialized) return
 
     val isDarkMode = when (state.isDarkMode) {
         true -> true
@@ -44,9 +44,18 @@ fun App() {
         themeName = state.todayJourney?.theme,
         isArabic = state.isArabic
     ) {
-        val navController = rememberNavController()
+        val startDest = state.startDestination
+        if (startDest == null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFFFAF7F0))
+            ) {
+                SplashContent()
+            }
+        } else {
+            val navController = rememberNavController()
 
-        state.startDestination?.let { startDest ->
             Box(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
