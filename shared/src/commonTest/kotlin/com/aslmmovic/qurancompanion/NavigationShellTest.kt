@@ -26,12 +26,10 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import qurancompanion.shared.generated.resources.Res
-import qurancompanion.shared.generated.resources.ic_tab_explore
 import qurancompanion.shared.generated.resources.ic_tab_habits
 import qurancompanion.shared.generated.resources.ic_tab_library
 import qurancompanion.shared.generated.resources.ic_tab_settings
 import qurancompanion.shared.generated.resources.ic_tab_today
-import qurancompanion.shared.generated.resources.tab_explore
 import qurancompanion.shared.generated.resources.tab_habits
 import qurancompanion.shared.generated.resources.tab_library
 import qurancompanion.shared.generated.resources.tab_settings
@@ -86,31 +84,28 @@ class NavigationShellTest {
     @Test
     fun test_AC01_mainTab_routesAndTitlesAreUniqueAndMapped() {
         val tabs = MainTab.entries
-        assertEquals(5, tabs.size)
+        assertEquals(4, tabs.size)
 
         // Verify distinct values
-        assertEquals(5, tabs.map { it.route }.distinct().size)
-        assertEquals(5, tabs.map { it.titleRes }.distinct().size)
-        assertEquals(5, tabs.map { it.iconRes }.distinct().size)
+        assertEquals(4, tabs.map { it.route }.distinct().size)
+        assertEquals(4, tabs.map { it.titleRes }.distinct().size)
+        assertEquals(4, tabs.map { it.iconRes }.distinct().size)
 
         // Verify specific route mappings
         assertEquals("main/today", MainTab.Today.route)
         assertEquals("main/library", MainTab.Library.route)
         assertEquals("main/habits", MainTab.Habits.route)
-        assertEquals("main/explore", MainTab.Explore.route)
         assertEquals("main/settings", MainTab.Settings.route)
 
         // Verify resource associations
         assertEquals(Res.string.tab_today, MainTab.Today.titleRes)
         assertEquals(Res.string.tab_library, MainTab.Library.titleRes)
         assertEquals(Res.string.tab_habits, MainTab.Habits.titleRes)
-        assertEquals(Res.string.tab_explore, MainTab.Explore.titleRes)
         assertEquals(Res.string.tab_settings, MainTab.Settings.titleRes)
 
         assertEquals(Res.drawable.ic_tab_today, MainTab.Today.iconRes)
         assertEquals(Res.drawable.ic_tab_library, MainTab.Library.iconRes)
         assertEquals(Res.drawable.ic_tab_habits, MainTab.Habits.iconRes)
-        assertEquals(Res.drawable.ic_tab_explore, MainTab.Explore.iconRes)
         assertEquals(Res.drawable.ic_tab_settings, MainTab.Settings.iconRes)
     }
 
@@ -120,7 +115,6 @@ class NavigationShellTest {
         assertEquals("welcome", AppRoute.Welcome.route)
         assertEquals("main", AppRoute.Main.route)
         assertEquals("settings", AppRoute.Settings.route)
-        assertEquals("map_explorer", AppRoute.MapExplorer.route)
         assertEquals("journey_flow", AppRoute.JourneyFlow.route)
         assertEquals("completion", AppRoute.Completion.route)
 
@@ -190,8 +184,7 @@ class NavigationShellTest {
             AppRoute.Welcome.route,
             AppRoute.JourneyFlow.route,
             AppRoute.Completion.route,
-            AppRoute.Settings.route,
-            AppRoute.MapExplorer.route
+            AppRoute.Settings.route
         )
 
         fullScreenRoutes.forEach { route ->
@@ -208,7 +201,6 @@ class NavigationShellTest {
             "main/today",
             "main/library",
             "main/habits",
-            "main/explore",
             "main/settings"
         )
         val actualTabRoutes = MainTab.entries.map { it.route }
@@ -231,7 +223,6 @@ class NavigationShellTest {
         assertEquals(MainTab.Today, resolveTab("main/today"))
         assertEquals(MainTab.Library, resolveTab("main/library"))
         assertEquals(MainTab.Habits, resolveTab("main/habits"))
-        assertEquals(MainTab.Explore, resolveTab("main/explore"))
         assertEquals(MainTab.Settings, resolveTab("main/settings"))
         assertEquals(MainTab.Today, resolveTab("unknown/route"))
         assertEquals(MainTab.Today, resolveTab(null))

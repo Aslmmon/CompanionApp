@@ -19,7 +19,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.aslmmovic.qurancompanion.presentation.screens.home.HomeScreen
-import com.aslmmovic.qurancompanion.presentation.screens.placeholder.ExplorePlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.placeholder.HabitsPlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.placeholder.LibraryPlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
@@ -29,7 +28,6 @@ import com.aslmmovic.qurancompanion.ui.components.CustomBottomNavigation
 fun MainNavigationScaffold(
     onNavigateToJourneyFlow: () -> Unit,
     onNavigateToSettings: () -> Unit = {},
-    onNavigateToMapExplorer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val tabNavController = rememberNavController()
@@ -94,11 +92,6 @@ fun MainNavigationScaffold(
             }
             composable(MainTab.Habits.route) {
                 HabitsPlaceholderScreen()
-            }
-            composable(MainTab.Explore.route) {
-                ExplorePlaceholderScreen(
-                    onNavigateToMap = onNavigateToMapExplorer
-                )
             }
             composable(MainTab.Settings.route) {
                 SettingsScreen()

@@ -19,7 +19,6 @@ import com.aslmmovic.qurancompanion.presentation.navigation.MainNavigationScaffo
 import com.aslmmovic.qurancompanion.presentation.screens.journey.CompletionScreen
 import com.aslmmovic.qurancompanion.presentation.screens.journey.JourneyFlowScreen
 import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageSelectionScreen
-import com.aslmmovic.qurancompanion.presentation.screens.placeholder.MapExplorerPlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashContent
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashScreen
@@ -95,9 +94,6 @@ fun App() {
                             },
                             onNavigateToSettings = {
                                 navController.navigate(AppRoute.Settings.route)
-                            },
-                            onNavigateToMapExplorer = {
-                                navController.navigate(AppRoute.MapExplorer.route)
                             }
                         )
                     }
@@ -129,14 +125,6 @@ fun App() {
 
                     composable(AppRoute.Settings.route) {
                         SettingsScreen(
-                            onNavigateBack = {
-                                navController.popBackStack()
-                            }
-                        )
-                    }
-
-                    composable(AppRoute.MapExplorer.route) {
-                        MapExplorerPlaceholderScreen(
                             onNavigateBack = {
                                 navController.popBackStack()
                             }

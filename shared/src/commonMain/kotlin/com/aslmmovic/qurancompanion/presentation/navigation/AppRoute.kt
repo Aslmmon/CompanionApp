@@ -8,7 +8,6 @@ sealed class AppRoute(val route: String) {
     data object Welcome : AppRoute("welcome")
     data object Main : AppRoute("main")
     data object Settings : AppRoute("settings")
-    data object MapExplorer : AppRoute("map_explorer")
 
     data object JourneyFlow : AppRoute("journey_flow") {
         const val ARG_JOURNEY_ID = "journeyId"

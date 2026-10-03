@@ -15,16 +15,13 @@ This is a Kotlin Multiplatform (KMP) project utilizing Compose Multiplatform for
 ## 2. Modular Guidelines Directory
 Refer to these topic-specific guidelines for detailed rules, code conventions, and implementation instructions:
 * 📖 **[Feature Registry (Single Source of Truth)](file:///docs/features/FEATURE_REGISTRY.md)**
-* 🧪 **[Test-Driven Development (TDD) Workflow Guide](file:///docs/dev/TDD_WORKFLOW.md)**
+* 🧪 **[Unified TDD & SDD Workflow Guide & Skill](file:///.agents/skills/tdd-agent/SKILL.md)**
 * 🏗️ **[Clean Architecture & Layer Isolation Guidelines](file:///.agents/rules/architecture.md)**
-* 📋 **[Spec-Driven Development Workflow](file:///.agents/skills/spec-driven-dev/SKILL.md)**
 * 📱 **[Compose Multiplatform UI Guidelines](file:///.agents/rules/compose.md)**
 * 🔌 **[Dependency Injection Guidelines (Koin)](file:///.agents/rules/di.md)**
 * ⚡ **[Coroutines & Concurrency Guidelines](file:///.agents/rules/concurrency.md)**
 * 🗺️ **[Navigation Architecture Guidelines](file:///.agents/rules/navigation.md)**
 * 🧪 **[Testing Architecture & Guidelines](file:///.agents/rules/testing.md)**
-* 🤖 **[TDD Subagent Production Rules](file:///.agents/rules/tdd_agent.md)**
-* 🛠️ **[TDD Subagent Orchestration Skill](file:///.agents/skills/tdd-agent/SKILL.md)**
 * 📝 **[Naming Conventions Guidelines](file:///.agents/rules/naming_conventions.md)**
 * ⚙️ **[Build Configuration Guidelines](file:///.agents/rules/build_config.md)**
 * 🔀 **[KMP expect/actual Platform Bridge](file:///.agents/skills/kmp-expect-actual/SKILL.md)** *(Dormant — activate only for new hardware APIs)*
@@ -34,9 +31,9 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 ## 3. Core Developer Checklist
 
 ### Do
-* **Spawn Dedicated Subagents for TDD**: Always produce a dedicated subagent for any feature development or bug fix task rather than implementing in the primary thread.
-* **Zero-Interruption Autonomous Workflow (Auto-Approve by Default)**: For any TDD, SDD, feature development, or bug fix task, auto-approve specifications, plans, and architecture choices based on project conventions and design references. Never pause or interrupt the user with intermediate questions, approval modals, or confirmation halts; execute end-to-end and return only the final verified results.
-* **Autonomous Subagent Execution**: Require dedicated subagents (TDD/SDD) to execute end-to-end autonomously (spec lock -> RED -> GREEN -> REFACTOR -> test verification) without requesting intermediate approvals or pausing.
+* **User Plan Approval First**: For any feature, bug fix, or architectural task, formulate a detailed implementation plan or spec first (with Acceptance Criteria Matrix) and present it to the user. Never auto-approve plans or specifications without explicit user acceptance.
+* **Spawn Dedicated Subagents for TDD**: Upon plan approval, always produce a dedicated subagent for any feature development or bug fix task rather than implementing in the primary thread.
+* **Zero-Interruption Autonomous Subagent Execution**: The spawned subagent executes end-to-end autonomously (RED -> GREEN -> REFACTOR -> test verification) without requesting intermediate approvals or pausing to ask permission before executing shell commands.
 * **Recreate Host Activities**: Trigger full resource reloads (e.g. `activity.recreate()`) on dynamic configuration shifts such as language/locale switches.
 * **Map Data Layers**: Fully map DTO/entity representations to domain models inside data layers using mapping extension functions (e.g., `toDomain()`) before returning.
 * **Main Safety**: Always ensure all Use Cases and Repository interfaces are main-safe and run non-blocking.
@@ -46,8 +43,8 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 ### Don't
 * **No Platform Imports in Domain**: Do not import Android SDK libraries (like `android.*`) or platform components in `commonMain` or the `domain` module.
 * **No Repository Bypassing**: ViewModels must never directly consume Repositories; always encapsulate business logic in Use Cases.
-* **No User Interruptions During TDD/SDD**: Never halt to ask the user for intermediate approvals, clarifications, or step-by-step permissions when executing TDD or SDD workflows; auto-approve and execute straight through to completion.
-* **No Mid-Flight Approval Halts**: Do not configure or prompt subagents to ask for approval between layers, spec drafting, or test phases; subagents run continuously to completion.
+* **No Plan Auto-Approval**: Never auto-approve implementation plans or rush into code execution before the user reviews and confirms the plan.
+* **No Mid-Flight Subagent Halts**: Do not configure or prompt subagents to ask for permission between layers, test phases, or before executing shell commands; subagents run continuously to completion.
 * **No Raw Exceptions in UI**: Never propagate raw SQL, filesystem, or network exceptions up to ViewModels; handle exceptions at repository boundaries.
 * **No Mocking Libraries**: Do not import mock frameworks (like Mockk or Mockito) in `commonTest`; write clean, in-memory fake classes instead.
 * **No Unstable UI Params**: Avoid passing unstable collection types (such as raw, standard `List` objects) directly into stateless composables without stable keys or wrappers.
