@@ -2,14 +2,17 @@ name: Test, Build & Deploy to Google Play Store
 
 on:
   pull_request:
-    branches: [ "release" ]
+    branches: [ "master" ]
     types: [ closed ]
   workflow_dispatch:
+
+permissions:yes
+  contents: write
 
 jobs:
   test:
     name: Run Unit Tests
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -23,17 +26,18 @@ jobs:
           cache: 'gradle'
 
       - name: Run KMP & Android Unit Tests
-        run: ./gradlew test
+        run: ./gradlew :shared:testAndroidHostTest :androidApp:test --stacktrace
 
   build-and-deploy:
     name: Build Signed AAB & Deploy to Play Store
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop')
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
+          ref: master
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up JDK 17
@@ -43,17 +47,17 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Increment Version Number (+0.1)
+      - name: Increment Version Number (+0.0.1)
         run: |
           python3 -c '
           import re
           with open("version.properties", "r") as f:
               content = f.read()
           
-          minor = int(re.search(r"MINOR=(\d+)", content).group(1)) + 1
+          patch = int(re.search(r"PATCH=(\d+)", content).group(1)) + 1
           code = int(re.search(r"VERSION_CODE=(\d+)", content).group(1)) + 1
           
-          content = re.sub(r"MINOR=\d+", f"MINOR={minor}", content)
+          content = re.sub(r"PATCH=\d+", f"PATCH={patch}", content)
           content = re.sub(r"VERSION_CODE=\d+", f"VERSION_CODE={code}", content)
           
           with open("version.properties", "w") as f:
@@ -62,8 +66,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add version.properties
-          git commit -m "chore(release): bump version to +0.1 [skip ci]" || true
-          git push origin main || true
+          git commit -m "chore(release): bump version to +0.0.1 [skip ci]" || true
+          git push origin master
 
       - name: Decode Keystore File
         run: |
