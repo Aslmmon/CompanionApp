@@ -25,7 +25,8 @@ import qurancompanion.shared.generated.resources.settings_trigger_notification
 fun DebugSettingsSection(
     onSimulateNextDay: () -> Unit,
     onTriggerNotification: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isNotificationEnabled: Boolean = true
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -47,6 +48,7 @@ fun DebugSettingsSection(
 
             Button(
                 onClick = onTriggerNotification,
+                enabled = isNotificationEnabled,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(

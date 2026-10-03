@@ -64,7 +64,7 @@ val appModule = module {
     single { ScheduleDailyReminderUseCase(get(), get(), get()) }
     single { SchedulePeriodicReminderUseCase(get(), get(), get()) }
     single { RequestNotificationPermissionUseCase(get()) }
-    single { TriggerImmediateNotificationUseCase(get(), get()) }
+    single { TriggerImmediateNotificationUseCase(get(), get(), get()) }
 
     // Presentation layer
     viewModel { SplashViewModel() }

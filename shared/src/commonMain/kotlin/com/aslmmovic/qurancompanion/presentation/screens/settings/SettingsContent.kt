@@ -77,10 +77,13 @@ fun SettingsContent(
                 buildType = uiState.buildType
             )
 
-            DebugSettingsSection(
-                onSimulateNextDay = onSimulateNextDay,
-                onTriggerNotification = onTriggerNotification
-            )
+            if (uiState.isDebug) {
+                DebugSettingsSection(
+                    onSimulateNextDay = onSimulateNextDay,
+                    onTriggerNotification = onTriggerNotification,
+                    isNotificationEnabled = uiState.userPreferences.isReminderEnabled
+                )
+            }
 
             Spacer(modifier = Modifier.height(32.dp))
         }
@@ -99,7 +102,6 @@ fun SettingsContent(
                 initialMinute = uiState.userPreferences.reminderMinute,
                 onConfirm = { hour, minute ->
                     onUpdateReminderTime(hour, minute)
-                    onToggleReminder(true)
                 },
                 onDismissRequest = { showTimePickerDialog = false }
             )

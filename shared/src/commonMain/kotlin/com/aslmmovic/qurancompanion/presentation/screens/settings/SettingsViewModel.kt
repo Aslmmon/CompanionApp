@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.map
 import com.aslmmovic.qurancompanion.domain.util.AppBuildInfoProvider
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class SettingsViewModel(
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
@@ -58,9 +60,13 @@ class SettingsViewModel(
             )
         )
 
+    private val preferencesMutex = Mutex()
+
     private suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences) {
-        val current = getUserPreferencesUseCase().first()
-        savePreferencesUseCase(transform(current))
+        preferencesMutex.withLock {
+            val current = getUserPreferencesUseCase().first()
+            savePreferencesUseCase(transform(current))
+        }
     }
 
     fun onToggleReminder(isEnabled: Boolean) {
@@ -75,7 +81,14 @@ class SettingsViewModel(
 
     fun onUpdateReminderTime(hour: Int, minute: Int) {
         viewModelScope.launch {
-            updatePreferences { it.copy(reminderHour = hour, reminderMinute = minute) }
+            requestNotificationPermissionUseCase()
+            updatePreferences {
+                it.copy(
+                    reminderHour = hour,
+                    reminderMinute = minute,
+                    isReminderEnabled = true
+                )
+            }
             scheduleDailyReminderUseCase()
         }
     }
@@ -100,6 +113,7 @@ class SettingsViewModel(
     }
 
     fun onTriggerNotification() {
+        if (!uiState.value.userPreferences.isReminderEnabled) return
         viewModelScope.launch {
             triggerImmediateNotificationUseCase()
         }

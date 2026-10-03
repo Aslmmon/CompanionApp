@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 class UserPreferencesRepositoryImpl(
@@ -21,6 +23,7 @@ class UserPreferencesRepositoryImpl(
 
     private val _preferences = MutableStateFlow(UserPreferences())
     private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
+    private val saveMutex = Mutex()
 
     init {
         scope.launch {
@@ -31,15 +34,17 @@ class UserPreferencesRepositoryImpl(
     override fun getUserPreferences(): Flow<UserPreferences> = _preferences.asStateFlow()
 
     override suspend fun saveUserPreferences(preferences: UserPreferences) = withContext(ioDispatcher) {
-        try {
-            storage.putInt(KEY_REMINDER_HOUR, preferences.reminderHour)
-            storage.putInt(KEY_REMINDER_MINUTE, preferences.reminderMinute)
-            storage.putBoolean(KEY_REMINDER_ENABLED, preferences.isReminderEnabled)
-            preferences.preferredLanguage?.let { storage.putString(KEY_PREFERRED_LANGUAGE, it) }
-            storage.putString(KEY_DARK_MODE, preferences.isDarkMode?.toString() ?: "system")
-            _preferences.value = preferences
-        } catch (e: Exception) {
-            // handle exception silently or log
+        saveMutex.withLock {
+            try {
+                storage.putInt(KEY_REMINDER_HOUR, preferences.reminderHour)
+                storage.putInt(KEY_REMINDER_MINUTE, preferences.reminderMinute)
+                storage.putBoolean(KEY_REMINDER_ENABLED, preferences.isReminderEnabled)
+                preferences.preferredLanguage?.let { storage.putString(KEY_PREFERRED_LANGUAGE, it) }
+                storage.putString(KEY_DARK_MODE, preferences.isDarkMode?.toString() ?: "system")
+                _preferences.value = preferences
+            } catch (e: Exception) {
+                // handle exception silently or log
+            }
         }
     }
 

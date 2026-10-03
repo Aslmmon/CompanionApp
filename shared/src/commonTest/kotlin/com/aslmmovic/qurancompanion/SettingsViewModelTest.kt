@@ -28,6 +28,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -58,7 +59,7 @@ class SettingsViewModelTest {
         savePreferencesUseCase = SavePreferencesUseCase(fakePrefsRepo),
         scheduleDailyReminderUseCase = ScheduleDailyReminderUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
         requestNotificationPermissionUseCase = RequestNotificationPermissionUseCase(fakeScheduler),
-        triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakeJourneyRepo),
+        triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
         localeProvider = fakeLocaleProvider,
         appBuildInfoProvider = fakeBuildInfoProvider
@@ -221,6 +222,45 @@ class SettingsViewModelTest {
 
         assertEquals("Sahaba Companion: Uthman ibn Affan", fakeScheduler.immediateNotificationTitle)
         assertEquals("The Possessor of Two Lights", fakeScheduler.immediateNotificationBody)
+    }
+
+    @Test
+    fun `SettingsViewModel onTriggerNotification does not trigger when reminder is disabled`() = runTest {
+        fakePrefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = false))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onTriggerNotification()
+        advanceUntilIdle()
+
+        assertNull(fakeScheduler.immediateNotificationTitle)
+        assertNull(fakeScheduler.immediateNotificationBody)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `SettingsViewModel onUpdateReminderTime sets reminder time and enables reminder`() = runTest {
+        fakePrefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = false, reminderHour = 8, reminderMinute = 0))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.userPreferences.isReminderEnabled)
+
+        viewModel.onUpdateReminderTime(21, 45)
+        advanceUntilIdle()
+
+        assertEquals(21, viewModel.uiState.value.userPreferences.reminderHour)
+        assertEquals(45, viewModel.uiState.value.userPreferences.reminderMinute)
+        assertTrue(viewModel.uiState.value.userPreferences.isReminderEnabled)
+        assertTrue(fakePrefsRepo.getUserPreferences().first().isReminderEnabled)
+        assertTrue(fakeScheduler.permissionRequested)
+        assertEquals(21, fakeScheduler.scheduledHour)
+        assertEquals(45, fakeScheduler.scheduledMinute)
+
+        collectJob.cancel()
     }
 
     @Test

@@ -44,9 +44,15 @@ class RequestNotificationPermissionUseCase(
 
 class TriggerImmediateNotificationUseCase(
     private val notificationScheduler: NotificationScheduler,
+    private val preferencesRepository: UserPreferencesRepository,
     private val journeyRepository: JourneyRepository
 ) {
-    suspend operator fun invoke(customTitle: String? = null, customBody: String? = null) {
+    suspend operator fun invoke(customTitle: String? = null, customBody: String? = null): Boolean {
+        val preferences = preferencesRepository.getUserPreferences().first()
+        if (!preferences.isReminderEnabled) {
+            return false
+        }
+
         notificationScheduler.requestNotificationPermission()
         val todayJourney = journeyRepository.getTodayJourney()
         val title = customTitle ?: if (todayJourney != null) {
@@ -57,6 +63,7 @@ class TriggerImmediateNotificationUseCase(
         val body = customBody ?: (todayJourney?.subtitle ?: "Discover today's journey with the Sahaba.")
 
         notificationScheduler.showImmediateNotification(title = title, body = body)
+        return true
     }
 }
 
