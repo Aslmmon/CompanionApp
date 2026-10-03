@@ -35,6 +35,7 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 
 ### Do
 * **Spawn Dedicated Subagents for TDD**: Always produce a dedicated subagent for any feature development or bug fix task rather than implementing in the primary thread.
+* **Zero-Interruption Autonomous Workflow (Auto-Approve by Default)**: For any TDD, SDD, feature development, or bug fix task, auto-approve specifications, plans, and architecture choices based on project conventions and design references. Never pause or interrupt the user with intermediate questions, approval modals, or confirmation halts; execute end-to-end and return only the final verified results.
 * **Autonomous Subagent Execution**: Require dedicated subagents (TDD/SDD) to execute end-to-end autonomously (spec lock -> RED -> GREEN -> REFACTOR -> test verification) without requesting intermediate approvals or pausing.
 * **Recreate Host Activities**: Trigger full resource reloads (e.g. `activity.recreate()`) on dynamic configuration shifts such as language/locale switches.
 * **Map Data Layers**: Fully map DTO/entity representations to domain models inside data layers using mapping extension functions (e.g., `toDomain()`) before returning.
@@ -45,6 +46,7 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 ### Don't
 * **No Platform Imports in Domain**: Do not import Android SDK libraries (like `android.*`) or platform components in `commonMain` or the `domain` module.
 * **No Repository Bypassing**: ViewModels must never directly consume Repositories; always encapsulate business logic in Use Cases.
+* **No User Interruptions During TDD/SDD**: Never halt to ask the user for intermediate approvals, clarifications, or step-by-step permissions when executing TDD or SDD workflows; auto-approve and execute straight through to completion.
 * **No Mid-Flight Approval Halts**: Do not configure or prompt subagents to ask for approval between layers, spec drafting, or test phases; subagents run continuously to completion.
 * **No Raw Exceptions in UI**: Never propagate raw SQL, filesystem, or network exceptions up to ViewModels; handle exceptions at repository boundaries.
 * **No Mocking Libraries**: Do not import mock frameworks (like Mockk or Mockito) in `commonTest`; write clean, in-memory fake classes instead.

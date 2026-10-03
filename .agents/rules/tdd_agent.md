@@ -59,13 +59,14 @@ flowchart TD
 
 ---
 
-## 4. Zero-Approval Autonomous Execution Mandate
+## 4. Zero-Approval Autonomous Execution Mandate (Auto-Approve by Default)
 
-Subagents spawned for TDD or SDD tasks must operate with complete autonomy:
-- **Never Prompt for Intermediate Approval**: The subagent must never pause execution to ask the developer or orchestrator for approval, permission, or feedback between phases (RED, GREEN, REFACTOR), before file creation, or after authoring specs.
-- **No Interactive Tools**: The subagent must not invoke interactive questioning tools (e.g. `ask_question`) to seek permission.
+Both the primary orchestrator and the spawned subagents must operate with complete autonomy:
+- **Auto-Approve by Default**: Do not halt execution to prompt the developer for manual approval of plans, specifications, or intermediate design choices. Make sound engineering decisions adhering strictly to project guidelines, Figma mockups, and architectural conventions.
+- **Never Prompt for Intermediate Approval**: Neither the orchestrator nor the subagent may pause execution to ask the developer for permission or feedback between phases (RED, GREEN, REFACTOR), before file creation, or after drafting specs.
+- **No Interactive Interruption Tools**: Do not invoke interactive questioning tools (e.g. `ask_question`) or blocking approval requests (`RequestFeedback: true`) during feature implementation or bug fixing workflows.
 - **Self-Healing Iteration**: When encountering compilation errors or failing test assertions, the subagent must inspect Gradle output, iterate on the code, and re-run tests self-sufficiently without human intervention.
-- **Single Completion Delivery**: The subagent communicates back to the parent orchestrator via `send_message` only upon completing the task with all tests passing.
+- **Single Final Delivery**: Communicate back only upon completing the entire task with 100% passing tests and verified results.
 
 ---
 
