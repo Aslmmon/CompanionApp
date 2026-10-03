@@ -1,17 +1,16 @@
 name: Test, Build & Deploy to Google Play Store
 
 on:
-  pull_request:
+  push:
     branches: [ "master" ]
-    types: [ closed ]
   workflow_dispatch:
+
 permissions:
   contents: write
 
 jobs:
   test:
     name: Run Unit Tests
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -29,7 +28,6 @@ jobs:
 
   build-and-deploy:
     name: Build Signed AAB & Deploy to Play Store
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop')
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -81,7 +79,7 @@ jobs:
         run: ./gradlew :androidApp:bundleRelease
 
       - name: Upload to Google Play Store
-        uses: rslabs/action-google-play-publish@v1
+        uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_CONFIG_JSON }}
           packageName: com.aslmmovic.qurancompanion
