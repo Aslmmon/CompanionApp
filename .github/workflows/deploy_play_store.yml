@@ -6,7 +6,7 @@ on:
     types: [ closed ]
   workflow_dispatch:
 
-permissions:yes
+permissions:
   contents: write
 
 jobs:
