@@ -23,10 +23,17 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,6 +61,19 @@ fun LibraryContent(
     onDismissDetail: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var textFieldValue by remember {
+        mutableStateOf(TextFieldValue(uiState.searchQuery, selection = TextRange(uiState.searchQuery.length)))
+    }
+
+    LaunchedEffect(uiState.searchQuery) {
+        if (uiState.searchQuery != textFieldValue.text) {
+            textFieldValue = TextFieldValue(
+                text = uiState.searchQuery,
+                selection = TextRange(uiState.searchQuery.length)
+            )
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -73,8 +93,13 @@ fun LibraryContent(
 
             // Search Bar
             OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = onSearchQueryChanged,
+                value = textFieldValue,
+                onValueChange = { newValue ->
+                    textFieldValue = newValue
+                    if (newValue.text != uiState.searchQuery) {
+                        onSearchQueryChanged(newValue.text)
+                    }
+                },
                 placeholder = {
                     Text(
                         text = stringResource(Res.string.library_search_placeholder),
@@ -91,7 +116,7 @@ fun LibraryContent(
                     )
                 },
                 trailingIcon = {
-                    if (uiState.searchQuery.isNotEmpty()) {
+                    if (textFieldValue.text.isNotEmpty()) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_close),
                             contentDescription = "Clear",
@@ -99,7 +124,10 @@ fun LibraryContent(
                             modifier = Modifier
                                 .size(20.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .clickable { onSearchQueryChanged("") }
+                                .clickable {
+                                    textFieldValue = TextFieldValue("")
+                                    onSearchQueryChanged("")
+                                }
                         )
                     }
                 },
