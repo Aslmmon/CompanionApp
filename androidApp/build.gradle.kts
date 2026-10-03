@@ -65,7 +65,8 @@ android {
                         ?: project.findProperty("KEYSTORE_PASSWORD")?.toString() ?: ""
                     keyAlias = (keystoreProps["keyAlias"] as? String) 
                         ?: System.getenv("KEY_ALIAS") 
-                        ?: project.findProperty("KEY_ALIAS")?.toString() ?: ""
+                        ?: project.findProperty("KEY_ALIAS")?.toString()
+                        ?: "sahaba-upload-key"
                     keyPassword = (keystoreProps["keyPassword"] as? String) 
                         ?: System.getenv("KEY_PASSWORD") 
                         ?: project.findProperty("KEY_PASSWORD")?.toString() ?: ""

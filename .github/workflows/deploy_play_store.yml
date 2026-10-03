@@ -66,17 +66,20 @@ jobs:
           git commit -m "chore(release): bump version to +0.0.1 [skip ci]" || true
           git push origin master
 
-      - name: Decode Keystore File
+      - name: Decode Keystore & Configure Signing
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '\r\n ' | base64 -d > release-upload.jks
+          ls -la release-upload.jks
+          
+          cat <<EOF > keystore.properties
+          storeFile=release-upload.jks
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS || 'sahaba-upload-key' }}
+          keyPassword=${{ secrets.KEY_PASSWORD || secrets.KEYSTORE_PASSWORD }}
+          EOF
 
       - name: Build Signed AAB
-        env:
-          KEYSTORE_FILE_PATH: release.keystore
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew :androidApp:bundleRelease
+        run: ./gradlew :androidApp:bundleRelease --stacktrace
 
       - name: Upload to Google Play Store
         uses: r0adkll/upload-google-play@v1
