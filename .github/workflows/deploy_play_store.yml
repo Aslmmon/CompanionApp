@@ -4,6 +4,16 @@ on:
   push:
     branches: [ "master" ]
   workflow_dispatch:
+    inputs:
+      track:
+        description: 'Google Play Release Track'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - closed
+          - production
 
 permissions:
   contents: write
@@ -87,5 +97,5 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_CONFIG_JSON }}
           packageName: com.aslmmovic.qurancompanion
           releaseFiles: androidApp/build/outputs/bundle/release/androidApp-release.aab
-          track: internal
+          track: ${{ github.event.inputs.track || 'internal' }}
           status: completed
