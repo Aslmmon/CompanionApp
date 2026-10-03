@@ -66,3 +66,26 @@ fun testUserPreferences(
     preferredLanguage = preferredLanguage,
     isDarkMode = isDarkMode
 )
+
+/**
+ * Convenience factory for creating test [Sahaba] instances.
+ */
+fun testSahaba(
+    id: String = "abu_bakr",
+    name: String = "Abu Bakr as-Siddiq",
+    arabicName: String = "أبو بكر الصديق",
+    initialLetterArabic: String = "أ",
+    epithet: String = "As-Siddiq (The Truthful)",
+    category: com.aslmmovic.qurancompanion.domain.model.SahabaCategory = com.aslmmovic.qurancompanion.domain.model.SahabaCategory.TEN_PROMISED,
+    journeyCount: Int = 14,
+    bio: String = "First caliph of Islam"
+) = com.aslmmovic.qurancompanion.domain.model.Sahaba(
+    id = id,
+    name = name,
+    arabicName = arabicName,
+    initialLetterArabic = initialLetterArabic,
+    epithet = epithet,
+    category = category,
+    journeyCount = journeyCount,
+    bio = bio
+)

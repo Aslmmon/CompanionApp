@@ -26,6 +26,13 @@ import com.aslmmovic.qurancompanion.presentation.screens.language.LanguageViewMo
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsViewModel
 import com.aslmmovic.qurancompanion.presentation.screens.splash.SplashViewModel
 import com.aslmmovic.qurancompanion.presentation.viewmodel.AppViewModel
+import com.aslmmovic.qurancompanion.data.datasource.SahabaLocalDataSource
+import com.aslmmovic.qurancompanion.data.datasource.ResourceSahabaLocalDataSource
+import com.aslmmovic.qurancompanion.data.repository.SahabaRepositoryImpl
+import com.aslmmovic.qurancompanion.domain.repository.SahabaRepository
+import com.aslmmovic.qurancompanion.domain.usecase.GetSahabaCatalogUseCase
+import com.aslmmovic.qurancompanion.domain.usecase.GetSahabaDetailUseCase
+import com.aslmmovic.qurancompanion.presentation.screens.library.LibraryViewModel
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
@@ -37,6 +44,7 @@ val appModule = module {
 
     // Data layer — data sources
     single<JourneyLocalDataSource> { ResourceJourneyLocalDataSource(get()) }
+    single<SahabaLocalDataSource> { ResourceSahabaLocalDataSource(get()) }
 
     // DateTime Provider
     single<com.aslmmovic.qurancompanion.domain.util.DateTimeProvider> { com.aslmmovic.qurancompanion.domain.util.SystemDateTimeProvider() }
@@ -45,6 +53,7 @@ val appModule = module {
     // KeyValueStorage and LocaleProvider are provided by platform-specific modules
     single { UserPreferencesRepositoryImpl(get()) } bind UserPreferencesRepository::class
     single { JourneyRepositoryImpl(get(), get(), get(), get()) } bind JourneyRepository::class
+    single { SahabaRepositoryImpl(get(), get()) } bind SahabaRepository::class
 
     // Domain layer — preferences
     single { GetUserPreferencesUseCase(get()) }
@@ -60,6 +69,10 @@ val appModule = module {
     single { GetDebugDayOffsetUseCase(get()) }
     single { IncrementDebugDayOffsetUseCase(get()) }
 
+    // Domain layer — sahaba
+    single { GetSahabaCatalogUseCase(get()) }
+    single { GetSahabaDetailUseCase(get()) }
+
     // Domain layer — notifications
     single { ScheduleDailyReminderUseCase(get(), get(), get()) }
     single { SchedulePeriodicReminderUseCase(get(), get(), get()) }
@@ -73,4 +86,5 @@ val appModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JourneyViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { LibraryViewModel(get()) }
 }

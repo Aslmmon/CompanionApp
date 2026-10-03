@@ -1,0 +1,162 @@
+[
+  {
+    "id": "abu_bakr",
+    "name": "Abu Bakr as-Siddiq",
+    "arabicName": "أبو بكر الصديق",
+    "initialLetterArabic": "أ",
+    "epithet": "As-Siddiq (The Truthful)",
+    "category": "TEN_PROMISED",
+    "journeyCount": 14,
+    "bio": "The closest companion to Prophet Muhammad (ﷺ), first adult male to accept Islam, and the first Rightly Guided Caliph. Known for his unwavering faith and boundless generosity."
+  },
+  {
+    "id": "umar",
+    "name": "Umar ibn al-Khattab",
+    "arabicName": "عمر بن الخطاب",
+    "initialLetterArabic": "ع",
+    "epithet": "Al-Faruq (The Distinguisher)",
+    "category": "TEN_PROMISED",
+    "journeyCount": 12,
+    "bio": "The second Rightly Guided Caliph whose conversion strengthened early Islam. Renowned worldwide for his uncompromising justice, wisdom, and leadership."
+  },
+  {
+    "id": "uthman",
+    "name": "Uthman ibn Affan",
+    "arabicName": "عثمان بن عفان",
+    "initialLetterArabic": "ع",
+    "epithet": "Dhun-Nurayn (The Possessor of Two Lights)",
+    "category": "TEN_PROMISED",
+    "journeyCount": 10,
+    "bio": "The third Rightly Guided Caliph who married two daughters of the Prophet (ﷺ). Celebrated for his humility, extraordinary generosity, and compiling the Quran into a standardized mushaf."
+  },
+  {
+    "id": "ali",
+    "name": "Ali ibn Abi Talib",
+    "arabicName": "علي بن أبي طالب",
+    "initialLetterArabic": "ع",
+    "epithet": "Lion of Allah & Gateway to Knowledge",
+    "category": "TEN_PROMISED",
+    "journeyCount": 12,
+    "bio": "The fourth Rightly Guided Caliph, cousin and son-in-law of the Prophet (ﷺ). The first youth to embrace Islam, legendary for his valor on the battlefield, profound wisdom, and eloquence."
+  },
+  {
+    "id": "talha",
+    "name": "Talha ibn Ubaydullah",
+    "arabicName": "طلحة بن عبيد الله",
+    "initialLetterArabic": "ط",
+    "epithet": "The Living Martyr (Talhat al-Khayr)",
+    "category": "TEN_PROMISED",
+    "journeyCount": 8,
+    "bio": "A hero of the Battle of Uhud who shielded the Prophet (ﷺ) with his own hands sustaining dozens of wounds. Renowned for his vast generosity to the destitute."
+  },
+  {
+    "id": "zubayr",
+    "name": "Az-Zubayr ibn al-Awwam",
+    "arabicName": "الزبير بن العوام",
+    "initialLetterArabic": "ز",
+    "epithet": "Hawariyy Rasulillah (Disciple of the Prophet)",
+    "category": "TEN_PROMISED",
+    "journeyCount": 8,
+    "bio": "The first companion to draw his sword in Islam. Cousin of the Prophet (ﷺ) whom the Prophet described as his disciple, fearless in defense of the faith."
+  },
+  {
+    "id": "abdur_rahman",
+    "name": "Abdur-Rahman ibn Awf",
+    "arabicName": "عبد الرحمن بن عوف",
+    "initialLetterArabic": "ع",
+    "epithet": "The Blessed Merchant",
+    "category": "TEN_PROMISED",
+    "journeyCount": 7,
+    "bio": "An early Muslim who migrated to Medina empty-handed and built a thriving, ethical trade empire, continuously funding jihad, emancipating captives, and providing for the needy."
+  },
+  {
+    "id": "sad_ibn_abi_waqqas",
+    "name": "Sa'd ibn Abi Waqqas",
+    "arabicName": "سعد بن أبي وقاص",
+    "initialLetterArabic": "س",
+    "epithet": "Knight of Islam & Conqueror of Qadisiyyah",
+    "category": "TEN_PROMISED",
+    "journeyCount": 8,
+    "bio": "The first to shoot an arrow in the defense of Islam, maternal uncle of the Prophet (ﷺ) whose prayers were answered, and victorious supreme commander at al-Qadisiyyah."
+  },
+  {
+    "id": "saeed_ibn_zayd",
+    "name": "Saeed ibn Zayd",
+    "arabicName": "سعيد بن زيد",
+    "initialLetterArabic": "س",
+    "epithet": "The Upright Pioneer",
+    "category": "TEN_PROMISED",
+    "journeyCount": 6,
+    "bio": "Son of Zayd ibn Amr who upheld monotheism before revelation. Accepted Islam early alongside his wife Fatima bint al-Khattab and was an earnest defender of the truth."
+  },
+  {
+    "id": "abu_ubaidah",
+    "name": "Abu Ubaidah ibn al-Jarrah",
+    "arabicName": "أبو عبيدة بن الجراح",
+    "initialLetterArabic": "أ",
+    "epithet": "Amin al-Ummah (Trustee of the Nation)",
+    "category": "TEN_PROMISED",
+    "journeyCount": 8,
+    "bio": "Designated by Prophet Muhammad (ﷺ) as the trustworthy guardian of the Muslim community. Renowned for his selfless humility and brilliant leadership in the Levant."
+  },
+  {
+    "id": "khadija",
+    "name": "Khadija bint Khuwaylid",
+    "arabicName": "خديجة بنت خويلد",
+    "initialLetterArabic": "خ",
+    "epithet": "Mother of the Believers & At-Tahirah",
+    "category": "MOTHERS_OF_BELIEVERS",
+    "journeyCount": 10,
+    "bio": "The first person to believe in the Prophet's mission, his steadfast companion and solace. Supported the fledgling Muslim community through hardship with her wealth and devotion."
+  },
+  {
+    "id": "aisha",
+    "name": "Aisha bint Abi Bakr",
+    "arabicName": "عائشة بنت أبي بكر",
+    "initialLetterArabic": "ع",
+    "epithet": "Mother of the Believers & As-Siddiqah",
+    "category": "MOTHERS_OF_BELIEVERS",
+    "journeyCount": 11,
+    "bio": "The scholarly Mother of the Believers who narrated over two thousand authentic hadiths. A prominent jurist, teacher, and eloquent speaker of the early Muslim community."
+  },
+  {
+    "id": "bilal",
+    "name": "Bilal ibn Rabah",
+    "arabicName": "بلال بن رباح",
+    "initialLetterArabic": "ب",
+    "epithet": "Mu'adhin of the Prophet & Voice of Tawhid",
+    "category": "MUHAJIRUN",
+    "journeyCount": 9,
+    "bio": "An enslaved Abyssinian who endured brutal torture in Mecca while proclaiming 'Ahad, Ahad'. Emancipated by Abu Bakr, he was chosen as Islam's very first Mu'adhin."
+  },
+  {
+    "id": "fatima",
+    "name": "Fatima az-Zahra",
+    "arabicName": "فاطمة الزهراء",
+    "initialLetterArabic": "ف",
+    "epithet": "Leader of the Women of Paradise",
+    "category": "MUHAJIRUN",
+    "journeyCount": 8,
+    "bio": "Beloved daughter of Prophet Muhammad (ﷺ) and Khadija, wife of Ali, and mother of Hasan and Husayn. Revered for her intense piety, humility, and steadfastness."
+  },
+  {
+    "id": "abu_ayyub",
+    "name": "Abu Ayyub al-Ansari",
+    "arabicName": "أبو أيوب الأنصاري",
+    "initialLetterArabic": "أ",
+    "epithet": "Host of the Messenger of Allah",
+    "category": "ANSAR",
+    "journeyCount": 7,
+    "bio": "The noble companion from Medina in whose home the Prophet (ﷺ) resided upon his migration. Devoted his life to faith and service until his passing outside Constantinople."
+  },
+  {
+    "id": "sad_ibn_muadh",
+    "name": "Sa'd ibn Mu'adh",
+    "arabicName": "سعد بن معاذ",
+    "initialLetterArabic": "س",
+    "epithet": "Leader of the Aws & Shaker of the Throne",
+    "category": "ANSAR",
+    "journeyCount": 7,
+    "bio": "Chieftain of the Aws tribe who accepted Islam and led his entire clan to faith. His passing was so momentous that the Throne of the Most Merciful shook in honor of his soul."
+  }
+]

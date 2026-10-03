@@ -109,4 +109,16 @@
     <string name="settings_push_notifications_title">الإشعارات</string>
     <string name="settings_app_info_brand">صحابة رسول الله</string>
     <string name="settings_app_info_version">الإصدار %1$s (بناء %2$d) • %3$s</string>
+
+    <!-- Library / Encyclopedia (FEAT-008 / SPEC-008) -->
+    <string name="library_title">المكتبة</string>
+    <string name="library_search_placeholder">ابحث عن صحابي بالاسم أو السمة...</string>
+    <string name="library_no_results">لم يتم العثور على صحابة</string>
+    <string name="library_journeys_suffix">رحلات</string>
+    <string name="category_all">الكل</string>
+    <string name="category_ten_promised">العشرة المبشرون</string>
+    <string name="category_mothers_of_believers">أمهات المؤمنين</string>
+    <string name="category_ansar">الأنصار</string>
+    <string name="category_muhajirun">المهاجرون</string>
+    <string name="sahaba_detail_close">إغلاق</string>
 </resources>

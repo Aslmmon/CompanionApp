@@ -109,4 +109,16 @@
     <string name="settings_push_notifications_title">Push Notifications</string>
     <string name="settings_app_info_brand">SAHABA COMPANIONS</string>
     <string name="settings_app_info_version">Version %1$s (Build %2$d) • %3$s</string>
+
+    <!-- Library / Encyclopedia (FEAT-008 / SPEC-008) -->
+    <string name="library_title">Library</string>
+    <string name="library_search_placeholder">Search Sahaba by name or trait...</string>
+    <string name="library_no_results">No companions found</string>
+    <string name="library_journeys_suffix">JOURNEYS</string>
+    <string name="category_all">All</string>
+    <string name="category_ten_promised">Ten Promised</string>
+    <string name="category_mothers_of_believers">Mothers of Believers</string>
+    <string name="category_ansar">Ansar</string>
+    <string name="category_muhajirun">Muhajirun</string>
+    <string name="sahaba_detail_close">Close</string>
 </resources>

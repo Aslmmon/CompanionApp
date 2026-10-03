@@ -19,8 +19,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.aslmmovic.qurancompanion.presentation.screens.home.HomeScreen
+import com.aslmmovic.qurancompanion.presentation.screens.library.LibraryScreen
 import com.aslmmovic.qurancompanion.presentation.screens.placeholder.HabitsPlaceholderScreen
-import com.aslmmovic.qurancompanion.presentation.screens.placeholder.LibraryPlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
 import com.aslmmovic.qurancompanion.ui.components.CustomBottomNavigation
 
@@ -88,7 +88,7 @@ fun MainNavigationScaffold(
                 )
             }
             composable(MainTab.Library.route) {
-                LibraryPlaceholderScreen()
+                LibraryScreen()
             }
             composable(MainTab.Habits.route) {
                 HabitsPlaceholderScreen()
