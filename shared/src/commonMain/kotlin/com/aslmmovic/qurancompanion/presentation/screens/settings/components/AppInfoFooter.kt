@@ -17,6 +17,7 @@ import org.jetbrains.compose.resources.stringResource
 import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.settings_app_info_brand
 import qurancompanion.shared.generated.resources.settings_app_info_version
+import qurancompanion.shared.generated.resources.welcome_title
 
 @Composable
 fun AppInfoFooter(
@@ -33,7 +34,7 @@ fun AppInfoFooter(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
-            text = stringResource(Res.string.settings_app_info_brand),
+            text = stringResource(Res.string.welcome_title),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             letterSpacing = 2.sp,
