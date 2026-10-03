@@ -12,27 +12,36 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.AppearanceSection
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.AppInfoFooter
 import com.aslmmovic.qurancompanion.presentation.screens.settings.components.DebugSettingsSection
-import com.aslmmovic.qurancompanion.presentation.screens.settings.components.LanguageSettingsSection
-import com.aslmmovic.qurancompanion.presentation.screens.settings.components.ReminderSettingsSection
-import com.aslmmovic.qurancompanion.presentation.screens.settings.components.SettingsTopBar
-import com.aslmmovic.qurancompanion.presentation.screens.settings.components.ThemeSettingsSection
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.LanguageBottomSheet
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.NotificationSection
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.ReminderTimePickerDialog
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.SettingsHeader
 
 @Composable
 fun SettingsContent(
     uiState: SettingsUiState,
-    onBackClick: () -> Unit,
-    onUpdateReminderTime: (Int, Int) -> Unit,
+    onToggleTheme: (Boolean) -> Unit,
     onLanguageSelected: (String) -> Unit,
-    onThemeToggle: (Boolean) -> Unit,
+    onUpdateReminderTime: (Int, Int) -> Unit,
+    onToggleReminder: (Boolean) -> Unit,
     onSimulateNextDay: () -> Unit,
     onTriggerNotification: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit = {}
 ) {
+    var showLanguageSheet by remember { mutableStateOf(false) }
+    var showTimePickerDialog by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -41,23 +50,31 @@ fun SettingsContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 16.dp)
+                .padding(horizontal = 20.dp, vertical = 16.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            SettingsTopBar(onBackClick = onBackClick)
+            SettingsHeader()
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            LanguageSettingsSection(
+            AppearanceSection(
+                isDarkMode = uiState.userPreferences.isDarkMode ?: false,
                 preferredLanguage = uiState.userPreferences.preferredLanguage,
-                onLanguageSelected = onLanguageSelected
+                onThemeToggle = onToggleTheme,
+                onOpenLanguageSheet = { showLanguageSheet = true }
             )
 
-            ThemeSettingsSection(
-                isDarkMode = uiState.userPreferences.isDarkMode,
-                onThemeToggle = onThemeToggle
+            NotificationSection(
+                isReminderEnabled = uiState.userPreferences.isReminderEnabled,
+                reminderHour = uiState.userPreferences.reminderHour,
+                reminderMinute = uiState.userPreferences.reminderMinute,
+                onToggleReminder = onToggleReminder,
+                onOpenTimePicker = { showTimePickerDialog = true }
+            )
+
+            AppInfoFooter(
+                versionName = uiState.appVersionName,
+                buildNumber = uiState.buildNumber,
+                buildType = uiState.buildType
             )
 
             DebugSettingsSection(
@@ -65,29 +82,27 @@ fun SettingsContent(
                 onTriggerNotification = onTriggerNotification
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+
+        if (showLanguageSheet) {
+            LanguageBottomSheet(
+                currentLanguage = uiState.userPreferences.preferredLanguage,
+                onLanguageSelected = onLanguageSelected,
+                onDismissRequest = { showLanguageSheet = false }
+            )
+        }
+
+        if (showTimePickerDialog) {
+            ReminderTimePickerDialog(
+                initialHour = uiState.userPreferences.reminderHour,
+                initialMinute = uiState.userPreferences.reminderMinute,
+                onConfirm = { hour, minute ->
+                    onUpdateReminderTime(hour, minute)
+                    onToggleReminder(true)
+                },
+                onDismissRequest = { showTimePickerDialog = false }
+            )
         }
     }
-}
-
-@Preview
-@Composable
-fun SettingsContentPreview() {
-    SettingsContent(
-        uiState = SettingsUiState(
-            userPreferences = UserPreferences(
-                isReminderEnabled = true,
-                reminderHour = 8,
-                reminderMinute = 0,
-                preferredLanguage = "en",
-                isDarkMode = false
-            )
-        ),
-        onBackClick = {},
-        onUpdateReminderTime = { _, _ -> },
-        onLanguageSelected = {},
-        onThemeToggle = {},
-        onSimulateNextDay = {},
-        onTriggerNotification = {}
-    )
 }

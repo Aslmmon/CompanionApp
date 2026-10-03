@@ -22,12 +22,13 @@ import com.aslmmovic.qurancompanion.presentation.screens.home.HomeScreen
 import com.aslmmovic.qurancompanion.presentation.screens.placeholder.ExplorePlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.placeholder.HabitsPlaceholderScreen
 import com.aslmmovic.qurancompanion.presentation.screens.placeholder.LibraryPlaceholderScreen
+import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsScreen
 import com.aslmmovic.qurancompanion.ui.components.CustomBottomNavigation
 
 @Composable
 fun MainNavigationScaffold(
     onNavigateToJourneyFlow: () -> Unit,
-    onNavigateToSettings: () -> Unit,
+    onNavigateToSettings: () -> Unit = {},
     onNavigateToMapExplorer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -77,7 +78,15 @@ fun MainNavigationScaffold(
             composable(MainTab.Today.route) {
                 HomeScreen(
                     onNavigateToJourneyFlow = onNavigateToJourneyFlow,
-                    onNavigateToSettings = onNavigateToSettings
+                    onNavigateToSettings = {
+                        tabNavController.navigate(MainTab.Settings.route) {
+                            popUpTo(tabNavController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
                 )
             }
             composable(MainTab.Library.route) {
@@ -90,6 +99,9 @@ fun MainNavigationScaffold(
                 ExplorePlaceholderScreen(
                     onNavigateToMap = onNavigateToMapExplorer
                 )
+            }
+            composable(MainTab.Settings.route) {
+                SettingsScreen()
             }
         }
     }

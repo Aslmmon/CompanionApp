@@ -1,0 +1,5 @@
+package com.aslmmovic.qurancompanion
+
+import com.aslmmovic.qurancompanion.fakes.FakeAppBuildInfoProvider as ActualFakeAppBuildInfoProvider
+
+typealias FakeAppBuildInfoProvider = ActualFakeAppBuildInfoProvider

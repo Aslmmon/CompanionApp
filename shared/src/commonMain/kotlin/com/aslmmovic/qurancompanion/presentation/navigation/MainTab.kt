@@ -6,10 +6,12 @@ import qurancompanion.shared.generated.resources.Res
 import qurancompanion.shared.generated.resources.ic_tab_explore
 import qurancompanion.shared.generated.resources.ic_tab_habits
 import qurancompanion.shared.generated.resources.ic_tab_library
+import qurancompanion.shared.generated.resources.ic_tab_settings
 import qurancompanion.shared.generated.resources.ic_tab_today
 import qurancompanion.shared.generated.resources.tab_explore
 import qurancompanion.shared.generated.resources.tab_habits
 import qurancompanion.shared.generated.resources.tab_library
+import qurancompanion.shared.generated.resources.tab_settings
 import qurancompanion.shared.generated.resources.tab_today
 
 /**
@@ -23,7 +25,8 @@ enum class MainTab(
     Today("main/today", Res.string.tab_today, Res.drawable.ic_tab_today),
     Library("main/library", Res.string.tab_library, Res.drawable.ic_tab_library),
     Habits("main/habits", Res.string.tab_habits, Res.drawable.ic_tab_habits),
-    Explore("main/explore", Res.string.tab_explore, Res.drawable.ic_tab_explore);
+    Explore("main/explore", Res.string.tab_explore, Res.drawable.ic_tab_explore),
+    Settings("main/settings", Res.string.tab_settings, Res.drawable.ic_tab_settings);
 
     companion object {
         val startTab: MainTab = Today

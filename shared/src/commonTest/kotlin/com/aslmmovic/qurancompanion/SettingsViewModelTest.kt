@@ -15,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -46,6 +47,11 @@ class SettingsViewModelTest {
             currentLocale = locale
         }
     }
+    private val fakeBuildInfoProvider = FakeAppBuildInfoProvider(
+        versionName = "2.1.0",
+        buildNumber = 42L,
+        isDebug = true
+    )
 
     private fun createViewModel() = SettingsViewModel(
         getUserPreferencesUseCase = GetUserPreferencesUseCase(fakePrefsRepo),
@@ -54,7 +60,8 @@ class SettingsViewModelTest {
         requestNotificationPermissionUseCase = RequestNotificationPermissionUseCase(fakeScheduler),
         triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakeJourneyRepo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
-        localeProvider = fakeLocaleProvider
+        localeProvider = fakeLocaleProvider,
+        appBuildInfoProvider = fakeBuildInfoProvider
     )
 
     @BeforeTest
@@ -214,5 +221,88 @@ class SettingsViewModelTest {
 
         assertEquals("Sahaba Companion: Uthman ibn Affan", fakeScheduler.immediateNotificationTitle)
         assertEquals("The Possessor of Two Lights", fakeScheduler.immediateNotificationBody)
+    }
+
+    @Test
+    fun test_onToggleTheme() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onToggleTheme(true)
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.value.userPreferences.isDarkMode)
+        assertEquals(true, fakePrefsRepo.getUserPreferences().first().isDarkMode)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun test_onLanguageSelected() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onLanguageSelected("ar")
+        advanceUntilIdle()
+
+        assertEquals("ar", viewModel.uiState.value.userPreferences.preferredLanguage)
+        assertEquals("ar", fakePrefsRepo.getUserPreferences().first().preferredLanguage)
+        assertEquals("ar", fakeLocaleProvider.currentLocale)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun test_onUpdateReminderTime() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onUpdateReminderTime(9, 30)
+        advanceUntilIdle()
+
+        assertEquals(9, viewModel.uiState.value.userPreferences.reminderHour)
+        assertEquals(30, viewModel.uiState.value.userPreferences.reminderMinute)
+        assertEquals(9, fakePrefsRepo.getUserPreferences().first().reminderHour)
+        assertEquals(30, fakePrefsRepo.getUserPreferences().first().reminderMinute)
+        assertEquals(9, fakeScheduler.scheduledHour)
+        assertEquals(30, fakeScheduler.scheduledMinute)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun test_onToggleReminder() = runTest {
+        fakePrefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = false))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.userPreferences.isReminderEnabled)
+
+        viewModel.onToggleReminder(true)
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.userPreferences.isReminderEnabled)
+        assertTrue(fakePrefsRepo.getUserPreferences().first().isReminderEnabled)
+        assertTrue(fakeScheduler.permissionRequested)
+        assertEquals(false, fakeScheduler.isCancelled)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `SettingsViewModel loads build info from AppBuildInfoProvider into uiState`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertEquals("2.1.0", viewModel.uiState.value.appVersionName)
+        assertEquals(42L, viewModel.uiState.value.buildNumber)
+        assertEquals("Debug", viewModel.uiState.value.buildType)
+
+        collectJob.cancel()
     }
 }

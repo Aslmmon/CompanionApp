@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import com.aslmmovic.qurancompanion.domain.util.AppBuildInfoProvider
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -27,7 +28,8 @@ class SettingsViewModel(
     private val requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase,
     private val triggerImmediateNotificationUseCase: TriggerImmediateNotificationUseCase,
     private val incrementDebugDayOffsetUseCase: IncrementDebugDayOffsetUseCase,
-    private val localeProvider: LocaleProvider
+    private val localeProvider: LocaleProvider,
+    private val appBuildInfoProvider: AppBuildInfoProvider
 ) : ViewModel() {
 
     private val _uiEffects = MutableSharedFlow<SettingsUiEffect>()
@@ -37,13 +39,23 @@ class SettingsViewModel(
         .map { preferences ->
             SettingsUiState(
                 userPreferences = preferences,
-                isLoading = false
+                isLoading = false,
+                isDebug = appBuildInfoProvider.isDebug,
+                appVersionName = appBuildInfoProvider.versionName,
+                buildNumber = appBuildInfoProvider.buildNumber,
+                buildType = appBuildInfoProvider.buildType
             )
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = SettingsUiState(isLoading = true)
+            initialValue = SettingsUiState(
+                isLoading = true,
+                isDebug = appBuildInfoProvider.isDebug,
+                appVersionName = appBuildInfoProvider.versionName,
+                buildNumber = appBuildInfoProvider.buildNumber,
+                buildType = appBuildInfoProvider.buildType
+            )
         )
 
     private suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences) {

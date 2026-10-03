@@ -13,6 +13,7 @@ class FakeNotificationScheduler : NotificationScheduler {
     var scheduledBody: String? = null
     var isCancelled: Boolean = false
     var permissionGranted: Boolean = true
+    var permissionRequested: Boolean = false
     var immediateNotificationTitle: String? = null
     var immediateNotificationBody: String? = null
 
@@ -41,6 +42,7 @@ class FakeNotificationScheduler : NotificationScheduler {
     }
 
     override suspend fun requestNotificationPermission(): Boolean {
+        permissionRequested = true
         return permissionGranted
     }
 

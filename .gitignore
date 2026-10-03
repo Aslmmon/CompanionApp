@@ -29,3 +29,6 @@ docs/store/release/
 *.jks
 *.keystore
 keystore.properties
+.agents/mcp_config.json
+*mcp_config.json
+

@@ -5,6 +5,8 @@
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
     <string name="daily_habit_badge">عادة ١٠ دقائق يومياً</string>
     <string name="action_back">رجوع</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_confirm">تأكيد</string>
 
     <!-- Splash Screen -->
     <string name="splash_title">Sahaba</string>
@@ -96,5 +98,17 @@
     <string name="tab_library">المكتبة</string>
     <string name="tab_habits">السنن</string>
     <string name="tab_explore">استكشف</string>
+    <string name="tab_settings">الإعدادات</string>
     <string name="map_explorer_title">خريطة المعالم التاريخية</string>
+
+    <!-- Settings Redesign (SPEC-003) -->
+    <string name="settings_section_appearance">المظهر</string>
+    <string name="settings_section_notifications">الإشعارات</string>
+    <string name="settings_dark_mode_title">الوضع الليلي</string>
+    <string name="settings_app_language_title">لغة التطبيق</string>
+    <string name="settings_daily_habit_reminder_title">تذكير العادة اليومية</string>
+    <string name="settings_daily_habit_reminder_subtitle">تذكير الضحى والأذكار</string>
+    <string name="settings_push_notifications_title">الإشعارات</string>
+    <string name="settings_app_info_brand">صحابة رسول الله</string>
+    <string name="settings_app_info_version">الإصدار %1$s (بناء %2$d) • %3$s</string>
 </resources>

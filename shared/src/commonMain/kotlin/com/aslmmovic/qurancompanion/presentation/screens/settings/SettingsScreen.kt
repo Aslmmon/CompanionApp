@@ -9,7 +9,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingsScreen(
-    onNavigateBack: () -> Unit,
+    onNavigateBack: () -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel()
 ) {
@@ -25,12 +25,13 @@ fun SettingsScreen(
 
     SettingsContent(
         uiState = uiState,
-        onBackClick = viewModel::onBackClick,
-        onUpdateReminderTime = viewModel::onUpdateReminderTime,
+        onToggleTheme = viewModel::onToggleTheme,
         onLanguageSelected = viewModel::onLanguageSelected,
-        onThemeToggle = viewModel::onToggleTheme,
+        onUpdateReminderTime = viewModel::onUpdateReminderTime,
+        onToggleReminder = viewModel::onToggleReminder,
         onSimulateNextDay = viewModel::onSimulateNextDay,
         onTriggerNotification = viewModel::onTriggerNotification,
+        onBackClick = viewModel::onBackClick,
         modifier = modifier
     )
 }

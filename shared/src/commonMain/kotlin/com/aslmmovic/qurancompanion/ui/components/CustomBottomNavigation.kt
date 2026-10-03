@@ -2,8 +2,10 @@ package com.aslmmovic.qurancompanion.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -101,16 +103,25 @@ private fun RowScope.CustomBottomNavigationItem(
         Icon(
             painter = painterResource(tab.iconRes),
             contentDescription = stringResource(tab.titleRes),
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(22.dp),
             tint = animatedColor
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = stringResource(tab.titleRes),
-            fontSize = 11.sp,
+            fontSize = 10.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
             color = animatedColor,
             maxLines = 1
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Box(
+            modifier = Modifier
+                .size(4.dp)
+                .background(
+                    color = if (isSelected) animatedColor else Color.Transparent,
+                    shape = CircleShape
+                )
         )
     }
 }
