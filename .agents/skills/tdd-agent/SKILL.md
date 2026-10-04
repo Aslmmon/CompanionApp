@@ -76,6 +76,7 @@ The Primary Agent acts as **Architect & Orchestrator**:
 Under project rules, **all feature development and bug fixes must produce a dedicated subagent** specifically tasked with executing the TDD inner loop in an isolated context (`Workspace: "inherit"`).
 
 ### Autonomous Execution Mandate (Zero Mid-Flight Interruption)
+- **Subagent Type**: Invoke the subagent using `TypeName: "autonomous_worker"` (or define it via `define_subagent` if not already defined), whose system prompt strictly bakes in full permission for commands, file edits, and git actions without permission prompts.
 - **Direct Tool & Command Execution**: The subagent must run all necessary terminal commands directly via `run_command` without asking the user or orchestrator for conversational permission (e.g. never ask *"May I run ./gradlew?"*).
 - **No Intermediate Halts**: The subagent must not pause between TDD phases (RED, GREEN, REFACTOR) to seek user confirmation or review.
 - **No Interactive Interruption Tools**: Do not invoke `ask_question` or set `RequestFeedback: true` during active subagent execution.
