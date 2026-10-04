@@ -41,13 +41,7 @@ jobs:
         run: |
           if [ -n "${{ secrets.TELEGRAM_BOT_TOKEN }}" ] && [ -n "${{ secrets.TELEGRAM_CHAT_ID }}" ]; then
             RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            MESSAGE=$(cat <<EOF
-          ❌ <b>Sahaba Companions — Unit Tests Failed!</b>
-
-          👤 <b>Author:</b> ${{ github.actor }}
-          🔗 <a href="${RUN_URL}">View Test Logs</a>
-          EOF
-            )
+            MESSAGE=$(printf "❌ <b>Sahaba Companions — Unit Tests Failed!</b>\n\n👤 <b>Author:</b> %s\n🔗 <a href='%s'>View Test Logs</a>" "${{ github.actor }}" "${RUN_URL}")
             curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
               -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
               -d "parse_mode=HTML" \
@@ -129,24 +123,9 @@ jobs:
             if [ "$STATUS" = "success" ]; then
               VERSION_NAME=$(grep -E '^(MAJOR|MINOR|PATCH)' version.properties | cut -d'=' -f2 | paste -sd'.' -)
               VERSION_CODE=$(grep -E '^VERSION_CODE' version.properties | cut -d'=' -f2)
-              MESSAGE=$(cat <<EOF
-          🚀 <b>Sahaba Companions — Deployment Successful!</b>
-
-          🏷 <b>Track:</b> <code>${TRACK}</code>
-          📦 <b>Version:</b> <code>${VERSION_NAME} (${VERSION_CODE})</code>
-          👤 <b>Author:</b> ${{ github.actor }}
-          🔗 <a href="${RUN_URL}">View GitHub Run</a>
-          EOF
-              )
+              MESSAGE=$(printf "🚀 <b>Sahaba Companions — Deployment Successful!</b>\n\n🏷 <b>Track:</b> <code>%s</code>\n📦 <b>Version:</b> <code>%s (%s)</code>\n👤 <b>Author:</b> %s\n🔗 <a href='%s'>View GitHub Run</a>" "${TRACK}" "${VERSION_NAME}" "${VERSION_CODE}" "${{ github.actor }}" "${RUN_URL}")
             else
-              MESSAGE=$(cat <<EOF
-          ❌ <b>Sahaba Companions — Deployment Failed!</b>
-
-          🏷 <b>Track:</b> <code>${TRACK}</code>
-          ⚠️ <b>Status:</b> Failed during build or upload
-          🔗 <a href="${RUN_URL}">View Error Logs</a>
-          EOF
-              )
+              MESSAGE=$(printf "❌ <b>Sahaba Companions — Deployment Failed!</b>\n\n🏷 <b>Track:</b> <code>%s</code>\n⚠️ <b>Status:</b> Failed during build or upload\n🔗 <a href='%s'>View Error Logs</a>" "${TRACK}" "${RUN_URL}")
             fi
 
             curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
