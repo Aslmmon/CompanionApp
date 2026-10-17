@@ -121,4 +121,30 @@
     <string name="category_ansar">Ansar</string>
     <string name="category_muhajirun">Muhajirun</string>
     <string name="sahaba_detail_close">Close</string>
+
+    <!-- Sunnah Habits Tracker (FEAT-009 / SPEC-009) -->
+    <string name="habits_title">Sunnah Habits</string>
+    <string name="habits_subtitle">Emulate the character of the Sahaba through daily actions.</string>
+    <string name="habits_daily_progress">Daily Progress</string>
+    <string name="habits_progress_quote">“The most beloved of deeds to Allah are those that are most consistent, even if they are small.”</string>
+    <string name="habits_active_section_title">ACTIVE HABITS</string>
+    <string name="habits_done_count">%1$d of %2$d done</string>
+    <string name="habits_add_new">Add New Habit</string>
+    <string name="habits_streak_days">%1$dd</string>
+    <string name="habits_catalog_title">Curated Sunnah Habits</string>
+    <string name="habits_category_all">All</string>
+    <string name="habits_category_prayers">Daily Prayers</string>
+    <string name="habits_category_adhkar">Adhkar</string>
+    <string name="habits_category_character">Character</string>
+    <string name="habits_category_quran_fasting">Quran &amp; Fasting</string>
+    <string name="habits_custom_title">Create Custom Habit</string>
+    <string name="habits_custom_input_title">Habit Title</string>
+    <string name="habits_custom_input_desc">Description or Intention</string>
+    <string name="habits_custom_save">Save Habit</string>
+    <string name="habits_action_add">Add</string>
+    <string name="habits_action_remove">Remove from Active</string>
+    <string name="habits_detail_title">Habit Details</string>
+    <string name="habits_detail_virtue">Virtue &amp; Sunnah Significance</string>
+    <string name="habits_detail_streak_label">Current Streak</string>
+    <string name="habits_celebration_title">Mubarak! All habits completed today 🎉</string>
 </resources>

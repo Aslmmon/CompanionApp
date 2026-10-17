@@ -31,4 +31,6 @@ docs/store/release/
 keystore.properties
 .agents/mcp_config.json
 *mcp_config.json
+.env
+*.env
 

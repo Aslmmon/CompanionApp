@@ -73,6 +73,22 @@ val appModule = module {
     single { GetSahabaCatalogUseCase(get()) }
     single { GetSahabaDetailUseCase(get()) }
 
+    // Data layer — habits
+    single<com.aslmmovic.qurancompanion.data.datasource.HabitLocalDataSource> {
+        com.aslmmovic.qurancompanion.data.datasource.ResourceHabitLocalDataSource(get())
+    }
+    single {
+        com.aslmmovic.qurancompanion.data.repository.HabitRepositoryImpl(get(), get(), get(), get(), get())
+    } bind com.aslmmovic.qurancompanion.domain.repository.HabitRepository::class
+
+    // Domain layer — habits
+    single { com.aslmmovic.qurancompanion.domain.usecase.GetActiveHabitsUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.GetCuratedHabitsUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.ToggleHabitCompletionUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.AddHabitFromCatalogUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.CreateCustomHabitUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.RemoveHabitUseCase(get()) }
+
     // Domain layer — notifications
     single { ScheduleDailyReminderUseCase(get(), get(), get()) }
     single { SchedulePeriodicReminderUseCase(get(), get(), get()) }
@@ -87,4 +103,9 @@ val appModule = module {
     viewModel { JourneyViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { LibraryViewModel(get()) }
+    viewModel {
+        com.aslmmovic.qurancompanion.presentation.screens.habits.HabitsViewModel(
+            get(), get(), get(), get(), get(), get()
+        )
+    }
 }

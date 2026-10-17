@@ -50,40 +50,54 @@ fun CategoryFilterChips(
         verticalAlignment = Alignment.CenterVertically
     ) {
         categories.forEach { category ->
-            val isSelected = category == selectedCategory
-            val containerColor by animateColorAsState(
-                targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                label = "chipContainer_${category.name}"
+            // Each chip owns its own animation scope to prevent row-level recomposition
+            CategoryChip(
+                category = category,
+                isSelected = category == selectedCategory,
+                onCategorySelected = onCategorySelected
             )
-            val contentColor by animateColorAsState(
-                targetValue = if (isSelected) MaterialTheme.colorScheme.onPrimary else SahabaTextMuted,
-                label = "chipContent_${category.name}"
-            )
-
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = containerColor,
-                border = BorderStroke(
-                    1.dp,
-                    if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
-                ),
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .clickable(
-                        role = Role.RadioButton,
-                        onClick = { onCategorySelected(category) }
-                    )
-            ) {
-                Text(
-                    text = stringResource(category.toTitleResource()),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                    color = contentColor,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
         }
+    }
+}
+
+/** Private chip that owns animateColorAsState in its own narrow recomposition scope. */
+@Composable
+private fun CategoryChip(
+    category: SahabaCategory,
+    isSelected: Boolean,
+    onCategorySelected: (SahabaCategory) -> Unit
+) {
+    val containerColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        label = "chipContainer_${category.name}"
+    )
+    val contentColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onPrimary else SahabaTextMuted,
+        label = "chipContent_${category.name}"
+    )
+
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = containerColor,
+        border = BorderStroke(
+            1.dp,
+            if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        ),
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .clickable(
+                role = Role.RadioButton,
+                onClick = { onCategorySelected(category) }
+            )
+    ) {
+        Text(
+            text = stringResource(category.toTitleResource()),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            color = contentColor,
+            fontSize = 12.sp,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
     }
 }
 
