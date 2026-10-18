@@ -8,11 +8,12 @@ on:
       track:
         description: 'Google Play Release Track'
         required: true
-        default: 'internal'
+        default: 'beta'
         type: choice
         options:
           - internal
-          - closed
+          - alpha
+          - beta
           - production
 
 permissions:
@@ -58,6 +59,7 @@ jobs:
         with:
           ref: master
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -103,29 +105,39 @@ jobs:
       - name: Build Signed AAB
         run: ./gradlew :androidApp:bundleRelease --stacktrace
 
+      - name: Generate AI Notes & Await Telegram Approval
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 scripts/telegram_release_manager.py
+
       - name: Upload to Google Play Store
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_CONFIG_JSON }}
           packageName: com.aslmmovic.qurancompanion
           releaseFiles: androidApp/build/outputs/bundle/release/androidApp-release.aab
-          track: ${{ github.event.inputs.track || 'internal' }}
+          track: ${{ github.event.inputs.track || 'beta' }}
+          whatsNewDirectory: distribution/whatsnew
           status: completed
 
       - name: Send Telegram Notification
         if: always()
         run: |
           if [ -n "${{ secrets.TELEGRAM_BOT_TOKEN }}" ] && [ -n "${{ secrets.TELEGRAM_CHAT_ID }}" ]; then
-            TRACK="${{ github.event.inputs.track || 'internal' }}"
+            TRACK="${{ github.event.inputs.track || 'beta' }}"
             STATUS="${{ job.status }}"
             RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
             if [ "$STATUS" = "success" ]; then
               VERSION_NAME=$(grep -E '^(MAJOR|MINOR|PATCH)' version.properties | cut -d'=' -f2 | paste -sd'.' -)
               VERSION_CODE=$(grep -E '^VERSION_CODE' version.properties | cut -d'=' -f2)
-              MESSAGE=$(printf "🚀 <b>Sahaba Companions — Deployment Successful!</b>\n\n🏷 <b>Track:</b> <code>%s</code>\n📦 <b>Version:</b> <code>%s (%s)</code>\n👤 <b>Author:</b> %s\n🔗 <a href='%s'>View GitHub Run</a>" "${TRACK}" "${VERSION_NAME}" "${VERSION_CODE}" "${{ github.actor }}" "${RUN_URL}")
+              NOTES=$(cat distribution/whatsnew/whatsnew-en-US 2>/dev/null || echo "Release published successfully.")
+              MESSAGE=$(printf "🚀 <b>Sahaba Companions — Deployed Successfully!</b>\n\n🏷 <b>Track:</b> <code>%s</code>\n📦 <b>Version:</b> <code>%s (%s)</code>\n\n📝 <b>What's New:</b>\n<pre>%s</pre>\n\n👤 <b>Author:</b> %s\n🔗 <a href='%s'>View GitHub Run</a>" "${TRACK}" "${VERSION_NAME}" "${VERSION_CODE}" "${NOTES}" "${{ github.actor }}" "${RUN_URL}")
             else
-              MESSAGE=$(printf "❌ <b>Sahaba Companions — Deployment Failed!</b>\n\n🏷 <b>Track:</b> <code>%s</code>\n⚠️ <b>Status:</b> Failed during build or upload\n🔗 <a href='%s'>View Error Logs</a>" "${TRACK}" "${RUN_URL}")
+              MESSAGE=$(printf "❌ <b>Sahaba Companions — Deployment Failed or Cancelled!</b>\n\n🏷 <b>Track:</b> <code>%s</code>\n⚠️ <b>Status:</b> %s\n🔗 <a href='%s'>View Error Logs</a>" "${TRACK}" "${STATUS}" "${RUN_URL}")
             fi
 
             curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \

@@ -22,12 +22,14 @@ class UserPreferencesRepositoryImpl(
 ) : UserPreferencesRepository {
 
     private val _preferences = MutableStateFlow(UserPreferences())
+    private val _bookmarkedJourneys = MutableStateFlow<Set<String>>(emptySet())
     private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
     private val saveMutex = Mutex()
 
     init {
         scope.launch {
             _preferences.value = loadFromStorage()
+            _bookmarkedJourneys.value = loadBookmarksFromStorage()
         }
     }
 
@@ -48,6 +50,28 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
+    override fun getBookmarkedJourneyIds(): Flow<Set<String>> = _bookmarkedJourneys.asStateFlow()
+
+    override suspend fun toggleJourneyBookmark(journeyId: String): Boolean = withContext(ioDispatcher) {
+        saveMutex.withLock {
+            val current = _bookmarkedJourneys.value.toMutableSet()
+            val isNowBookmarked = if (current.contains(journeyId)) {
+                current.remove(journeyId)
+                false
+            } else {
+                current.add(journeyId)
+                true
+            }
+            try {
+                storage.putString(KEY_BOOKMARKED_JOURNEYS, current.joinToString(","))
+            } catch (e: Exception) {
+                // handle exception silently or log
+            }
+            _bookmarkedJourneys.value = current
+            isNowBookmarked
+        }
+    }
+
     private fun loadFromStorage(): UserPreferences {
         return try {
             val isDarkModeString = storage.getString(KEY_DARK_MODE)
@@ -65,11 +89,23 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
+    private fun loadBookmarksFromStorage(): Set<String> {
+        return try {
+            storage.getString(KEY_BOOKMARKED_JOURNEYS)
+                ?.split(",")
+                ?.filter { it.isNotBlank() }
+                ?.toSet() ?: emptySet()
+        } catch (e: Exception) {
+            emptySet()
+        }
+    }
+
     companion object {
         private const val KEY_REMINDER_HOUR = "pref_reminder_hour"
         private const val KEY_REMINDER_MINUTE = "pref_reminder_minute"
         private const val KEY_REMINDER_ENABLED = "pref_reminder_enabled"
         private const val KEY_PREFERRED_LANGUAGE = "pref_preferred_language"
         private const val KEY_DARK_MODE = "pref_dark_mode"
+        private const val KEY_BOOKMARKED_JOURNEYS = "pref_bookmarked_journeys"
     }
 }

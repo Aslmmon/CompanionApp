@@ -18,6 +18,7 @@ fun CompletionScreen(
             when (effect) {
                 JourneyUiEffect.NavigateToHome       -> onNavigateToHome()
                 JourneyUiEffect.NavigateToCompletion -> { /* already here */ }
+                is JourneyUiEffect.ShowBookmarkFeedback -> { /* no-op in completion */ }
             }
         }
     }

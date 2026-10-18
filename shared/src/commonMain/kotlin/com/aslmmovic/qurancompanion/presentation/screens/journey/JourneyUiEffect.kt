@@ -7,4 +7,5 @@ package com.aslmmovic.qurancompanion.presentation.screens.journey
 sealed class JourneyUiEffect {
     data object NavigateToCompletion : JourneyUiEffect()
     data object NavigateToHome : JourneyUiEffect()
+    data class ShowBookmarkFeedback(val isBookmarked: Boolean) : JourneyUiEffect()
 }

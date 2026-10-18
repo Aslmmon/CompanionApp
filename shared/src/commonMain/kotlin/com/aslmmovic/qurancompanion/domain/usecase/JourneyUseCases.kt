@@ -38,3 +38,11 @@ class GetDebugDayOffsetUseCase(private val repository: JourneyRepository) {
 class IncrementDebugDayOffsetUseCase(private val repository: JourneyRepository) {
     suspend operator fun invoke() = repository.incrementDebugDayOffset()
 }
+
+class GetBookmarkedJourneyIdsUseCase(private val userPreferencesRepository: com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository) {
+    operator fun invoke(): Flow<Set<String>> = userPreferencesRepository.getBookmarkedJourneyIds()
+}
+
+class ToggleJourneyBookmarkUseCase(private val userPreferencesRepository: com.aslmmovic.qurancompanion.domain.repository.UserPreferencesRepository) {
+    suspend operator fun invoke(journeyId: String): Boolean = userPreferencesRepository.toggleJourneyBookmark(journeyId)
+}
