@@ -71,3 +71,9 @@ kotlin.daemon.jvmargs=-Xmx3072M
 - Shared KMP logic: `:shared` module (library, `com.android.kotlin.multiplatform.library`)
 - Android app: `:androidApp` module (application, `com.android.application`)
 - `:androidApp` depends on `:shared` only — no direct dependency on shared internals.
+
+## Tooling & Android CLI Skills Compatibility
+
+- **R8 Analyzer**: When analyzing R8/ProGuard optimizations, the application target is `:androidApp` (`./gradlew :androidApp:analyzeReleaseR8Config`). Never remove mandatory keep rules for RevenueCat or kotlinx.serialization.
+- **AGP 9 Upgrade Skill (`agp-9-upgrade`)**: Project is already on AGP 9.3.1. `agp-9-upgrade` explicitly does not support KMP and must never be run on this repository.
+- **Compose Styles API (`styles`)**: Compose Styles API (`androidx.compose.foundation.style`) requires alpha dependencies and `compileSdk 37+`, violating our Dependency Stability Policy. It is strictly excluded.

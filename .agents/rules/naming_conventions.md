@@ -8,7 +8,7 @@ These rules define standard naming conventions across architectural components.
 * **ViewModels**: `<Feature>ViewModel` (e.g., `HomeViewModel`)
 * **Stateful Screen Wrappers**: `<Feature>Screen` (e.g., `HomeScreen`)
 * **Stateless Screen Contents**: `<Feature>Content` (e.g., `HomeContent`)
-* **One-Shot UI Events**: `<Feature>UiEvent` (e.g., `HomeUiEvent`)
+* **One-Shot UI Effects**: `<Feature>UiEffect` (e.g., `HomeUiEffect`), exposed via `uiEffects: SharedFlow<*UiEffect>`
 * **Use Cases**: `<Verb><Subject>UseCase` (e.g., `GetTodayJourneyUseCase`)
 * **Repositories**: 
   - Interface: `<Subject>Repository` (e.g., `JourneyRepository`)

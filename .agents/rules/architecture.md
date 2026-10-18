@@ -6,8 +6,8 @@ These guidelines define the Clean Architecture standards for the project.
 
 ## 1. Layer Isolation
 * The `:shared` module is structured into `data`, `domain`, and `presentation` packages.
-* **Domain Layer Protection**: The `domain` layer must remain completely free of platform-specific imports (e.g. `android.*`, `UIKit.*`) and data layer/third-party library dependencies (such as Ktor, SQLDelight, or Serialization).
-* Only standard Kotlin libraries are allowed in the `domain` layer (e.g., coroutines, collections).
+* **Domain Layer Protection**: The `domain` layer must remain completely free of platform-specific imports (e.g. `android.*`, `UIKit.*`), Compose runtime imports (never import `androidx.compose.runtime.*` or annotate domain models with `@Immutable`/`@Stable`), and data layer/third-party library dependencies (such as Ktor, SQLDelight, or Serialization).
+* Only standard Kotlin libraries are allowed in the `domain` layer (e.g., coroutines, collections). Domain models in `domain/model/` are pure Kotlin classes.
 
 ---
 

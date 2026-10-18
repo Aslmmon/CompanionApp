@@ -118,7 +118,7 @@ fun GameContent(
 
 #### File 3: `presentation/game/components/GameHeader.kt` (Dedicated File)
 ```kotlin
-package com.aerobounce.presentation.game.components
+package com.aslmmovic.qurancompanion.presentation.game.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -150,7 +150,7 @@ fun GameHeader(
 
 #### File 4: `presentation/game/components/GameItemRow.kt` (Dedicated File)
 ```kotlin
-package com.aerobounce.presentation.game.components
+package com.aslmmovic.qurancompanion.presentation.game.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -224,7 +224,7 @@ fun AppSectionCard(
 - [ ] Is each sub-composable created in its own dedicated Kotlin file in `presentation/[feature]/components/` or `presentation/[feature]/`?
 - [ ] Is the screen split into a Container Composable (`[Feature]Screen.kt`) and Content Composable (`[Feature]Content.kt`)?
 - [ ] Are all sub-composable files under 60–80 lines long?
-- [ ] Are child composables pure and stateless (accepting `@Immutable` data and lambda callbacks)?
+- [ ] Are child composables pure and stateless (accepting state models and lambda callbacks)?
 - [ ] Is ViewModel injection limited ONLY to the top-level Container Composable?
 - [ ] Are reusable layout containers using Slot APIs (`@Composable () -> Unit`)?
-- [ ] Are items in `LazyColumn` / `LazyRow` using stable `key` parameter (e.g. `key = { it.id }`)?
+- [ ] Are items in `LazyColumn` / `LazyRow` using both stable `key` AND `contentType` parameters?
