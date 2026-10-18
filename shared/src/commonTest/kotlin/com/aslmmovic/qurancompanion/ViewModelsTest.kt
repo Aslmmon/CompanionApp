@@ -83,6 +83,14 @@ class ViewModelsTest {
         localeProvider = fakeLocaleProvider
     )
 
+    private fun createJourneyViewModel() = JourneyViewModel(
+        getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
+        markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo),
+        dateTimeProvider = fakeDateTimeProvider,
+        getBookmarkedJourneyIdsUseCase = com.aslmmovic.qurancompanion.domain.usecase.GetBookmarkedJourneyIdsUseCase(prefsRepo),
+        toggleJourneyBookmarkUseCase = com.aslmmovic.qurancompanion.domain.usecase.ToggleJourneyBookmarkUseCase(prefsRepo)
+    )
+
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
@@ -182,11 +190,7 @@ class ViewModelsTest {
         val today = testJourney(id = "today")
         repo.todayJourney = today
 
-        val viewModel = JourneyViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider
-        )
+        val viewModel = createJourneyViewModel()
 
         advanceUntilIdle()
 
@@ -215,11 +219,7 @@ class ViewModelsTest {
         val today = testJourney(id = "today")
         repo.todayJourney = today
 
-        val viewModel = JourneyViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider
-        )
+        val viewModel = createJourneyViewModel()
 
         advanceUntilIdle()
 
@@ -243,11 +243,7 @@ class ViewModelsTest {
         val today = testJourney(id = "today")
         repo.todayJourney = today
 
-        val viewModel = JourneyViewModel(
-            getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
-            markJourneyCompletedUseCase = MarkJourneyCompletedUseCase(repo),
-            dateTimeProvider = fakeDateTimeProvider
-        )
+        val viewModel = createJourneyViewModel()
 
         advanceUntilIdle()
         viewModel.onNextStep()

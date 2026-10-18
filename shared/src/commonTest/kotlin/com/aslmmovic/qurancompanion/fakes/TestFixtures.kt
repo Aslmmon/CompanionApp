@@ -29,7 +29,8 @@ fun testJourney(
         JourneyStep(StepType.ACTION, "Action Title", "Action content")
     ),
     references: List<String> = emptyList(),
-    tags: List<String> = emptyList()
+    tags: List<String> = emptyList(),
+    arabicVerse: String? = null
 ) = Journey(
     id = id,
     dayNumber = dayNumber,
@@ -47,7 +48,8 @@ fun testJourney(
     cover = cover,
     steps = steps,
     references = references,
-    tags = tags
+    tags = tags,
+    arabicVerse = arabicVerse
 )
 
 /**

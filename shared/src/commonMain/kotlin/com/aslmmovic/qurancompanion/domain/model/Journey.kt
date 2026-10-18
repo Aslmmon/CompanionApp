@@ -17,7 +17,8 @@ data class Journey(
     val cover: Cover,
     val steps: List<JourneyStep>,
     val references: List<String>,
-    val tags: List<String>
+    val tags: List<String>,
+    val arabicVerse: String? = null
 )
 
 data class Cover(

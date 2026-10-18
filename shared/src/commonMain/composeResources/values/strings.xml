@@ -30,6 +30,12 @@
     <string name="journey_next">Next</string>
     <string name="journey_finish">Finish</string>
     <string name="journey_back">Back</string>
+    <string name="journey_continue">Continue</string>
+    <string name="journey_complete">Complete Journey</string>
+    <string name="journey_bookmarked">Journey saved to bookmarks</string>
+    <string name="journey_unbookmarked">Journey removed from bookmarks</string>
+    <string name="bismillah_text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
+    <string name="journey_default_arabic_verse">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</string>
 
     <!-- Completion Screen -->
     <string name="completion_heading">Alhamdulillah</string>

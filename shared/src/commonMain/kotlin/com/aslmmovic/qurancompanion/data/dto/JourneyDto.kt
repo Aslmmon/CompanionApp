@@ -24,7 +24,8 @@ data class JourneyDto(
     val cover: CoverDto,
     val steps: List<JourneyStepDto> = emptyList(),
     val references: List<String> = emptyList(),
-    val tags: List<String> = emptyList()
+    val tags: List<String> = emptyList(),
+    val arabicVerse: String? = null
 )
 
 @Serializable
@@ -64,7 +65,8 @@ fun JourneyDto.toDomain(): Journey = Journey(
     cover = cover.toDomain(),
     steps = steps.map { it.toDomain() },
     references = references,
-    tags = tags
+    tags = tags,
+    arabicVerse = arabicVerse
 )
 
 fun CoverDto.toDomain(): Cover = Cover(
