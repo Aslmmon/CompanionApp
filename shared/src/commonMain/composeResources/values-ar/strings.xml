@@ -121,4 +121,30 @@
     <string name="category_ansar">الأنصار</string>
     <string name="category_muhajirun">المهاجرون</string>
     <string name="sahaba_detail_close">إغلاق</string>
+
+    <!-- Sunnah Habits Tracker (FEAT-009 / SPEC-009) -->
+    <string name="habits_title">سنن الحبيب</string>
+    <string name="habits_subtitle">اقتدِ بأخلاق الصحابة الكرام في سنن اليوم والليلة.</string>
+    <string name="habits_daily_progress">الإنجاز اليومي</string>
+    <string name="habits_progress_quote">«أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ»</string>
+    <string name="habits_active_section_title">السنن اليومية</string>
+    <string name="habits_done_count">أُنجز %1$d من %2$d</string>
+    <string name="habits_add_new">إضافة سنة جديدة</string>
+    <string name="habits_streak_days">%1$d ي</string>
+    <string name="habits_catalog_title">دليل السنن والفضائل</string>
+    <string name="habits_category_all">الكل</string>
+    <string name="habits_category_prayers">الصلوات والنوافل</string>
+    <string name="habits_category_adhkar">الأذكار والاستغفار</string>
+    <string name="habits_category_character">الخلق والآداب</string>
+    <string name="habits_category_quran_fasting">القرآن والصيام</string>
+    <string name="habits_custom_title">إضافة عادة مخصصة</string>
+    <string name="habits_custom_input_title">اسم العادة</string>
+    <string name="habits_custom_input_desc">الوصف أو النية</string>
+    <string name="habits_custom_save">حفظ العادة</string>
+    <string name="habits_action_add">إضافة</string>
+    <string name="habits_action_remove">إزالة من اليومية</string>
+    <string name="habits_detail_title">تفاصيل السنة</string>
+    <string name="habits_detail_virtue">فضل العمل وسنده</string>
+    <string name="habits_detail_streak_label">التتابع الحالي</string>
+    <string name="habits_celebration_title">مبارك! أتممت جميع سنن اليوم 🎉</string>
 </resources>

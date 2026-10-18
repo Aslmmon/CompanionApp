@@ -1,0 +1,72 @@
+[
+  {
+    "id": "morning_adhkar",
+    "title": "Morning Adhkar",
+    "description": "Spiritual protection and mindfulness",
+    "category": "Adhkar",
+    "isDefaultActive": true
+  },
+  {
+    "id": "duha_prayer",
+    "title": "Duha Prayer",
+    "description": "The prayer of the repentant",
+    "category": "DailyPrayers",
+    "isDefaultActive": true
+  },
+  {
+    "id": "smile_everyone",
+    "title": "Smile at Everyone",
+    "description": "Sunnah of the Prophet (ﷺ)",
+    "category": "Character",
+    "isDefaultActive": true
+  },
+  {
+    "id": "read_quran_page",
+    "title": "Read 1 Page Quran",
+    "description": "Daily spiritual nourishment",
+    "category": "QuranAndFasting",
+    "isDefaultActive": true
+  },
+  {
+    "id": "tahajjud_prayer",
+    "title": "Tahajjud Prayer",
+    "description": "Night vigil and intimate communion with Allah",
+    "category": "DailyPrayers",
+    "isDefaultActive": false
+  },
+  {
+    "id": "evening_adhkar",
+    "title": "Evening Adhkar",
+    "description": "Protection through the quiet night hours",
+    "category": "Adhkar",
+    "isDefaultActive": false
+  },
+  {
+    "id": "surah_mulk",
+    "title": "Surah Al-Mulk Before Sleep",
+    "description": "Protection from the trial of the grave",
+    "category": "QuranAndFasting",
+    "isDefaultActive": false
+  },
+  {
+    "id": "siwak_cleanliness",
+    "title": "Use Siwak / Tooth-Stick",
+    "description": "Pleasing to the Lord and purification of mouth",
+    "category": "Character",
+    "isDefaultActive": false
+  },
+  {
+    "id": "istighfar_100",
+    "title": "Seek Forgiveness (Istighfar 100x)",
+    "description": "Continual repentance of the Prophet ﷺ",
+    "category": "Adhkar",
+    "isDefaultActive": false
+  },
+  {
+    "id": "fasting_mon_thu",
+    "title": "Fast Mondays or Thursdays",
+    "description": "Days when deeds are presented to Allah",
+    "category": "QuranAndFasting",
+    "isDefaultActive": false
+  }
+]

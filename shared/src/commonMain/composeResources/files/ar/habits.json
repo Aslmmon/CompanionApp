@@ -1,0 +1,72 @@
+[
+  {
+    "id": "morning_adhkar",
+    "title": "أذكار الصباح",
+    "description": "حصن المسلم ونور اليوم والسكينة",
+    "category": "Adhkar",
+    "isDefaultActive": true
+  },
+  {
+    "id": "duha_prayer",
+    "title": "صلاة الضحى",
+    "description": "صلاة الأوابين وصدقة عن كل مَفْصِل",
+    "category": "DailyPrayers",
+    "isDefaultActive": true
+  },
+  {
+    "id": "smile_everyone",
+    "title": "التبسم في وجوه الناس",
+    "description": "تبسمك في وجه أخيك صدقة (سنة الحبيب ﷺ)",
+    "category": "Character",
+    "isDefaultActive": true
+  },
+  {
+    "id": "read_quran_page",
+    "title": "قراءة صفحة من القرآن",
+    "description": "غذاء الروح اليومي وورد التلاوة",
+    "category": "QuranAndFasting",
+    "isDefaultActive": true
+  },
+  {
+    "id": "tahajjud_prayer",
+    "title": "قيام الليل والتهجد",
+    "description": "دَأْبُ الصالحين ومناجاة الخلوات",
+    "category": "DailyPrayers",
+    "isDefaultActive": false
+  },
+  {
+    "id": "evening_adhkar",
+    "title": "أذكار المساء",
+    "description": "حفظ ووقاية في سكون الليل",
+    "category": "Adhkar",
+    "isDefaultActive": false
+  },
+  {
+    "id": "surah_mulk",
+    "title": "سورة الملك قبل النوم",
+    "description": "المانعة المنجية من عذاب القبر",
+    "category": "QuranAndFasting",
+    "isDefaultActive": false
+  },
+  {
+    "id": "siwak_cleanliness",
+    "title": "استعمال السواك",
+    "description": "مطهرة للفم مرضاة للرب",
+    "category": "Character",
+    "isDefaultActive": false
+  },
+  {
+    "id": "istighfar_100",
+    "title": "الاستغفار مائة مرة",
+    "description": "مغفرة للذنوب وتفريج للكروب",
+    "category": "Adhkar",
+    "isDefaultActive": false
+  },
+  {
+    "id": "fasting_mon_thu",
+    "title": "صيام الإثنين أو الخميس",
+    "description": "تُعرض فيهما الأعمال على الله",
+    "category": "QuranAndFasting",
+    "isDefaultActive": false
+  }
+]

@@ -2,57 +2,53 @@
 name: kmp-mvvm-implementation
 description: >-
   Standard MVVM (Model-View-ViewModel) pattern implementation guide for KMP Compose Multiplatform.
-  Includes code templates for UiState, UiEffect/Event, ViewModel with explicit action methods,
-  Screen/Content container separation, and Turbine unit testing. Use when implementing or
-  reviewing MVVM architecture in any KMP project.
+  Includes code templates for UiState, UiEffect, ViewModel with explicit action methods and UseCases,
+  Screen/Content container separation, and Turbine unit testing. Use when implementing or reviewing
+  MVVM architecture in any KMP project.
 ---
 
-# MVVM Implementation Guide for KMP
-
-MVVM in KMP Compose Multiplatform structures the presentation layer into three clean components:
-1. **UiState**: An immutable snapshot of what the screen displays.
-2. **ViewModel**: Manages business logic, holds state in a `StateFlow`, handles async work via `viewModelScope`, and exposes explicit action methods.
-3. **Screen Container & Content**: Screen handles ViewModel injection and side-effect handling; Content renders UI statelessly.
+# KMP MVVM Architecture Guide
 
 ---
 
-## Architecture Diagram
+## Architecture Flow
 
 ```
-User Action (Callback)
-     │
-     ▼
-[Screen Container] ──Explicit Method Call──▶ [ViewModel]
-         ▲                                       │
-         │                                       ├──State──▶ StateFlow ──▶ [Screen Container] ──▶ [Content Composable]
-         │                                       │
-         └──Effect (one-shot)────────────────────┘ SharedFlow ──▶ [Screen LaunchedEffect]
+User Action ──▶ ViewModel.onAction() ──▶ UseCase.invoke() ──▶ Repository
+                      │
+                      ├── updates _uiState (StateFlow<UiState>) ──▶ ScreenContent
+                      └── emits _uiEffects (SharedFlow<UiEffect>) ──▶ LaunchedEffect in ScreenContainer
 ```
 
 ---
 
 ## Component 1: UiState & UiEffect
 
-Define your screen's UI State and optional one-shot UI Effects in `presentation/[feature]/[Feature]UiState.kt`.
+Define your screen's UI State and optional one-shot UI Effects in `presentation/screens/[feature]/[Feature]UiState.kt` and `[Feature]UiEffect.kt`.
 
 ```kotlin
-// presentation/[feature]/[Feature]UiState.kt
-package com.aerobounce.presentation.feature
+// presentation/screens/[feature]/[Feature]UiState.kt
+package com.aslmmovic.qurancompanion.presentation.screens.feature
 
-import androidx.compose.runtime.Immutable
-import com.aerobounce.domain.model.FeatureItem
+import com.aslmmovic.qurancompanion.domain.model.FeatureItem
 
 /**
  * Single source of truth for screen state.
- * @Immutable allows Compose smart recomposition optimizations.
+ * Flat data classes with primitive properties are inferred stable automatically.
+ * Under Strong Skipping Mode (Kotlin 2.0+), do NOT add @Immutable when holding collections (List),
+ * as O(N) structural equals() degrades scrolling performance compared to O(1) instance equality (===).
  */
-@Immutable
 data class FeatureUiState(
     val items: List<FeatureItem> = emptyList(),
     val selectedItemId: String? = null,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 )
+```
+
+```kotlin
+// presentation/screens/[feature]/[Feature]UiEffect.kt
+package com.aslmmovic.qurancompanion.presentation.screens.feature
 
 /**
  * One-shot side effects (navigation, snackbars, sound/haptic triggers).
@@ -68,15 +64,15 @@ sealed interface FeatureUiEffect {
 
 ## Component 2: ViewModel
 
-The ViewModel exposes the `UiState` via `StateFlow` and single-shot events via `SharedFlow`. It exposes **explicit public functions** for each user interaction.
+The ViewModel exposes the `UiState` via `StateFlow` and single-shot side effects via `SharedFlow<*UiEffect>`. ViewModels **must consume UseCases**, never repositories directly.
 
 ```kotlin
-// presentation/[feature]/[Feature]ViewModel.kt
-package com.aerobounce.presentation.feature
+// presentation/screens/[feature]/[Feature]ViewModel.kt
+package com.aslmmovic.qurancompanion.presentation.screens.feature
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aerobounce.domain.repository.FeatureRepository
+import com.aslmmovic.qurancompanion.domain.usecase.GetFeatureItemsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -88,14 +84,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FeatureViewModel(
-    private val repository: FeatureRepository,
+    private val getFeatureItemsUseCase: GetFeatureItemsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FeatureUiState())
     val uiState: StateFlow<FeatureUiState> = _uiState.asStateFlow()
 
-    private val _effect = MutableSharedFlow<FeatureUiEffect>(extraBufferCapacity = 16)
-    val effect: SharedFlow<FeatureUiEffect> = _effect.asSharedFlow()
+    private val _uiEffects = MutableSharedFlow<FeatureUiEffect>(extraBufferCapacity = 16)
+    val uiEffects: SharedFlow<FeatureUiEffect> = _uiEffects.asSharedFlow()
 
     init {
         loadItems()
@@ -110,7 +106,7 @@ class FeatureViewModel(
     fun onItemClicked(itemId: String) {
         _uiState.update { it.copy(selectedItemId = itemId) }
         viewModelScope.launch {
-            _effect.emit(FeatureUiEffect.NavigateToDetail(itemId))
+            _uiEffects.emit(FeatureUiEffect.NavigateToDetail(itemId))
         }
     }
 
@@ -121,7 +117,7 @@ class FeatureViewModel(
     private fun loadItems() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-            repository.getItemsFlow()
+            getFeatureItemsUseCase()
                 .catch { error ->
                     _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
                 }
@@ -140,8 +136,8 @@ class FeatureViewModel(
 Separate the top-level **Screen Container** (handles ViewModel injection & lifecycle side-effects) from the **Content Composable** (pure rendering).
 
 ```kotlin
-// presentation/[feature]/[Feature]Screen.kt
-package com.aerobounce.presentation.feature
+// presentation/screens/[feature]/[Feature]Screen.kt
+package com.aslmmovic.qurancompanion.presentation.screens.feature
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -163,8 +159,8 @@ fun FeatureScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     // Handle one-shot side effects
-    LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+    LaunchedEffect(viewModel.uiEffects) {
+        viewModel.uiEffects.collect { effect ->
             when (effect) {
                 is FeatureUiEffect.NavigateToDetail -> onNavigateToDetail(effect.id)
                 is FeatureUiEffect.ShowSnackbar -> { /* show snackbar */ }
@@ -186,7 +182,7 @@ fun FeatureScreen(
  * Pure rendering — accepts UiState snapshot and explicit lambda callbacks.
  */
 @Composable
-private fun FeatureContent(
+fun FeatureContent(
     uiState: FeatureUiState,
     onRefresh: () -> Unit,
     onItemClicked: (String) -> Unit,
@@ -204,25 +200,23 @@ private fun FeatureContent(
 Test state transitions and effect emissions using `Turbine` in `commonTest/`.
 
 ```kotlin
-// commonTest/kotlin/com/aerobounce/presentation/feature/FeatureViewModelTest.kt
-package com.aerobounce.presentation.feature
+// commonTest/kotlin/com/aslmmovic/qurancompanion/presentation/screens/feature/FeatureViewModelTest.kt
+package com.aslmmovic.qurancompanion.presentation.screens.feature
 
 import app.cash.turbine.test
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 
 class FeatureViewModelTest {
 
-    private val fakeRepository = FakeFeatureRepository()
+    private val fakeUseCase = FakeGetFeatureItemsUseCase()
     private lateinit var viewModel: FeatureViewModel
 
     @BeforeTest
     fun setup() {
-        viewModel = FeatureViewModel(fakeRepository)
+        viewModel = FeatureViewModel(fakeUseCase)
     }
 
     @Test
@@ -239,7 +233,7 @@ class FeatureViewModelTest {
 
     @Test
     fun featureViewModel_onItemClicked_emitsNavigationEffect() = runTest {
-        viewModel.effect.test {
+        viewModel.uiEffects.test {
             viewModel.onItemClicked("item-123")
             val effect = awaitItem()
             assertEquals(FeatureUiEffect.NavigateToDetail("item-123"), effect)
@@ -253,7 +247,8 @@ class FeatureViewModelTest {
 ## Key Rules Summary
 
 1. **State Ownership**: ViewModel owns state via `MutableStateFlow`, exposes read-only `StateFlow<UiState>`.
-2. **Explicit Actions**: ViewModel exposes explicit named functions for user actions (e.g. `onItemClicked()`), avoiding monolithic intent switch blocks.
-3. **Immutable State**: Annotate `UiState` with `@Immutable` or `@Stable`.
-4. **Single-Shot Events**: Use `SharedFlow` with `extraBufferCapacity = 16` for one-shot UI effects (navigation, sounds, snackbars).
-5. **Stateless Content**: Content composables accept `UiState` snapshot + lambda callbacks `() -> Unit` and contain zero business logic.
+2. **Consume Use Cases**: ViewModels must never directly inject Repositories.
+3. **Explicit Actions**: ViewModel exposes explicit named functions for user actions (e.g. `onItemClicked()`), avoiding monolithic intent switch blocks.
+4. **Strong Skipping Stability**: Do NOT add `@Immutable` on classes with collection properties (`List`, `Set`, `Map`).
+5. **Single-Shot Side Effects**: Name them `*UiEffect` and expose via `uiEffects: SharedFlow<*UiEffect>`.
+6. **Stateless Content**: Content composables accept `UiState` snapshot + lambda callbacks `() -> Unit` and contain zero business logic.

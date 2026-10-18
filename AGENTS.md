@@ -22,6 +22,8 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 * ⚡ **[Coroutines & Concurrency Guidelines](file:///.agents/rules/concurrency.md)**
 * 🗺️ **[Navigation Architecture Guidelines](file:///.agents/rules/navigation.md)**
 * 🧪 **[Testing Architecture & Guidelines](file:///.agents/rules/testing.md)**
+* 🧪 **[KMP Unit Testing & Fakes Enforcer](file:///.agents/skills/kmp-test-review/SKILL.md)**
+* 💳 **[RevenueCat KMP Monetization Guide](file:///.agents/skills/kmp-revenuecat-integration/SKILL.md)**
 * 📝 **[Naming Conventions Guidelines](file:///.agents/rules/naming_conventions.md)**
 * ⚙️ **[Build Configuration Guidelines](file:///.agents/rules/build_config.md)**
 * 🔀 **[KMP expect/actual Platform Bridge](file:///.agents/skills/kmp-expect-actual/SKILL.md)** *(Dormant — activate only for new hardware APIs)*
@@ -34,6 +36,7 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 * **User Plan Approval First**: For any feature, bug fix, or architectural task, formulate a detailed implementation plan or spec first (with Acceptance Criteria Matrix) and present it to the user. Never auto-approve plans or specifications without explicit user acceptance.
 * **Spawn Dedicated Subagents for TDD**: Upon plan approval, always produce a dedicated subagent for any feature development or bug fix task rather than implementing in the primary thread.
 * **Zero-Interruption Autonomous Subagent Execution**: The spawned subagent executes end-to-end autonomously (RED -> GREEN -> REFACTOR -> test verification) without requesting intermediate approvals or pausing to ask permission before executing shell commands.
+* **Lazy Layout Virtualization**: Always declare both a primitive `key` AND `contentType` on items in `LazyColumn`, `LazyRow`, and `LazyVerticalGrid`.
 * **Recreate Host Activities**: Trigger full resource reloads (e.g. `activity.recreate()`) on dynamic configuration shifts such as language/locale switches.
 * **Map Data Layers**: Fully map DTO/entity representations to domain models inside data layers using mapping extension functions (e.g., `toDomain()`) before returning.
 * **Main Safety**: Always ensure all Use Cases and Repository interfaces are main-safe and run non-blocking.
@@ -41,10 +44,11 @@ Refer to these topic-specific guidelines for detailed rules, code conventions, a
 * **Concise Code Comments**: Write only very short, concise comments (1 line max) for non-obvious logic when generating code. Avoid verbose explanations.
 
 ### Don't
-* **No Platform Imports in Domain**: Do not import Android SDK libraries (like `android.*`) or platform components in `commonMain` or the `domain` module.
+* **No Platform Imports in Domain**: Do not import Android SDK libraries (like `android.*`), Compose runtime (like `androidx.compose.runtime.*`), or platform components in `commonMain` or the `domain` module.
 * **No Repository Bypassing**: ViewModels must never directly consume Repositories; always encapsulate business logic in Use Cases.
 * **No Plan Auto-Approval**: Never auto-approve implementation plans or rush into code execution before the user reviews and confirms the plan.
 * **No Mid-Flight Subagent Halts**: Do not configure or prompt subagents to ask for permission between layers, test phases, or before executing shell commands; subagents run continuously to completion.
 * **No Raw Exceptions in UI**: Never propagate raw SQL, filesystem, or network exceptions up to ViewModels; handle exceptions at repository boundaries.
 * **No Mocking Libraries**: Do not import mock frameworks (like Mockk or Mockito) in `commonTest`; write clean, in-memory fake classes instead.
-* **No Unstable UI Params**: Avoid passing unstable collection types (such as raw, standard `List` objects) directly into stateless composables without stable keys or wrappers.
+* **No Navigation 3 or Android Testing Mocks**: Do not introduce Android-only Navigation 3 (`androidx.navigation3`) or Android CLI mock test runners (`Robolectric`, `Hilt`, `MockK`) into shared KMP modules.
+* **No @Immutable on Collection Models**: Under Strong Skipping Mode (Kotlin 2.0+), do not add `@Immutable` or `@Stable` to models holding collections (`List`, `Set`, `Map`), as $O(N)$ structural `.equals()` degrades scrolling performance compared to $O(1)$ instance equality (`===`).

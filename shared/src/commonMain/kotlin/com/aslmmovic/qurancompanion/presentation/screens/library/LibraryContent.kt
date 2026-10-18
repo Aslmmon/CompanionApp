@@ -189,7 +189,8 @@ fun LibraryContent(
                     ) {
                         items(
                             items = uiState.sahabaList,
-                            key = { it.id }
+                            key = { it.id },
+                            contentType = { "sahaba_card" }
                         ) { sahaba ->
                             SahabaCard(
                                 sahaba = sahaba,
