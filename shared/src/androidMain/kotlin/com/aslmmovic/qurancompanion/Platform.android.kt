@@ -32,3 +32,27 @@ actual fun getCurrentDateString(): String {
         cal.get(java.util.Calendar.DAY_OF_MONTH)
     )
 }
+
+actual fun getTimeUntilMidnight(): Pair<Int, Int> {
+    val cal = java.util.Calendar.getInstance()
+    val hour = cal.get(java.util.Calendar.HOUR_OF_DAY)
+    val minute = cal.get(java.util.Calendar.MINUTE)
+    val remainingMinutes = 1440 - (hour * 60 + minute)
+    val hours = (remainingMinutes / 60).coerceIn(0, 24)
+    val minutes = (remainingMinutes % 60).coerceIn(0, 59)
+    return Pair(hours, minutes)
+}
+
+actual fun getCurrentHijriDateString(): String {
+    return try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val hijrahDate = java.time.chrono.HijrahDate.now()
+            val formatter = java.time.format.DateTimeFormatter.ofPattern("d MMMM y G", java.util.Locale.getDefault())
+            hijrahDate.format(formatter).uppercase()
+        } else {
+            "14 RAMADAN 1447 AH"
+        }
+    } catch (e: Exception) {
+        "14 RAMADAN 1447 AH"
+    }
+}

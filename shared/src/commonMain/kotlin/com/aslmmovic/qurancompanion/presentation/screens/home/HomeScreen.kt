@@ -5,12 +5,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aslmmovic.qurancompanion.domain.model.SahabaCategory
+import com.aslmmovic.qurancompanion.presentation.screens.library.components.SahabaDetailBottomSheet
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
     onNavigateToJourneyFlow: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    onNavigateToLibrary: ((SahabaCategory?) -> Unit)? = null,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
@@ -21,20 +24,26 @@ fun HomeScreen(
             when (effect) {
                 HomeUiEffect.NavigateToJourneyFlow -> onNavigateToJourneyFlow()
                 HomeUiEffect.NavigateToSettings -> onNavigateToSettings()
+                is HomeUiEffect.NavigateToLibrary -> onNavigateToLibrary?.invoke(effect.category)
             }
         }
     }
 
     HomeContent(
-        journey = uiState.journey,
-        isCompleted = uiState.isCompleted,
-        userPreferences = uiState.userPreferences,
-        weeklyProgress = uiState.weeklyProgress,
-        tomorrowJourney = uiState.tomorrowJourney,
+        uiState = uiState,
         onBeginClick = viewModel::onBeginJourneyClick,
-        onResetClick = viewModel::onResetCompletionClick,
-        onSettingsClick = viewModel::onSettingsClick,
-        onThemeToggle = viewModel::onToggleTheme,
-        modifier = modifier,
+        onBookmarkClick = viewModel::onBookmarkClick,
+        onNotificationClick = viewModel::onNotificationClick,
+        onSahabaClick = viewModel::onSahabaCardClick,
+        onViewAllTenPromisedClick = viewModel::onViewAllTenPromisedClick,
+        onToggleHabitClick = viewModel::onToggleHabitClick,
+        modifier = modifier
     )
+
+    uiState.selectedSahabaDetail?.let { sahaba ->
+        SahabaDetailBottomSheet(
+            sahaba = sahaba,
+            onDismissRequest = viewModel::onDismissSahabaDetail
+        )
+    }
 }

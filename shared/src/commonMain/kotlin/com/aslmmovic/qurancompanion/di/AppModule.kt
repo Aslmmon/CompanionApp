@@ -70,6 +70,7 @@ val appModule = module {
     single { IncrementDebugDayOffsetUseCase(get()) }
     single { com.aslmmovic.qurancompanion.domain.usecase.GetBookmarkedJourneyIdsUseCase(get()) }
     single { com.aslmmovic.qurancompanion.domain.usecase.ToggleJourneyBookmarkUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.GetJourneyStreakUseCase(get()) }
 
     // Domain layer — sahaba
     single { GetSahabaCatalogUseCase(get()) }
@@ -101,7 +102,14 @@ val appModule = module {
     viewModel { SplashViewModel() }
     viewModel { AppViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel {
+        HomeViewModel(
+            get(), get(), get(), get(), get(),
+            get(), get(), get(), get(), get(),
+            get(), get(), get(), get(), get(),
+            get()
+        )
+    }
     viewModel { JourneyViewModel(get(), get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { LibraryViewModel(get()) }

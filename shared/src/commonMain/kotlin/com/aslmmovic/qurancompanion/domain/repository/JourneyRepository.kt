@@ -9,6 +9,7 @@ interface JourneyRepository {
     suspend fun getTomorrowJourney(): Journey?
     fun isCompleted(journeyId: String, date: String): Flow<Boolean>
     fun getWeeklyProgress(): Flow<List<Boolean>>
+    fun getJourneyStreak(): Flow<Int>
     suspend fun markCompleted(journeyId: String, date: String)
     suspend fun resetCompletion(journeyId: String, date: String)
     

@@ -9,5 +9,8 @@ data class JourneyUiState(
     val journey: Journey? = null,
     val currentStepIndex: Int = 0,
     val isBookmarked: Boolean = false,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val hoursUntilMidnight: Int = 0,
+    val minutesUntilMidnight: Int = 0
 )
+

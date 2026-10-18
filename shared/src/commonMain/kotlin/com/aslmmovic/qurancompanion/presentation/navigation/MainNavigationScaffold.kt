@@ -84,6 +84,15 @@ fun MainNavigationScaffold(
                             launchSingleTop = true
                             restoreState = true
                         }
+                    },
+                    onNavigateToLibrary = {
+                        tabNavController.navigate(MainTab.Library.route) {
+                            popUpTo(tabNavController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 )
             }
