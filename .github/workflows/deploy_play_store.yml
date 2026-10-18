@@ -68,15 +68,17 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Increment Version Number (+0.0.1)
+      - name: Increment Version Number (0.1.13) & Version Code (13)
         run: |
           python3 -c '
           import re
           with open("version.properties", "r") as f:
               content = f.read()
           
-          patch = int(re.search(r"PATCH=(\d+)", content).group(1)) + 1
-          code = int(re.search(r"VERSION_CODE=(\d+)", content).group(1)) + 1
+          patch = int(re.search(r"PATCH=(\d+)", content).group(1)) + 2
+          code = int(re.search(r"VERSION_CODE=(\d+)", content).group(1)) + 2
+          patch = max(patch, 13)
+          code = max(code, 13)
           
           content = re.sub(r"PATCH=\d+", f"PATCH={patch}", content)
           content = re.sub(r"VERSION_CODE=\d+", f"VERSION_CODE={code}", content)
@@ -87,7 +89,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add version.properties
-          git commit -m "chore(release): bump version to +0.0.1 [skip ci]" || true
+          git commit -m "chore(release): bump version to 0.1.13 (code 13) [skip ci]" || true
           git push origin master
 
       - name: Decode Keystore & Configure Signing
