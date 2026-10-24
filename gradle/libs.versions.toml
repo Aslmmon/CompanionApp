@@ -22,6 +22,7 @@ kotlinxSerialization = "1.8.1"
 ktor = "3.1.1"
 material3 = "1.11.0-alpha07"
 navigation = "2.9.0-beta03"
+revenuecat = "8.12.2"
 turbine = "1.2.0"
 
 [libraries]
@@ -63,6 +64,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+revenuecat-purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "revenuecat" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]

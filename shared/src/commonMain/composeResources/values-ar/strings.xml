@@ -155,4 +155,37 @@
     <string name="habits_detail_virtue">فضل العمل وسنده</string>
     <string name="habits_detail_streak_label">التتابع الحالي</string>
     <string name="habits_celebration_title">مبارك! أتممت جميع سنن اليوم 🎉</string>
+
+    <!-- Patron Tier & Monetization (FEAT-010 / SPEC-010) -->
+    <string name="paywall_header_ornament">✦ رعاية مستمرة · صدقة جارية ✦</string>
+    <string name="paywall_title">رفقاء بلس · راعي الصحابة</string>
+    <string name="paywall_subtitle">ساهم في استمرار التطوير بلا إعلانات أبداً وافتح سمات القراءة المقدسة ومزايا حصرية.</string>
+    <string name="paywall_annual_title">اشتراك سنوي (راعي الصحابة)</string>
+    <string name="paywall_annual_subtitle">دعم عام كامل · %1$s</string>
+    <string name="paywall_best_value">أفضل قيمة</string>
+    <string name="paywall_monthly_title">اشتراك شهري (رعاية مستمرة)</string>
+    <string name="paywall_monthly_subtitle">مساهمة متجددة · تجربة مجانية لمدة 7 أيام</string>
+    <string name="paywall_free_trial_tag">تجربة مجانية 7 أيام</string>
+    <string name="paywall_tip_title">إكرامية داعم</string>
+    <string name="paywall_tip_subtitle">مساهمة لمرة واحدة دعماً لرسالتنا</string>
+    <string name="paywall_restore">استعادة المشتريات</string>
+    <string name="paywall_not_now">ليس الآن</string>
+    <string name="paywall_support_button">انضم لرفقاء بلس</string>
+    <string name="paywall_tip_button">تقديم الإكرامية</string>
+    <string name="paywall_processing">جاري المعالجة…</string>
+    <string name="paywall_success_message">جزاكم الله خيراً وبارك في عطائكم الكريم!</string>
+
+    <string name="settings_support_card_title">رعاية رفقاء الصحابة</string>
+    <string name="settings_support_card_subtitle">ساهم معنا كراعٍ للتطبيق (صدقة جارية) لنستمر في بناء تجارب إسلامية راقية بلا إعلانات.</string>
+    <string name="settings_support_card_action">انضم إلى الرعاة</string>
+    <string name="settings_patron_badge">راعي رفقاء الصحابة ★</string>
+    <string name="settings_patron_active_desc">شكراً لدعمك المبارك والمستمر (صدقة جارية).</string>
+    <string name="settings_supporter_badge">داعم كريم ★</string>
+
+    <string name="settings_theme_title">سمات القراءة الشريفة</string>
+    <string name="theme_classic">الأصلي</string>
+    <string name="theme_parchment">مصحف المدينة</string>
+    <string name="theme_andalus">زمرد أندلسي</string>
+    <string name="theme_oled">أسود نقي OLED</string>
+    <string name="theme_locked_badge">حصري للرعاة</string>
 </resources>

@@ -97,6 +97,12 @@ val appModule = module {
     single { RequestNotificationPermissionUseCase(get()) }
     single { TriggerImmediateNotificationUseCase(get(), get(), get()) }
 
+    // Domain layer — purchases & entitlements
+    single { com.aslmmovic.qurancompanion.domain.usecase.GetEntitlementsUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.GetProductsUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.PurchaseProductUseCase(get()) }
+    single { com.aslmmovic.qurancompanion.domain.usecase.RestorePurchasesUseCase(get()) }
+
     // Presentation layer
     viewModel { SplashViewModel() }
     viewModel { AppViewModel(get(), get(), get(), get(), get(), get(), get()) }
@@ -105,6 +111,7 @@ val appModule = module {
     viewModel { JourneyViewModel(get(), get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { LibraryViewModel(get()) }
+    viewModel { com.aslmmovic.qurancompanion.presentation.screens.paywall.PaywallViewModel(get(), get(), get()) }
     viewModel {
         com.aslmmovic.qurancompanion.presentation.screens.habits.HabitsViewModel(
             get(), get(), get(), get(), get(), get()

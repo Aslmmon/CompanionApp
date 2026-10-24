@@ -1,13 +1,18 @@
 package com.aslmmovic.qurancompanion
 
+import app.cash.turbine.test
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+import com.aslmmovic.qurancompanion.domain.model.AppTheme
+import com.aslmmovic.qurancompanion.domain.model.UserEntitlements
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
+import com.aslmmovic.qurancompanion.domain.usecase.GetEntitlementsUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.TriggerImmediateNotificationUseCase
+import com.aslmmovic.qurancompanion.fakes.FakePurchasesRepository
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsUiEffect
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +43,7 @@ class SettingsViewModelTest {
     private val fakePrefsRepo = FakeUserPreferencesRepository()
     private val fakeJourneyRepo = FakeJourneyRepository()
     private val fakeScheduler = FakeNotificationScheduler()
+    private val fakePurchasesRepo = FakePurchasesRepository()
     private val fakeLocaleProvider = object : LocaleProvider {
         private val _currentLocaleFlow = MutableStateFlow("en")
         override val currentLocaleFlow: StateFlow<String> = _currentLocaleFlow.asStateFlow()
@@ -73,6 +79,7 @@ class SettingsViewModelTest {
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
         localeProvider = fakeLocaleProvider,
         appBuildInfoProvider = fakeBuildInfoProvider,
+        getEntitlementsUseCase = GetEntitlementsUseCase(fakePurchasesRepo),
         dateTimeProvider = fakeDateTimeProvider
     )
 
@@ -406,7 +413,8 @@ class SettingsViewModelTest {
             triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
             incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
             localeProvider = fakeLocaleProvider,
-            appBuildInfoProvider = releaseBuildProvider
+            appBuildInfoProvider = releaseBuildProvider,
+            getEntitlementsUseCase = GetEntitlementsUseCase(fakePurchasesRepo)
         )
         val collectJob = launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
@@ -490,6 +498,95 @@ class SettingsViewModelTest {
         kotlin.test.assertNotNull(confirmationEffect)
         assertFalse(confirmationEffect.isToday)
         assertEquals("02:30 PM", confirmationEffect.formattedTime)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `free user selecting premium theme emits OpenPaywall effect and does not change selectedTheme`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isPatron)
+        val initialTheme = viewModel.uiState.value.userPreferences.selectedTheme
+
+        viewModel.uiEffects.test {
+            viewModel.onSelectTheme(AppTheme.MUSHAF_PARCHMENT)
+            advanceUntilIdle()
+
+            val effect = awaitItem()
+            assertTrue(effect is SettingsUiEffect.OpenPaywall)
+            assertEquals(initialTheme, viewModel.uiState.value.userPreferences.selectedTheme)
+        }
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `free user selecting classic theme updates selectedTheme`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onSelectTheme(AppTheme.CLASSIC)
+        advanceUntilIdle()
+
+        assertEquals(AppTheme.CLASSIC.id, viewModel.uiState.value.userPreferences.selectedTheme)
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `patron user selecting premium theme updates selectedTheme`() = runTest {
+        fakePurchasesRepo.updateEntitlements(UserEntitlements(isPatron = true))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isPatron)
+
+        viewModel.uiEffects.test {
+            viewModel.onSelectTheme(AppTheme.ANDALUS_EMERALD)
+            advanceUntilIdle()
+
+            expectNoEvents()
+            assertEquals(AppTheme.ANDALUS_EMERALD.id, viewModel.uiState.value.userPreferences.selectedTheme)
+        }
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onOpenSupportCard emits OpenPaywall effect`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.uiEffects.test {
+            viewModel.onOpenSupportCard()
+            advanceUntilIdle()
+
+            val effect = awaitItem()
+            assertTrue(effect is SettingsUiEffect.OpenPaywall)
+        }
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `entitlements changes dynamically update SettingsUiState`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isPatron)
+        assertFalse(viewModel.uiState.value.isSupporter)
+
+        fakePurchasesRepo.updateEntitlements(UserEntitlements(isPatron = true, isSupporter = true))
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isPatron)
+        assertTrue(viewModel.uiState.value.isSupporter)
 
         collectJob.cancel()
     }

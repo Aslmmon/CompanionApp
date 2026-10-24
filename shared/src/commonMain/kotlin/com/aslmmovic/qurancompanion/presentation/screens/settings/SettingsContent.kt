@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.aslmmovic.qurancompanion.domain.model.AppTheme
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import com.aslmmovic.qurancompanion.presentation.screens.settings.components.AppearanceSection
 import com.aslmmovic.qurancompanion.presentation.screens.settings.components.AppInfoFooter
@@ -26,14 +27,18 @@ import com.aslmmovic.qurancompanion.presentation.screens.settings.components.Lan
 import com.aslmmovic.qurancompanion.presentation.screens.settings.components.NotificationSection
 import com.aslmmovic.qurancompanion.presentation.screens.settings.components.ReminderTimePickerDialog
 import com.aslmmovic.qurancompanion.presentation.screens.settings.components.SettingsHeader
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.SupportCard
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.ThemeSelectorRow
 
 @Composable
 fun SettingsContent(
     uiState: SettingsUiState,
     onToggleTheme: (Boolean) -> Unit,
+    onSelectTheme: (AppTheme) -> Unit,
     onLanguageSelected: (String) -> Unit,
     onUpdateReminderTime: (Int, Int) -> Unit,
     onToggleReminder: (Boolean) -> Unit,
+    onOpenPaywall: () -> Unit,
     onSimulateNextDay: () -> Unit,
     onTriggerNotification: () -> Unit,
     modifier: Modifier = Modifier,
@@ -55,6 +60,18 @@ fun SettingsContent(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             SettingsHeader()
+
+            SupportCard(
+                isPatron = uiState.isPatron,
+                isSupporter = uiState.isSupporter,
+                onOpenPaywall = onOpenPaywall
+            )
+
+            ThemeSelectorRow(
+                selectedThemeId = uiState.userPreferences.selectedTheme,
+                isPatron = uiState.isPatron,
+                onSelectTheme = onSelectTheme
+            )
 
             AppearanceSection(
                 isDarkMode = uiState.userPreferences.isDarkMode ?: false,

@@ -38,9 +38,11 @@ fun App() {
         null -> isSystemInDarkTheme()
     }
 
+    val activeTheme = state.userPreferences?.selectedTheme ?: state.todayJourney?.theme
+
     SahabaCompanionTheme(
         darkTheme = isDarkMode,
-        themeName = state.todayJourney?.theme,
+        themeName = activeTheme,
         isArabic = state.isArabic
     ) {
         val startDest = state.startDestination

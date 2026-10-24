@@ -59,3 +59,6 @@
 -keepclassmembers class * extends androidx.room.RoomDatabase {
     *;
 }
+
+# RevenueCat Purchases SDK
+-keep class com.revenuecat.** { *; }

@@ -96,6 +96,7 @@ class UserPreferencesRepositoryImplTest {
         assertTrue(prefs.isReminderEnabled)
         assertNull(prefs.preferredLanguage)
         assertNull(prefs.isDarkMode)
+        assertEquals("classic", prefs.selectedTheme)
     }
 
     @Test
@@ -111,13 +112,35 @@ class UserPreferencesRepositoryImplTest {
             reminderMinute = 30,
             isReminderEnabled = false,
             preferredLanguage = "ar",
-            isDarkMode = true
+            isDarkMode = true,
+            selectedTheme = "parchment"
         )
         repository.saveUserPreferences(newPrefs)
         advanceUntilIdle()
 
         val loaded = repository.getUserPreferences().first()
         assertEquals(newPrefs, loaded)
+    }
+
+    @Test
+    fun saveUserPreferences_selectedTheme_persistsAcrossReload() = runTest(testDispatcher) {
+        val repository1 = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        repository1.saveUserPreferences(UserPreferences(selectedTheme = "andalus"))
+        advanceUntilIdle()
+
+        val repository2 = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        val loaded = repository2.getUserPreferences().first()
+        assertEquals("andalus", loaded.selectedTheme)
     }
 
     @Test

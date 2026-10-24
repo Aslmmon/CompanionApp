@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.koin.android)
+    implementation(libs.revenuecat.purchases)
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
@@ -55,6 +56,7 @@ android {
         versionCode = vCode
         versionName = vName
         resourceConfigurations += listOf("en", "ar")
+        buildConfigField("String", "REVENUECAT_API_KEY", "\"${project.findProperty("REVENUECAT_API_KEY") ?: ""}\"")
     }
 
     signingConfigs {
@@ -106,6 +108,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
