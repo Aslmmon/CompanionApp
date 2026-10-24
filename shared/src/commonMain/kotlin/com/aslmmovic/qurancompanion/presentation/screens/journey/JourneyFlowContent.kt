@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -166,6 +167,7 @@ fun JourneyFlowContent(
                     .padding(horizontal = 24.dp)
                     .padding(bottom = 24.dp)
                     .height(54.dp)
+                    .testTag("journey_next_button")
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,

@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.aslmmovic.qurancompanion.ui.theme.DarkColorScheme
 import com.aslmmovic.qurancompanion.ui.theme.LightColorScheme
 import com.aslmmovic.qurancompanion.ui.theme.SahabaCardBorder
+import com.aslmmovic.qurancompanion.ui.theme.SahabaEmeraldHighlight
 import com.aslmmovic.qurancompanion.ui.theme.SahabaEvergreen
 import com.aslmmovic.qurancompanion.ui.theme.SahabaGoldAccent
 import com.aslmmovic.qurancompanion.ui.theme.SahabaIvoryBackground
@@ -162,5 +163,18 @@ class ThemeTest {
         assertEquals(FontWeight.Normal, quran.fontWeight)
         assertEquals(24.sp, quran.fontSize)
         assertEquals(48.sp, quran.lineHeight)
+    }
+
+    @Test
+    fun test_getSahabaTypography_isArabicTrue_returnsArabicFontFamily() {
+        val dummyArabicFont = FontFamily.Cursive
+        val typography = createSahabaTypography(dummyArabicFont)
+        assertEquals(dummyArabicFont, typography.headlineLarge.fontFamily)
+        assertEquals(dummyArabicFont, typography.displayMedium.fontFamily)
+    }
+
+    @Test
+    fun test_darkScheme_secondaryIsEmeraldHighlight() {
+        assertEquals(SahabaEmeraldHighlight, DarkColorScheme.secondary)
     }
 }

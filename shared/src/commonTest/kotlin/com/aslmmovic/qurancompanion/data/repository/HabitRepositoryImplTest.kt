@@ -158,6 +158,33 @@ class HabitRepositoryImplTest {
         assertFalse(active.any { it.id == "duha_prayer" })
     }
 
+    @Test
+    fun addHabitFromCatalog_alreadyActiveHabit_doesNotDuplicate() = runTest {
+        val repository = createRepository()
+        val initialActive = repository.observeActiveHabits().first()
+        assertEquals(4, initialActive.size)
+
+        val result = repository.addHabitFromCatalog("morning_adhkar")
+        assertTrue(result.isSuccess)
+
+        val afterAdd = repository.observeActiveHabits().first()
+        assertEquals(4, afterAdd.size)
+    }
+
+    @Test
+    fun observeActiveHabits_emitsNewListAfterAdd_reactively() = runTest {
+        val repository = createRepository()
+        val initialActive = repository.observeActiveHabits().first()
+        assertEquals(4, initialActive.size)
+        assertFalse(initialActive.any { it.id == "tahajjud_prayer" })
+
+        repository.addHabitFromCatalog("tahajjud_prayer")
+
+        val updatedActive = repository.observeActiveHabits().first()
+        assertEquals(5, updatedActive.size)
+        assertTrue(updatedActive.any { it.id == "tahajjud_prayer" })
+    }
+
     private class FakeHabitLocalDataSource : HabitLocalDataSource {
         var habits: List<HabitDto> = emptyList()
         override suspend fun loadHabitsCatalog(locale: String): List<HabitDto> = habits

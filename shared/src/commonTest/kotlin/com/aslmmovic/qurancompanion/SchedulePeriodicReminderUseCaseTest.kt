@@ -57,4 +57,18 @@ class SchedulePeriodicReminderUseCaseTest {
         assertEquals(30L, fakeScheduler.scheduledIntervalMinutes)
         assertEquals("Sahaba Companion: Uthman ibn Affan", fakeScheduler.scheduledTitle)
     }
+
+    @Test
+    fun nullJourney_usesFallbackTitleAndBody() = runTest {
+        val fakeScheduler = FakeNotificationScheduler()
+        val fakeJourneyRepo = FakeJourneyRepository().apply { todayJourney = null }
+        val fakePrefsRepo = FakeUserPreferencesRepository(UserPreferences(isReminderEnabled = true))
+
+        val useCase = SchedulePeriodicReminderUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo)
+        useCase()
+
+        assertEquals("Sahaba Companion", fakeScheduler.scheduledTitle)
+        assertEquals("Discover today's journey with the Sahaba.", fakeScheduler.scheduledBody)
+        assertFalse(fakeScheduler.isCancelled)
+    }
 }

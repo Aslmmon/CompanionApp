@@ -286,6 +286,87 @@ class JourneyRepositoryImplTest {
         assertEquals("أبو بكر الصديق", repository.getAllJourneys().first().title)
     }
 
+    @Test
+    fun getTodayJourney_emptyDataSource_returnsNull() = runTest {
+        val repository = createRepository()
+        fakeDataSource.journeys = emptyList()
+        advanceUntilIdle()
+
+        assertNull(repository.getTodayJourney())
+    }
+
+    @Test
+    fun getTomorrowJourney_atLastJourney_returnsNullOrWraps() = runTest {
+        fakeDataSource.journeys = listOf(
+            createJourneyDto("1", title = "Journey 1"),
+            createJourneyDto("2", title = "Journey 2")
+        )
+        fakeDateTimeProvider.dateString = "2026-01-01"
+        val repository = createRepository()
+        advanceUntilIdle()
+
+        // Fast forward to journey 2 using debug offset
+        repository.incrementDebugDayOffset()
+        advanceUntilIdle()
+
+        assertEquals("2", repository.getTodayJourney()?.id)
+        // Tomorrow wraps around to journey 1
+        assertEquals("1", repository.getTomorrowJourney()?.id)
+    }
+
+    @Test
+    fun getWeeklyProgress_allDaysCompleted_returns7TrueSlots() = runTest {
+        fakeDataSource.journeys = listOf(createJourneyDto("1", title = "Abu Bakr"))
+        fakeDateTimeProvider.dayOfWeek = 1
+        fakeDateTimeProvider.dateString = "2026-01-05" // Monday
+        val repository = createRepository()
+        advanceUntilIdle()
+
+        // Complete all 7 days Monday to Sunday: 2026-01-05 to 2026-01-11
+        val dates = listOf(
+            "2026-01-05", "2026-01-06", "2026-01-07",
+            "2026-01-08", "2026-01-09", "2026-01-10", "2026-01-11"
+        )
+        dates.forEach { date ->
+            repository.markCompleted("1", date)
+        }
+        advanceUntilIdle()
+
+        val progress = repository.getWeeklyProgress().first()
+        assertEquals(listOf(true, true, true, true, true, true, true), progress)
+    }
+
+    @Test
+    fun localeChange_fromArabicToEnglish_reloadsCatalogInEnglish() = runTest {
+        val repository = createRepository()
+        fakeDataSource.journeysByLocale = mapOf(
+            "ar" to listOf(createJourneyDto("1", title = "أبو بكر")),
+            "en" to listOf(createJourneyDto("1", title = "Abu Bakr"))
+        )
+        fakeLocaleProvider.changeLocale("ar")
+        advanceUntilIdle()
+
+        assertEquals("أبو بكر", repository.getAllJourneys().first().title)
+
+        fakeLocaleProvider.changeLocale("en")
+        advanceUntilIdle()
+
+        assertEquals("Abu Bakr", repository.getAllJourneys().first().title)
+    }
+
+    @Test
+    fun isCompleted_differentDate_returnsFalse() = runTest {
+        val repository = createRepository()
+        fakeDataSource.journeys = listOf(createJourneyDto("1"))
+        advanceUntilIdle()
+
+        repository.markCompleted("1", "2026-01-01")
+        advanceUntilIdle()
+
+        assertTrue(repository.isCompleted("1", "2026-01-01").first())
+        assertFalse(repository.isCompleted("1", "2026-01-02").first())
+    }
+
     // Helper functions and fakes
     private fun createJourneyDto(id: String, title: String = "Journey $id") = JourneyDto(
         id = id,

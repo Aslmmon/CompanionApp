@@ -308,4 +308,43 @@ class ViewModelsTest {
 
         collectJob.cancel()
     }
+
+    @Test
+    fun HomeViewModel_weeklyProgressReflectsRepository() = runTest {
+        repo.todayJourney = testJourney(id = "j1")
+        val viewModel = createHomeViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        val progress = viewModel.uiState.value.weeklyProgress
+        assertEquals(7, progress.size)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun HomeViewModel_onResetCompletionClick_nullJourney_doesNothing() = runTest {
+        repo.todayJourney = null
+        val viewModel = createHomeViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onResetCompletionClick()
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.journey)
+        collectJob.cancel()
+    }
+
+    @Test
+    fun HomeViewModel_initialStateIsLoading_thenFalseAfterLoad() = runTest {
+        val viewModel = createHomeViewModel()
+        assertTrue(viewModel.uiState.value.isLoading)
+
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isLoading)
+        collectJob.cancel()
+    }
 }

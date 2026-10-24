@@ -30,6 +30,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -232,5 +233,71 @@ class JourneyViewModelTest {
 
         val domain = dto.toDomain()
         assertEquals("إِنَّ مَعَ العُسْرِ يُسْرًا", domain.arabicVerse)
+    }
+
+    @Test
+    fun initialization_nullJourney_setsNullJourneyInState() = runTest {
+        repo.todayJourney = null
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.journey)
+        assertFalse(viewModel.uiState.value.isLoading)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onFinish_nullJourney_isNoOp() = runTest {
+        repo.todayJourney = null
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        val effects = mutableListOf<JourneyUiEffect>()
+        val effectsJob = launch { viewModel.uiEffects.toList(effects) }
+        advanceUntilIdle()
+
+        viewModel.onFinish()
+        advanceUntilIdle()
+
+        assertTrue(effects.isEmpty())
+
+        collectJob.cancel()
+        effectsJob.cancel()
+    }
+
+    @Test
+    fun journeyDto_nullArabicVerse_mapsToNullDomainField() {
+        val dto = JourneyDto(
+            id = "dto-2",
+            dayNumber = 2,
+            title = "Title 2",
+            subtitle = "Subtitle 2",
+            category = "Category",
+            emotion = "Emotion",
+            theme = "Theme",
+            heroQuote = "Quote",
+            intention = "Intention",
+            durationMinutes = 5,
+            difficulty = "Easy",
+            estimatedReadingMinutes = 4,
+            cover = CoverDto("illustration", "asset"),
+            arabicVerse = null
+        )
+
+        val domain = dto.toDomain()
+        assertNull(domain.arabicVerse)
+    }
+
+    @Test
+    fun initialization_withPreExistingBookmark_isBookmarkedTrue() = runTest {
+        prefsRepo.toggleJourneyBookmark(sampleJourney.id)
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isBookmarked)
+
+        collectJob.cancel()
     }
 }

@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,19 +68,22 @@ fun AddHabitBottomSheet(
     onAddCatalogHabit: (String) -> Unit,
     onCreateCustomHabit: (String, String, HabitCategory) -> Unit,
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    searchQuery: String = "",
+    onSearchQueryChange: (String) -> Unit = {}
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var customTitle by remember { mutableStateOf("") }
     var customDesc by remember { mutableStateOf("") }
     var customCategory by remember { mutableStateOf(HabitCategory.CHARACTER) }
+    var localSearchQuery by remember(searchQuery) { mutableStateOf(searchQuery) }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         containerColor = MaterialTheme.colorScheme.surface,
-        modifier = modifier
+        modifier = modifier.testTag("add_habit_sheet")
     ) {
         Column(
             modifier = Modifier
@@ -93,6 +97,22 @@ fun AddHabitBottomSheet(
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            OutlinedTextField(
+                value = localSearchQuery,
+                onValueChange = {
+                    localSearchQuery = it
+                    onSearchQueryChange(it)
+                },
+                label = { Text("Search") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("add_habit_search_field"),
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(14.dp))
@@ -247,7 +267,8 @@ fun AddHabitBottomSheet(
                 enabled = customTitle.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
+                    .height(48.dp)
+                    .testTag("add_habit_confirm_button"),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,

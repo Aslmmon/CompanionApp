@@ -1,6 +1,7 @@
 package com.aslmmovic.qurancompanion.data.repository
 
 import com.aslmmovic.qurancompanion.data.datasource.KeyValueStorage
+import com.aslmmovic.qurancompanion.domain.model.UserPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -14,6 +15,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -78,6 +80,116 @@ class UserPreferencesRepositoryImplTest {
 
         val bookmarks = repository.getBookmarkedJourneyIds().first()
         assertEquals(setOf("journey-a", "journey-b"), bookmarks)
+    }
+
+    @Test
+    fun getUserPreferences_freshStorage_returnsDefaultPreferences() = runTest(testDispatcher) {
+        val repository = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        val prefs = repository.getUserPreferences().first()
+        assertEquals(8, prefs.reminderHour)
+        assertEquals(0, prefs.reminderMinute)
+        assertTrue(prefs.isReminderEnabled)
+        assertNull(prefs.preferredLanguage)
+        assertNull(prefs.isDarkMode)
+    }
+
+    @Test
+    fun saveUserPreferences_fullPreferences_roundTripsAllFields() = runTest(testDispatcher) {
+        val repository = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        val newPrefs = UserPreferences(
+            reminderHour = 6,
+            reminderMinute = 30,
+            isReminderEnabled = false,
+            preferredLanguage = "ar",
+            isDarkMode = true
+        )
+        repository.saveUserPreferences(newPrefs)
+        advanceUntilIdle()
+
+        val loaded = repository.getUserPreferences().first()
+        assertEquals(newPrefs, loaded)
+    }
+
+    @Test
+    fun saveUserPreferences_preferredLanguageAr_persistsAcrossReload() = runTest(testDispatcher) {
+        val repository1 = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        repository1.saveUserPreferences(UserPreferences(preferredLanguage = "ar"))
+        advanceUntilIdle()
+
+        val repository2 = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        val loaded = repository2.getUserPreferences().first()
+        assertEquals("ar", loaded.preferredLanguage)
+    }
+
+    @Test
+    fun saveUserPreferences_darkMode_persistsAcrossReload() = runTest(testDispatcher) {
+        val repository1 = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        repository1.saveUserPreferences(UserPreferences(isDarkMode = true))
+        advanceUntilIdle()
+
+        val repository2 = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        val loaded = repository2.getUserPreferences().first()
+        assertEquals(true, loaded.isDarkMode)
+    }
+
+    @Test
+    fun initialization_emptyStorageString_emitsEmptySet() = runTest(testDispatcher) {
+        fakeStorage.putString("pref_bookmarked_journeys", "")
+
+        val repository = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        val bookmarks = repository.getBookmarkedJourneyIds().first()
+        assertTrue(bookmarks.isEmpty())
+    }
+
+    @Test
+    fun getBookmarkedJourneyIds_emitsReactively_afterToggle() = runTest(testDispatcher) {
+        val repository = UserPreferencesRepositoryImpl(
+            storage = fakeStorage,
+            ioDispatcher = testDispatcher
+        )
+        advanceUntilIdle()
+
+        assertEquals(emptySet(), repository.getBookmarkedJourneyIds().first())
+
+        repository.toggleJourneyBookmark("journey-xyz")
+        advanceUntilIdle()
+
+        assertEquals(setOf("journey-xyz"), repository.getBookmarkedJourneyIds().first())
     }
 
     private class TestKeyValueStorage : KeyValueStorage {

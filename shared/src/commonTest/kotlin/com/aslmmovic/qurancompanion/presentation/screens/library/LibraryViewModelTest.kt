@@ -16,6 +16,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -125,5 +126,78 @@ class LibraryViewModelTest {
         assertNull(viewModel.uiState.value.selectedSahabaDetail)
 
         collectJob.cancel()
+    }
+
+    @Test
+    fun combinedCategoryAndSearch_filtersByBoth() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onCategorySelected(SahabaCategory.TEN_PROMISED)
+        viewModel.onSearchQueryChanged("Abu Bakr")
+        advanceUntilIdle()
+
+        assertEquals(1, viewModel.uiState.value.sahabaList.size)
+        assertEquals("abu_bakr", viewModel.uiState.value.sahabaList.first().id)
+
+        // Matching query but wrong category
+        viewModel.onCategorySelected(SahabaCategory.ANSAR)
+        advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.sahabaList.isEmpty())
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun caseInsensitiveSearch_matchesIgnoringCase() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onSearchQueryChanged("umar")
+        advanceUntilIdle()
+
+        assertEquals(1, viewModel.uiState.value.sahabaList.size)
+        assertEquals("umar", viewModel.uiState.value.sahabaList.first().id)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun searchQueryWithNoMatch_returnsEmptyList() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onSearchQueryChanged("NonExistentCompanion")
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.sahabaList.isEmpty())
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun categoryResetToAll_showsFullList() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onCategorySelected(SahabaCategory.ANSAR)
+        advanceUntilIdle()
+        assertEquals(1, viewModel.uiState.value.sahabaList.size)
+
+        viewModel.onCategorySelected(SahabaCategory.ALL)
+        advanceUntilIdle()
+        assertEquals(3, viewModel.uiState.value.sahabaList.size)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun libraryViewModel_initialState_isLoading() {
+        val viewModel = createViewModel()
+        assertTrue(viewModel.uiState.value.isLoading)
     }
 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,6 +50,7 @@ fun HabitCard(
 
     Surface(
         modifier = modifier
+            .testTag("habit_card_${habit.id}")
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))

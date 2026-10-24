@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,6 +68,7 @@ fun ReadyStateContent(
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag("home_today_card")
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.35f),
@@ -191,6 +193,7 @@ fun ReadyStateContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
+                .testTag("home_begin_journey_button")
         ) {
             Text(
                 text = stringResource(Res.string.home_begin_journey),

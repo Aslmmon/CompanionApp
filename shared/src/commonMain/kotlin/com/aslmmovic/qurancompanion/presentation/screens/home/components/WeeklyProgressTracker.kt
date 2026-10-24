@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -59,11 +60,13 @@ fun WeeklyProgressTracker(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
         ),
         shape = RoundedCornerShape(20.dp),
-        modifier = modifier.border(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.25f),
-            shape = RoundedCornerShape(20.dp)
-        )
+        modifier = modifier
+            .testTag("home_weekly_progress")
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.25f),
+                shape = RoundedCornerShape(20.dp)
+            )
     ) {
         Column(
             modifier = Modifier.padding(20.dp),

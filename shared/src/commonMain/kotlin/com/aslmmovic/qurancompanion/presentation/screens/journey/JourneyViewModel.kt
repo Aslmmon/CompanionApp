@@ -92,10 +92,9 @@ class JourneyViewModel(
     }
 
     fun onFinish() {
+        val currentJourney = _uiState.value.journey ?: return
         viewModelScope.launch {
-            _uiState.value.journey?.let {
-                markJourneyCompletedUseCase(it.id, dateTimeProvider.getCurrentDateString())
-            }
+            markJourneyCompletedUseCase(currentJourney.id, dateTimeProvider.getCurrentDateString())
             _uiEffects.emit(JourneyUiEffect.NavigateToCompletion)
         }
     }

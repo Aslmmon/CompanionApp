@@ -227,5 +227,41 @@ class NavigationShellTest {
         assertEquals(MainTab.Today, resolveTab("unknown/route"))
         assertEquals(MainTab.Today, resolveTab(null))
     }
+
+    @Test
+    fun appViewModel_isArabicTrue_whenLanguageIsAr() = runTest {
+        prefsRepo.saveUserPreferences(UserPreferences(preferredLanguage = "ar"))
+        val viewModel = createAppViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isArabic)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun appViewModel_darkModePreference_propagatesToUiState() = runTest {
+        prefsRepo.saveUserPreferences(UserPreferences(isDarkMode = true))
+        val viewModel = createAppViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.value.isDarkMode)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun AppViewModel_reminderDisabled_schedulerCancelsCalled() = runTest {
+        prefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = false))
+        val viewModel = createAppViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertTrue(fakeScheduler.isCancelled)
+
+        collectJob.cancel()
+    }
 }
 

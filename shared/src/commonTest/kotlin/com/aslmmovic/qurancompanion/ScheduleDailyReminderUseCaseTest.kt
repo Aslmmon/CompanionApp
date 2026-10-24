@@ -71,4 +71,35 @@ class ScheduleDailyReminderUseCaseTest {
 
         assertTrue(fakeScheduler.isCancelled)
     }
+
+    @Test
+    fun nullJourney_andReminderEnabled_schedulesFallbackContent() = runTest {
+        val fakeScheduler = FakeNotificationScheduler()
+        val fakeJourneyRepo = FakeJourneyRepository().apply { todayJourney = null }
+        val fakePrefsRepo = FakeUserPreferencesRepository(
+            UserPreferences(isReminderEnabled = true, reminderHour = 8, reminderMinute = 0)
+        )
+
+        val useCase = ScheduleDailyReminderUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo)
+        useCase()
+
+        assertEquals("Sahaba Companion", fakeScheduler.scheduledTitle)
+        assertEquals("Discover today's journey with the Sahaba.", fakeScheduler.scheduledBody)
+        assertFalse(fakeScheduler.isCancelled)
+    }
+
+    @Test
+    fun reminderTimeWithNonZeroMinutes_schedulesAtCorrectMinute() = runTest {
+        val fakeScheduler = FakeNotificationScheduler()
+        val fakeJourneyRepo = FakeJourneyRepository()
+        val fakePrefsRepo = FakeUserPreferencesRepository(
+            UserPreferences(isReminderEnabled = true, reminderHour = 7, reminderMinute = 45)
+        )
+
+        val useCase = ScheduleDailyReminderUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo)
+        useCase()
+
+        assertEquals(7, fakeScheduler.scheduledHour)
+        assertEquals(45, fakeScheduler.scheduledMinute)
+    }
 }

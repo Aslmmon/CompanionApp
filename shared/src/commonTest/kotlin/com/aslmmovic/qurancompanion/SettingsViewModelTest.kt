@@ -345,4 +345,81 @@ class SettingsViewModelTest {
 
         collectJob.cancel()
     }
+
+    @Test
+    fun onTriggerNotification_nullJourney_whenReminderEnabled_firesFallbackNotification() = runTest {
+        fakeJourneyRepo.todayJourney = null
+        fakePrefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = true))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onTriggerNotification()
+        advanceUntilIdle()
+
+        assertEquals("Sahaba Companion", fakeScheduler.immediateNotificationTitle)
+        assertEquals("Discover today's journey with the Sahaba.", fakeScheduler.immediateNotificationBody)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onToggleReminder_true_schedulerIsCalledWithCurrentPreferredTime() = runTest {
+        fakePrefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = false, reminderHour = 7, reminderMinute = 15))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onToggleReminder(true)
+        advanceUntilIdle()
+
+        assertEquals(7, fakeScheduler.scheduledHour)
+        assertEquals(15, fakeScheduler.scheduledMinute)
+        assertFalse(fakeScheduler.isCancelled)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun SettingsViewModel_releaseBuild_isDebugFalseAndBuildTypeIsRelease() = runTest {
+        val releaseBuildProvider = FakeAppBuildInfoProvider(
+            versionName = "1.0.0",
+            buildNumber = 100L,
+            isDebug = false
+        )
+        val viewModel = SettingsViewModel(
+            getUserPreferencesUseCase = GetUserPreferencesUseCase(fakePrefsRepo),
+            savePreferencesUseCase = SavePreferencesUseCase(fakePrefsRepo),
+            scheduleDailyReminderUseCase = ScheduleDailyReminderUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
+            requestNotificationPermissionUseCase = RequestNotificationPermissionUseCase(fakeScheduler),
+            triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
+            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
+            localeProvider = fakeLocaleProvider,
+            appBuildInfoProvider = releaseBuildProvider
+        )
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isDebug)
+        assertEquals("Release", viewModel.uiState.value.buildType)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onToggleReminder_rapidToggle_resultsInCorrectFinalState() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onToggleReminder(false)
+        viewModel.onToggleReminder(true)
+        viewModel.onToggleReminder(false)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.userPreferences.isReminderEnabled)
+        assertTrue(fakeScheduler.isCancelled)
+
+        collectJob.cancel()
+    }
 }

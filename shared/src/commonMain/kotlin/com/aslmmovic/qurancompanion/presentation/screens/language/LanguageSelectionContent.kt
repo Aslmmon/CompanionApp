@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,7 +85,8 @@ fun LanguageSelectionContent(
                 title = stringResource(Res.string.language_english),
                 subtitle = "English",
                 isSelected = selectedLanguage == "en",
-                onClick = { selectedLanguage = "en" }
+                onClick = { selectedLanguage = "en" },
+                modifier = Modifier.testTag("language_english_button")
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -93,7 +95,8 @@ fun LanguageSelectionContent(
                 title = stringResource(Res.string.language_arabic),
                 subtitle = "العربية",
                 isSelected = selectedLanguage == "ar",
-                onClick = { selectedLanguage = "ar" }
+                onClick = { selectedLanguage = "ar" },
+                modifier = Modifier.testTag("language_arabic_button")
             )
 
             Spacer(modifier = Modifier.height(48.dp))
@@ -124,7 +127,8 @@ private fun LanguageOptionCard(
     title: String,
     subtitle: String,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val borderColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
@@ -141,7 +145,7 @@ private fun LanguageOptionCard(
     Card(
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         shape = RoundedCornerShape(16.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .border(
                 width = if (isSelected) 2.dp else 1.dp,

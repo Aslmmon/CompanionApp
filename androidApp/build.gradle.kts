@@ -36,6 +36,12 @@ dependencies {
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
+    debugImplementation(libs.compose.ui.test.manifest)
+
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.android.test)
+    androidTestImplementation(libs.androidx.testExt.junit)
 }
 
 android {
