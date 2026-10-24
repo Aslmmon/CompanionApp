@@ -5,4 +5,5 @@ package com.aslmmovic.qurancompanion.presentation.screens.settings
  */
 sealed interface SettingsUiEffect {
     data object NavigateBack : SettingsUiEffect
+    data class ShowReminderConfirmation(val isToday: Boolean, val formattedTime: String) : SettingsUiEffect
 }

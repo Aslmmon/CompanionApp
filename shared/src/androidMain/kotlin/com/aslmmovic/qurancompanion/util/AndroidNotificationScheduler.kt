@@ -1,6 +1,7 @@
 package com.aslmmovic.qurancompanion.util
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -26,6 +27,7 @@ class AndroidNotificationScheduler(
         const val CHANNEL_ID = "daily_reminder_channel"
         const val NOTIFICATION_ID = 1001
         const val REQUEST_CODE_POST_NOTIFICATIONS = 1002
+        const val REMINDER_PENDING_INTENT_REQUEST_CODE = 1003
         const val WORK_NAME_DAILY_REMINDER = "daily_companion_reminder_work"
         const val EXTRA_TITLE = "extra_title"
         const val EXTRA_BODY = "extra_body"
@@ -71,36 +73,89 @@ class AndroidNotificationScheduler(
     }
 
     override fun scheduleDailyReminder(hour: Int, minute: Int, title: String, body: String) {
+        // Clean up legacy WorkManager task
+        WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME_DAILY_REMINDER)
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
         val now = Calendar.getInstance()
         val target = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
-            if (before(now)) {
+            if (!after(now)) {
                 add(Calendar.DAY_OF_MONTH, 1)
             }
         }
-        val initialDelayMs = target.timeInMillis - now.timeInMillis
+        val triggerAtMillis = target.timeInMillis
 
-        val inputData = Data.Builder()
-            .putString(EXTRA_TITLE, title)
-            .putString(EXTRA_BODY, body)
-            .build()
-
-        val workRequest = PeriodicWorkRequestBuilder<DailyReminderWorker>(24, TimeUnit.HOURS)
-            .setInputData(inputData)
-            .setInitialDelay(initialDelayMs, TimeUnit.MILLISECONDS)
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            WORK_NAME_DAILY_REMINDER,
-            ExistingPeriodicWorkPolicy.UPDATE,
-            workRequest
+        val intent = Intent(context, DailyReminderReceiver::class.java).apply {
+            action = DailyReminderReceiver.ACTION_DAILY_REMINDER
+            putExtra(DailyReminderReceiver.EXTRA_TITLE, title)
+            putExtra(DailyReminderReceiver.EXTRA_BODY, body)
+            putExtra(DailyReminderReceiver.EXTRA_HOUR, hour)
+            putExtra(DailyReminderReceiver.EXTRA_MINUTE, minute)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            REMINDER_PENDING_INTENT_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerAtMillis,
+                        pendingIntent
+                    )
+                } else {
+                    alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerAtMillis,
+                        pendingIntent
+                    )
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    triggerAtMillis,
+                    pendingIntent
+                )
+            } else {
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    triggerAtMillis,
+                    pendingIntent
+                )
+            }
+        } catch (e: SecurityException) {
+            alarmManager.setAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                triggerAtMillis,
+                pendingIntent
+            )
+        }
     }
 
     override fun cancelDailyReminder() {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, DailyReminderReceiver::class.java).apply {
+            action = DailyReminderReceiver.ACTION_DAILY_REMINDER
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            REMINDER_PENDING_INTENT_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+        if (pendingIntent != null) {
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+        }
         WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME_DAILY_REMINDER)
     }
 

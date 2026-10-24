@@ -9,6 +9,9 @@ import platform.Foundation.preferredLanguages
 import platform.UIKit.UIDevice
 
 import platform.Foundation.NSCalendarUnitWeekday
+import platform.Foundation.NSCalendarUnitHour
+import platform.Foundation.NSCalendarUnitMinute
+
 
 class IOSPlatform: Platform {
     override val name: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
@@ -43,4 +46,14 @@ actual fun getCurrentDateString(): String {
     val formatter = NSDateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
     return formatter.stringFromDate(NSDate())
+}
+
+actual fun getCurrentHour(): Int {
+    val calendar = NSCalendar.currentCalendar
+    return calendar.component(NSCalendarUnitHour, NSDate()).toInt()
+}
+
+actual fun getCurrentMinute(): Int {
+    val calendar = NSCalendar.currentCalendar
+    return calendar.component(NSCalendarUnitMinute, NSDate()).toInt()
 }

@@ -54,6 +54,16 @@ class SettingsViewModelTest {
         isDebug = true
     )
 
+    private var fakeCurrentHour = 12
+    private var fakeCurrentMinute = 0
+    private val fakeDateTimeProvider = object : com.aslmmovic.qurancompanion.domain.util.DateTimeProvider {
+        override fun getCurrentDayOfYear(): Int = 1
+        override fun getCurrentDayOfWeek(): Int = 1
+        override fun getCurrentDateString(): String = "2026-10-24"
+        override fun getCurrentHour(): Int = fakeCurrentHour
+        override fun getCurrentMinute(): Int = fakeCurrentMinute
+    }
+
     private fun createViewModel() = SettingsViewModel(
         getUserPreferencesUseCase = GetUserPreferencesUseCase(fakePrefsRepo),
         savePreferencesUseCase = SavePreferencesUseCase(fakePrefsRepo),
@@ -62,7 +72,8 @@ class SettingsViewModelTest {
         triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
         localeProvider = fakeLocaleProvider,
-        appBuildInfoProvider = fakeBuildInfoProvider
+        appBuildInfoProvider = fakeBuildInfoProvider,
+        dateTimeProvider = fakeDateTimeProvider
     )
 
     @BeforeTest
@@ -419,6 +430,66 @@ class SettingsViewModelTest {
 
         assertFalse(viewModel.uiState.value.userPreferences.isReminderEnabled)
         assertTrue(fakeScheduler.isCancelled)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onUpdateReminderTime with future time emits ShowReminderConfirmation with isToday true`() = runTest {
+        fakeCurrentHour = 10
+        fakeCurrentMinute = 0
+        val viewModel = createViewModel()
+        val effects = mutableListOf<SettingsUiEffect>()
+        val collectJob = launch { viewModel.uiEffects.toList(effects) }
+        advanceUntilIdle()
+
+        viewModel.onUpdateReminderTime(14, 30)
+        advanceUntilIdle()
+
+        val confirmationEffect = effects.filterIsInstance<SettingsUiEffect.ShowReminderConfirmation>().firstOrNull()
+        kotlin.test.assertNotNull(confirmationEffect)
+        assertTrue(confirmationEffect.isToday)
+        assertEquals("02:30 PM", confirmationEffect.formattedTime)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onUpdateReminderTime with past time emits ShowReminderConfirmation with isToday false`() = runTest {
+        fakeCurrentHour = 15
+        fakeCurrentMinute = 30
+        val viewModel = createViewModel()
+        val effects = mutableListOf<SettingsUiEffect>()
+        val collectJob = launch { viewModel.uiEffects.toList(effects) }
+        advanceUntilIdle()
+
+        viewModel.onUpdateReminderTime(8, 0)
+        advanceUntilIdle()
+
+        val confirmationEffect = effects.filterIsInstance<SettingsUiEffect.ShowReminderConfirmation>().firstOrNull()
+        kotlin.test.assertNotNull(confirmationEffect)
+        assertFalse(confirmationEffect.isToday)
+        assertEquals("08:00 AM", confirmationEffect.formattedTime)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onUpdateReminderTime with past minutes in current hour emits isToday false`() = runTest {
+        fakeCurrentHour = 14
+        fakeCurrentMinute = 45
+        val viewModel = createViewModel()
+        val effects = mutableListOf<SettingsUiEffect>()
+        val collectJob = launch { viewModel.uiEffects.toList(effects) }
+        advanceUntilIdle()
+
+        viewModel.onUpdateReminderTime(14, 30)
+        advanceUntilIdle()
+
+        val confirmationEffect = effects.filterIsInstance<SettingsUiEffect.ShowReminderConfirmation>().firstOrNull()
+        kotlin.test.assertNotNull(confirmationEffect)
+        assertFalse(confirmationEffect.isToday)
+        assertEquals("02:30 PM", confirmationEffect.formattedTime)
 
         collectJob.cancel()
     }

@@ -54,6 +54,8 @@
     <string name="reminder_time_6am">٠٦:٠٠ صباحاً (بعد الفجر)</string>
     <string name="reminder_time_8am">٠٨:٠٠ صباحاً (الصباح)</string>
     <string name="reminder_time_8pm">٠٨:٠٠ مساءً (المساء)</string>
+    <string name="reminder_set_today">تم ضبط التذكير لليوم الساعة %1$s</string>
+    <string name="reminder_set_tomorrow">تم ضبط التذكير لغداً الساعة %1$s</string>
     <string name="notification_title_pattern">تعرّف على صحابي اليوم: %1$s 🌟</string>
 
     <!-- Weekly Tracker -->

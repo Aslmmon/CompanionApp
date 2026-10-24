@@ -77,7 +77,7 @@ class JourneyViewModelTest {
     }
 
     @Test
-    fun `initialization loads journey, step 0, and bookmark status`() = runTest {
+    fun `initialization loads journey step 0 and bookmark status`() = runTest {
         val viewModel = createViewModel()
         val collectJob = launch { viewModel.uiState.collect {} }
         advanceUntilIdle()

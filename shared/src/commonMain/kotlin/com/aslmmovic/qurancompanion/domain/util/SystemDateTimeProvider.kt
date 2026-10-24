@@ -4,5 +4,7 @@ class SystemDateTimeProvider : DateTimeProvider {
     override fun getCurrentDayOfYear(): Int = com.aslmmovic.qurancompanion.getCurrentDayOfYear()
     override fun getCurrentDayOfWeek(): Int = com.aslmmovic.qurancompanion.getCurrentDayOfWeek()
     override fun getCurrentDateString(): String = com.aslmmovic.qurancompanion.getCurrentDateString()
+    override fun getCurrentHour(): Int = com.aslmmovic.qurancompanion.getCurrentHour()
+    override fun getCurrentMinute(): Int = com.aslmmovic.qurancompanion.getCurrentMinute()
 }
 

@@ -18,6 +18,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import com.aslmmovic.qurancompanion.domain.util.AppBuildInfoProvider
+import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
+import com.aslmmovic.qurancompanion.domain.util.SystemDateTimeProvider
+import com.aslmmovic.qurancompanion.presentation.screens.settings.components.formatReminderTime
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -31,7 +34,8 @@ class SettingsViewModel(
     private val triggerImmediateNotificationUseCase: TriggerImmediateNotificationUseCase,
     private val incrementDebugDayOffsetUseCase: IncrementDebugDayOffsetUseCase,
     private val localeProvider: LocaleProvider,
-    private val appBuildInfoProvider: AppBuildInfoProvider
+    private val appBuildInfoProvider: AppBuildInfoProvider,
+    private val dateTimeProvider: DateTimeProvider = SystemDateTimeProvider()
 ) : ViewModel() {
 
     private val _uiEffects = MutableSharedFlow<SettingsUiEffect>()
@@ -90,6 +94,12 @@ class SettingsViewModel(
                 )
             }
             scheduleDailyReminderUseCase()
+
+            val currentHour = dateTimeProvider.getCurrentHour()
+            val currentMinute = dateTimeProvider.getCurrentMinute()
+            val isToday = hour > currentHour || (hour == currentHour && minute > currentMinute)
+            val formattedTime = formatReminderTime(hour, minute)
+            _uiEffects.emit(SettingsUiEffect.ShowReminderConfirmation(isToday = isToday, formattedTime = formattedTime))
         }
     }
 
