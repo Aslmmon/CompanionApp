@@ -13,7 +13,14 @@ class QuranCompanionApp : Application() {
         AndroidActivityProvider.init(this)
         startKoin {
             androidContext(this@QuranCompanionApp)
-            modules(androidModule(applicationContext, BuildConfig.REVENUECAT_API_KEY), appModule)
+            modules(
+                androidModule(
+                    context = applicationContext,
+                    apiKey = BuildConfig.REVENUECAT_API_KEY,
+                    isDebug = BuildConfig.DEBUG
+                ),
+                appModule
+            )
         }
     }
 }

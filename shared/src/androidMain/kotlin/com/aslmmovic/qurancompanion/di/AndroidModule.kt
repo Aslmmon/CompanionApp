@@ -14,7 +14,11 @@ import com.aslmmovic.qurancompanion.util.AndroidNotificationScheduler
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-fun androidModule(context: Context, apiKey: String = "") = module {
+fun androidModule(
+    context: Context,
+    apiKey: String = "",
+    isDebug: Boolean = false
+) = module {
     single<KeyValueStorage> { AndroidKeyValueStorage(context) }
     single<LocaleProvider> { AndroidLocaleProvider(context, get()) }
     single { AndroidNotificationScheduler(context) } bind NotificationScheduler::class
@@ -23,7 +27,8 @@ fun androidModule(context: Context, apiKey: String = "") = module {
         AndroidPurchasesRepositoryImpl(
             context = context,
             storage = get(),
-            apiKey = apiKey
+            apiKey = apiKey,
+            isDebug = isDebug
         )
     }
 }

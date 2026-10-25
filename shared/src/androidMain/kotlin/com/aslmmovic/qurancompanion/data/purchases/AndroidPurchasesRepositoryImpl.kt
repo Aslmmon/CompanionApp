@@ -27,7 +27,8 @@ import kotlin.coroutines.resume
 class AndroidPurchasesRepositoryImpl(
     private val context: Context,
     private val storage: KeyValueStorage,
-    private val apiKey: String = ""
+    private val apiKey: String = "",
+    private val isDebug: Boolean = false
 ) : PurchasesRepository {
 
     private val _entitlementsFlow = MutableStateFlow(loadCachedEntitlements())
@@ -82,7 +83,7 @@ class AndroidPurchasesRepositoryImpl(
 
     override suspend fun getProducts(): List<SubscriptionProduct> {
         if (!isConfigured) {
-            return defaultProducts
+            return if (isDebug) defaultProducts else emptyList()
         }
 
         return try {
@@ -100,27 +101,34 @@ class AndroidPurchasesRepositoryImpl(
 
             val currentOffering = offerings?.current
             if (currentOffering == null || currentOffering.availablePackages.isEmpty()) {
-                defaultProducts
+                if (isDebug) defaultProducts else emptyList()
             } else {
                 mapOfferingsToProducts(currentOffering.availablePackages)
             }
         } catch (_: Exception) {
-            defaultProducts
+            if (isDebug) defaultProducts else emptyList()
         }
     }
 
     override suspend fun purchaseProduct(productId: String): Result<UserEntitlements> {
         if (!isConfigured) {
-            // Simulated development / mock purchase
-            val current = _entitlementsFlow.value
-            val updated = if (productId == "sahaba_tip_199") {
-                current.copy(isSupporter = true)
+            if (isDebug) {
+                // Mock purchase simulator permitted only in debug mode
+                val current = _entitlementsFlow.value
+                val updated = if (productId == "sahaba_tip_199") {
+                    current.copy(isSupporter = true)
+                } else {
+                    current.copy(isPatron = true)
+                }
+                _entitlementsFlow.value = updated
+                saveCachedEntitlements(updated)
+                return Result.success(updated)
             } else {
-                current.copy(isPatron = true)
+                // Strictly fail in release mode
+                return Result.failure(
+                    IllegalStateException("Billing service is not configured. Live purchases required in production.")
+                )
             }
-            _entitlementsFlow.value = updated
-            saveCachedEntitlements(updated)
-            return Result.success(updated)
         }
 
         val activity = AndroidActivityProvider.currentActivity
@@ -170,7 +178,13 @@ class AndroidPurchasesRepositoryImpl(
 
     override suspend fun restorePurchases(): Result<UserEntitlements> {
         if (!isConfigured) {
-            return Result.success(_entitlementsFlow.value)
+            return if (isDebug) {
+                Result.success(_entitlementsFlow.value)
+            } else {
+                Result.failure(
+                    IllegalStateException("Billing service is not configured. Live restore required in production.")
+                )
+            }
         }
 
         return suspendCancellableCoroutine { cont ->

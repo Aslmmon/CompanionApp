@@ -10,13 +10,17 @@ import com.aslmmovic.qurancompanion.domain.util.AppBuildInfoProvider
 import com.aslmmovic.qurancompanion.domain.util.NotificationScheduler
 import com.aslmmovic.qurancompanion.util.IosAppBuildInfoProvider
 import com.aslmmovic.qurancompanion.util.IosNotificationScheduler
+import kotlin.experimental.ExperimentalNativeApi
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val iosModule = module {
+@OptIn(ExperimentalNativeApi::class)
+fun iosModule(isDebug: Boolean = kotlin.native.Platform.isDebugBinary) = module {
     single<KeyValueStorage> { IosKeyValueStorage() }
     single<LocaleProvider> { IosLocaleProvider(get()) }
     single { IosNotificationScheduler() } bind NotificationScheduler::class
     single<AppBuildInfoProvider> { IosAppBuildInfoProvider() }
-    single<PurchasesRepository> { IosPurchasesRepositoryImpl(get()) }
+    single<PurchasesRepository> { IosPurchasesRepositoryImpl(get(), isDebug = isDebug) }
 }
+
+val iosModule = iosModule()

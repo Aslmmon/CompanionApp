@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class IosPurchasesRepositoryImpl(
-    private val storage: KeyValueStorage
+    private val storage: KeyValueStorage,
+    private val isDebug: Boolean = false
 ) : PurchasesRepository {
 
     private val _entitlementsFlow = MutableStateFlow(loadCachedEntitlements())
@@ -47,10 +48,15 @@ class IosPurchasesRepositoryImpl(
     }
 
     override suspend fun getProducts(): List<SubscriptionProduct> {
-        return defaultProducts
+        return if (isDebug) defaultProducts else emptyList()
     }
 
     override suspend fun purchaseProduct(productId: String): Result<UserEntitlements> {
+        if (!isDebug) {
+            return Result.failure(
+                IllegalStateException("Billing service is not configured. Live purchases required in production.")
+            )
+        }
         val current = _entitlementsFlow.value
         val updated = if (productId == "sahaba_tip_199") {
             current.copy(isSupporter = true)
@@ -63,6 +69,11 @@ class IosPurchasesRepositoryImpl(
     }
 
     override suspend fun restorePurchases(): Result<UserEntitlements> {
+        if (!isDebug) {
+            return Result.failure(
+                IllegalStateException("Billing service is not configured. Live restore required in production.")
+            )
+        }
         return Result.success(_entitlementsFlow.value)
     }
 
