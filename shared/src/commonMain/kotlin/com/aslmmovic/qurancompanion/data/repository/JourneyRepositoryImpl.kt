@@ -163,6 +163,36 @@ class JourneyRepositoryImpl(
         }.flowOn(ioDispatcher)
     }
 
+    override fun getJourneyStreak(): Flow<Int> {
+        return _completionStates.map { states ->
+            val todayDateString = dateTimeProvider.getCurrentDateString()
+            val isTodayDone = isDateCompleted(todayDateString, states)
+            val yesterdayDateString = offsetDate(todayDateString, -1)
+            val isYesterdayDone = isDateCompleted(yesterdayDateString, states)
+
+            val startDate = when {
+                isTodayDone -> todayDateString
+                isYesterdayDone -> yesterdayDateString
+                else -> return@map 0
+            }
+
+            var streak = 0
+            var checkDate = startDate
+            while (isDateCompleted(checkDate, states)) {
+                streak++
+                checkDate = offsetDate(checkDate, -1)
+                if (streak > 3650) break
+            }
+            streak
+        }.flowOn(ioDispatcher)
+    }
+
+    private fun isDateCompleted(date: String, states: Map<String, Boolean>): Boolean {
+        val inMemoryDate = states["$KEY_COMPLETED_DATE_PREFIX$date"]
+        if (inMemoryDate != null) return inMemoryDate
+        return storage.getBoolean("$KEY_COMPLETED_DATE_PREFIX$date", false)
+    }
+
     override suspend fun markCompleted(journeyId: String, date: String) = withContext(ioDispatcher) {
         try {
             storage.putBoolean(completionKey(journeyId, date), true)

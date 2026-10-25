@@ -36,6 +36,9 @@ class FakeJourneyRepository : JourneyRepository {
             }
         }
 
+    val streakFlow = MutableStateFlow(0)
+    override fun getJourneyStreak(): Flow<Int> = streakFlow
+
     override suspend fun markCompleted(journeyId: String, date: String) {
         completions.value = completions.value + ("$journeyId|$date" to true)
     }

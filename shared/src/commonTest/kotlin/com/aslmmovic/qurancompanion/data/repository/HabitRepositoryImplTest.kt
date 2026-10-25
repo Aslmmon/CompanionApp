@@ -217,5 +217,8 @@ class HabitRepositoryImplTest {
         override fun getCurrentDayOfYear(): Int = 290
         override fun getCurrentDayOfWeek(): Int = 6
         override fun getCurrentDateString(): String = dateString
+        override fun getTimeUntilMidnight(): Pair<Int, Int> = Pair(14, 22)
+        override fun getCurrentHijriDateString(): String = "14 RAMADAN 1447 AH"
     }
 }
+
