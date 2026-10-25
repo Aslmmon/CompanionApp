@@ -1,6 +1,7 @@
 package com.aslmmovic.qurancompanion.presentation.screens.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,7 @@ fun SettingsContent(
             )
 
             AppearanceSection(
-                isDarkMode = uiState.userPreferences.isDarkMode ?: false,
+                isDarkMode = uiState.userPreferences.isDarkMode ?: isSystemInDarkTheme(),
                 preferredLanguage = uiState.userPreferences.preferredLanguage,
                 onThemeToggle = onToggleTheme,
                 onOpenLanguageSheet = { showLanguageSheet = true }

@@ -1,6 +1,9 @@
 package com.aslmmovic.qurancompanion.presentation.screens.habits.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +50,14 @@ fun HabitCard(
     )
     val checkboxBorderColor by animateColorAsState(
         targetValue = if (habit.isCompletedToday) primaryColor else outlineColor
+    )
+    val checkmarkScale by animateFloatAsState(
+        targetValue = if (habit.isCompletedToday) 1f else 0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "habit_checkmark_scale"
     )
 
     Surface(
@@ -78,12 +90,16 @@ fun HabitCard(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                if (habit.isCompletedToday) {
+                if (checkmarkScale > 0.01f) {
                     Text(
                         text = "✓",
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.graphicsLayer {
+                            scaleX = checkmarkScale
+                            scaleY = checkmarkScale
+                        }
                     )
                 }
             }

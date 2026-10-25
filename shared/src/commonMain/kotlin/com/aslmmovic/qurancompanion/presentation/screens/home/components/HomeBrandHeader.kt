@@ -1,5 +1,11 @@
 package com.aslmmovic.qurancompanion.presentation.screens.home.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,9 +24,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +48,30 @@ fun HomeBrandHeader(
     onNotificationClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val infiniteTransition = rememberInfiniteTransition(label = "streak_pulse_transition")
+    val pulseScale by infiniteTransition.animateFloat(
+        initialValue = 1.0f,
+        targetValue = 1.08f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "streak_scale_pulse"
+    )
+    val pulseGlowAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.12f,
+        targetValue = 0.26f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "streak_glow_pulse"
+    )
+
+    val flameScale = if (streakCount > 0) pulseScale else 1.0f
+    val flameGlowAlpha = if (streakCount > 0) pulseGlowAlpha else 0.12f
+    val flameBorderAlpha = if (streakCount > 0) (flameGlowAlpha * 1.8f).coerceAtMost(0.6f) else 0.35f
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -94,9 +126,17 @@ fun HomeBrandHeader(
         ) {
             Box(
                 modifier = Modifier
+                    .graphicsLayer {
+                        scaleX = flameScale
+                        scaleY = flameScale
+                    }
                     .clip(RoundedCornerShape(16.dp))
-                    .background(SahabaWarmGold.copy(alpha = 0.12f))
-                    .border(1.dp, SahabaWarmGold.copy(alpha = 0.35f), RoundedCornerShape(16.dp))
+                    .background(SahabaWarmGold.copy(alpha = flameGlowAlpha))
+                    .border(
+                        1.dp,
+                        SahabaWarmGold.copy(alpha = flameBorderAlpha),
+                        RoundedCornerShape(16.dp)
+                    )
                     .padding(horizontal = 10.dp, vertical = 6.dp),
                 contentAlignment = Alignment.Center
             ) {
