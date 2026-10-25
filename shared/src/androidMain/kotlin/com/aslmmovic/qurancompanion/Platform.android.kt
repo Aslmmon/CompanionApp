@@ -33,6 +33,12 @@ actual fun getCurrentDateString(): String {
     )
 }
 
+actual fun getCurrentHour(): Int =
+    java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+
+actual fun getCurrentMinute(): Int =
+    java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE)
+
 actual fun getTimeUntilMidnight(): Pair<Int, Int> {
     val cal = java.util.Calendar.getInstance()
     val hour = cal.get(java.util.Calendar.HOUR_OF_DAY)
@@ -56,9 +62,3 @@ actual fun getCurrentHijriDateString(): String {
         "14 RAMADAN 1447 AH"
     }
 }
-
-actual fun getCurrentHour(): Int =
-    java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-
-actual fun getCurrentMinute(): Int =
-    java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE)

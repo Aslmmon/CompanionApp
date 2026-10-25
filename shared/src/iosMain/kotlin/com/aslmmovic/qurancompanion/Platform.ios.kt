@@ -2,18 +2,14 @@ package com.aslmmovic.qurancompanion
 
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
+import platform.Foundation.NSCalendarUnitHour
+import platform.Foundation.NSCalendarUnitMinute
+import platform.Foundation.NSCalendarUnitWeekday
 import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.preferredLanguages
 import platform.UIKit.UIDevice
-
-import platform.Foundation.NSCalendarUnitWeekday
-import platform.Foundation.NSCalendarUnitHour
-import platform.Foundation.NSCalendarUnitMinute
-
-import platform.Foundation.NSCalendarUnitHour
-import platform.Foundation.NSCalendarUnitMinute
 
 class IOSPlatform: Platform {
 
@@ -45,6 +41,21 @@ actual fun getCurrentDayOfWeek(): Int {
     return if (dayOfWeek == 1) 7 else dayOfWeek - 1
 }
 
+actual fun getCurrentDateString(): String {
+    val formatter = NSDateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter.stringFromDate(NSDate())
+}
+
+actual fun getCurrentHour(): Int {
+    val calendar = NSCalendar.currentCalendar
+    return calendar.component(NSCalendarUnitHour, NSDate()).toInt()
+}
+
+actual fun getCurrentMinute(): Int {
+    val calendar = NSCalendar.currentCalendar
+    return calendar.component(NSCalendarUnitMinute, NSDate()).toInt()
+}
 
 actual fun getTimeUntilMidnight(): Pair<Int, Int> {
     val calendar = NSCalendar.currentCalendar

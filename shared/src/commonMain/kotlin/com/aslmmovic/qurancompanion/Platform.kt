@@ -15,6 +15,13 @@ expect fun getCurrentDayOfYear(): Int
 expect fun getCurrentDayOfWeek(): Int
 
 /** Returns the current date as an ISO-8601 string (YYYY-MM-DD). Implemented per platform. */
+expect fun getCurrentDateString(): String
+
+/** Returns the current hour in 24-hour format (0-23). Implemented per platform. */
+expect fun getCurrentHour(): Int
+
+/** Returns the current minute (0-59). Implemented per platform. */
+expect fun getCurrentMinute(): Int
 
 /** Returns the remaining hours and minutes until midnight as a Pair(hours, minutes). */
 expect fun getTimeUntilMidnight(): Pair<Int, Int>

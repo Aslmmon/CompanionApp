@@ -85,7 +85,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `initialization loads journey, streak, hijriDate, tenPromised and habit into uiState`() = runTest {
+    fun `initialization loads journey streak hijriDate tenPromised and habit into uiState`() = runTest {
         val today = testJourney(id = "abu_bakr_1", title = "Abu Bakr")
         journeyRepo.todayJourney = today
         journeyRepo.allJourneys = listOf(today)
