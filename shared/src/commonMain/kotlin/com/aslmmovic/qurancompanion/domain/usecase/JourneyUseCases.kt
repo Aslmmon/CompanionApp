@@ -31,6 +31,10 @@ class GetWeeklyProgressUseCase(private val repository: JourneyRepository) {
     operator fun invoke(): Flow<List<Boolean>> = repository.getWeeklyProgress()
 }
 
+class GetJourneyStreakUseCase(private val repository: JourneyRepository) {
+    operator fun invoke(): Flow<Int> = repository.getJourneyStreak()
+}
+
 class GetDebugDayOffsetUseCase(private val repository: JourneyRepository) {
     operator fun invoke(): Flow<Int> = repository.getDebugDayOffset()
 }

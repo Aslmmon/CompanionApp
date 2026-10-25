@@ -6,5 +6,8 @@ class SystemDateTimeProvider : DateTimeProvider {
     override fun getCurrentDateString(): String = com.aslmmovic.qurancompanion.getCurrentDateString()
     override fun getCurrentHour(): Int = com.aslmmovic.qurancompanion.getCurrentHour()
     override fun getCurrentMinute(): Int = com.aslmmovic.qurancompanion.getCurrentMinute()
+    override fun getTimeUntilMidnight(): Pair<Int, Int> = com.aslmmovic.qurancompanion.getTimeUntilMidnight()
+    override fun getCurrentHijriDateString(): String = com.aslmmovic.qurancompanion.getCurrentHijriDateString()
 }
+
 

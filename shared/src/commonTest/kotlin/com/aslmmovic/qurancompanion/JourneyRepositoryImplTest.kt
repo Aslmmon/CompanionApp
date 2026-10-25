@@ -410,6 +410,20 @@ class JourneyRepositoryImplTest {
         }
     }
 
+    @Test
+    fun `test_getJourneyStreak_calculatesConsecutiveDays`() = runTest {
+        val repository = createRepository()
+        fakeDateTimeProvider.dateString = "2026-03-15"
+
+        // Mark today (2026-03-15), yesterday (2026-03-14), and day before (2026-03-13)
+        repository.markCompleted("j1", "2026-03-15")
+        repository.markCompleted("j2", "2026-03-14")
+        repository.markCompleted("j3", "2026-03-13")
+
+        val streak = repository.getJourneyStreak().first()
+        assertEquals(3, streak)
+    }
+
     private class FakeKeyValueStorage : KeyValueStorage {
         private val booleans = mutableMapOf<String, Boolean>()
         private val ints = mutableMapOf<String, Int>()
@@ -430,5 +444,8 @@ class JourneyRepositoryImplTest {
         override fun getCurrentDayOfYear(): Int = dayOfYear
         override fun getCurrentDayOfWeek(): Int = dayOfWeek
         override fun getCurrentDateString(): String = dateString
+        override fun getTimeUntilMidnight(): Pair<Int, Int> = Pair(14, 22)
+        override fun getCurrentHijriDateString(): String = "14 RAMADAN 1447 AH"
     }
 }
+

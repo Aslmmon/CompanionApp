@@ -6,4 +6,7 @@ interface DateTimeProvider {
     fun getCurrentDateString(): String // ISO format: YYYY-MM-DD
     fun getCurrentHour(): Int = 0
     fun getCurrentMinute(): Int = 0
+    fun getTimeUntilMidnight(): Pair<Int, Int> = Pair(0, 0)
+    fun getCurrentHijriDateString(): String = ""
 }
+

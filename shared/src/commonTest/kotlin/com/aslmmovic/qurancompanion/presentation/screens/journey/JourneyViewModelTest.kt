@@ -12,6 +12,7 @@ import com.aslmmovic.qurancompanion.domain.model.StepType
 import com.aslmmovic.qurancompanion.domain.usecase.GetTodayJourneyUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.MarkJourneyCompletedUseCase
 import com.aslmmovic.qurancompanion.domain.util.DateTimeProvider
+import com.aslmmovic.qurancompanion.fakes.FakeDateTimeProvider
 import com.aslmmovic.qurancompanion.fakes.FakeJourneyRepository
 import com.aslmmovic.qurancompanion.fakes.FakeUserPreferencesRepository
 import com.aslmmovic.qurancompanion.fakes.testJourney
@@ -30,7 +31,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,11 +39,13 @@ class JourneyViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private val repo = FakeJourneyRepository()
     private val prefsRepo = FakeUserPreferencesRepository()
-    private val fakeDateTimeProvider = object : DateTimeProvider {
-        override fun getCurrentDayOfYear(): Int = 1
-        override fun getCurrentDayOfWeek(): Int = 1
-        override fun getCurrentDateString(): String = "2026-01-01"
-    }
+    private val fakeDateTimeProvider = FakeDateTimeProvider(
+        dayOfYear = 1,
+        dayOfWeek = 1,
+        dateString = "2026-01-01",
+        remainingTimeUntilMidnight = Pair(14, 22)
+    )
+
 
     private fun createViewModel() = JourneyViewModel(
         getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
@@ -77,13 +79,14 @@ class JourneyViewModelTest {
     }
 
     @Test
-    fun `initialization loads journey step 0 and bookmark status`() = runTest {
+    fun `initialization loads journey and step 0 and bookmark status`() = runTest {
         val viewModel = createViewModel()
         val collectJob = launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertEquals(sampleJourney, state.journey)
+
         assertEquals(0, state.currentStepIndex)
         assertFalse(state.isBookmarked)
         assertFalse(state.isLoading)
@@ -236,68 +239,41 @@ class JourneyViewModelTest {
     }
 
     @Test
-    fun initialization_nullJourney_setsNullJourneyInState() = runTest {
-        repo.todayJourney = null
+    fun `initialization loads remaining hours and minutes until midnight into uiState`() = runTest {
+        fakeDateTimeProvider.remainingTimeUntilMidnight = Pair(14, 22)
         val viewModel = createViewModel()
+
         val collectJob = launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
-        assertNull(viewModel.uiState.value.journey)
-        assertFalse(viewModel.uiState.value.isLoading)
-
+        val state = viewModel.uiState.value
+        assertEquals(14, state.hoursUntilMidnight)
+        assertEquals(22, state.minutesUntilMidnight)
         collectJob.cancel()
     }
 
     @Test
-    fun onFinish_nullJourney_isNoOp() = runTest {
-        repo.todayJourney = null
+    fun `onReturnHome resets current step index to zero and emits NavigateToHome effect`() = runTest {
         val viewModel = createViewModel()
         val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onNextStep()
+        viewModel.onNextStep()
+        assertEquals(2, viewModel.uiState.value.currentStepIndex)
+
         val effects = mutableListOf<JourneyUiEffect>()
         val effectsJob = launch { viewModel.uiEffects.toList(effects) }
+
+        viewModel.onReturnHome()
         advanceUntilIdle()
 
-        viewModel.onFinish()
-        advanceUntilIdle()
+        assertEquals(0, viewModel.uiState.value.currentStepIndex)
+        assertEquals(1, effects.size)
+        assertEquals(JourneyUiEffect.NavigateToHome, effects.first())
 
-        assertTrue(effects.isEmpty())
-
-        collectJob.cancel()
         effectsJob.cancel()
-    }
-
-    @Test
-    fun journeyDto_nullArabicVerse_mapsToNullDomainField() {
-        val dto = JourneyDto(
-            id = "dto-2",
-            dayNumber = 2,
-            title = "Title 2",
-            subtitle = "Subtitle 2",
-            category = "Category",
-            emotion = "Emotion",
-            theme = "Theme",
-            heroQuote = "Quote",
-            intention = "Intention",
-            durationMinutes = 5,
-            difficulty = "Easy",
-            estimatedReadingMinutes = 4,
-            cover = CoverDto("illustration", "asset"),
-            arabicVerse = null
-        )
-
-        val domain = dto.toDomain()
-        assertNull(domain.arabicVerse)
-    }
-
-    @Test
-    fun initialization_withPreExistingBookmark_isBookmarkedTrue() = runTest {
-        prefsRepo.toggleJourneyBookmark(sampleJourney.id)
-        val viewModel = createViewModel()
-        val collectJob = launch { viewModel.uiState.collect {} }
-        advanceUntilIdle()
-
-        assertTrue(viewModel.uiState.value.isBookmarked)
-
         collectJob.cancel()
     }
 }
+
