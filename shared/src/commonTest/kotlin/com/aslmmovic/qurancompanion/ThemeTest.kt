@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.aslmmovic.qurancompanion.ui.theme.DarkColorScheme
 import com.aslmmovic.qurancompanion.ui.theme.LightColorScheme
 import com.aslmmovic.qurancompanion.ui.theme.SahabaCardBorder
+import com.aslmmovic.qurancompanion.ui.theme.SahabaEmeraldHighlight
 import com.aslmmovic.qurancompanion.ui.theme.SahabaEvergreen
 import com.aslmmovic.qurancompanion.ui.theme.SahabaGoldAccent
 import com.aslmmovic.qurancompanion.ui.theme.SahabaIvoryBackground
@@ -162,5 +163,39 @@ class ThemeTest {
         assertEquals(FontWeight.Normal, quran.fontWeight)
         assertEquals(24.sp, quran.fontSize)
         assertEquals(48.sp, quran.lineHeight)
+    }
+
+    @Test
+    fun test_getSahabaTypography_isArabicTrue_returnsArabicFontFamily() {
+        val dummyArabicFont = FontFamily.Cursive
+        val typography = createSahabaTypography(dummyArabicFont)
+        assertEquals(dummyArabicFont, typography.headlineLarge.fontFamily)
+        assertEquals(dummyArabicFont, typography.displayMedium.fontFamily)
+    }
+
+    @Test
+    fun test_darkScheme_secondaryIsEmeraldHighlight() {
+        assertEquals(SahabaEmeraldHighlight, DarkColorScheme.secondary)
+    }
+
+    @Test
+    fun test_AC07_sacredThemesReturnExpectedColorSchemes() {
+        val classicLight = getThemeColorScheme(darkTheme = false, themeName = "classic")
+        assertEquals(Color(0xFFF9F8F3), classicLight.background)
+
+        val classicDark = getThemeColorScheme(darkTheme = true, themeName = "classic")
+        assertEquals(Color(0xFF0B1320), classicDark.background)
+
+        val parchment = getThemeColorScheme(darkTheme = false, themeName = "parchment")
+        assertEquals(Color(0xFFFBF7EE), parchment.background)
+        assertEquals(Color(0xFFB8860B), parchment.primary)
+
+        val andalus = getThemeColorScheme(darkTheme = false, themeName = "andalus")
+        assertEquals(Color(0xFF0F2B20), andalus.background)
+        assertEquals(Color(0xFFD4AF37), andalus.primary)
+
+        val oled = getThemeColorScheme(darkTheme = false, themeName = "oled")
+        assertEquals(Color(0xFF000000), oled.background)
+        assertEquals(Color(0xFFE5C158), oled.primary)
     }
 }

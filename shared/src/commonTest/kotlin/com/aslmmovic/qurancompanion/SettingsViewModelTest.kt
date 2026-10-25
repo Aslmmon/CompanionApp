@@ -1,13 +1,18 @@
 package com.aslmmovic.qurancompanion
 
+import app.cash.turbine.test
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+import com.aslmmovic.qurancompanion.domain.model.AppTheme
+import com.aslmmovic.qurancompanion.domain.model.UserEntitlements
 import com.aslmmovic.qurancompanion.domain.model.UserPreferences
+import com.aslmmovic.qurancompanion.domain.usecase.GetEntitlementsUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.IncrementDebugDayOffsetUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.RequestNotificationPermissionUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.SavePreferencesUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.ScheduleDailyReminderUseCase
 import com.aslmmovic.qurancompanion.domain.usecase.TriggerImmediateNotificationUseCase
+import com.aslmmovic.qurancompanion.fakes.FakePurchasesRepository
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsUiEffect
 import com.aslmmovic.qurancompanion.presentation.screens.settings.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +43,7 @@ class SettingsViewModelTest {
     private val fakePrefsRepo = FakeUserPreferencesRepository()
     private val fakeJourneyRepo = FakeJourneyRepository()
     private val fakeScheduler = FakeNotificationScheduler()
+    private val fakePurchasesRepo = FakePurchasesRepository()
     private val fakeLocaleProvider = object : LocaleProvider {
         private val _currentLocaleFlow = MutableStateFlow("en")
         override val currentLocaleFlow: StateFlow<String> = _currentLocaleFlow.asStateFlow()
@@ -54,6 +60,16 @@ class SettingsViewModelTest {
         isDebug = true
     )
 
+    private var fakeCurrentHour = 12
+    private var fakeCurrentMinute = 0
+    private val fakeDateTimeProvider = object : com.aslmmovic.qurancompanion.domain.util.DateTimeProvider {
+        override fun getCurrentDayOfYear(): Int = 1
+        override fun getCurrentDayOfWeek(): Int = 1
+        override fun getCurrentDateString(): String = "2026-10-24"
+        override fun getCurrentHour(): Int = fakeCurrentHour
+        override fun getCurrentMinute(): Int = fakeCurrentMinute
+    }
+
     private fun createViewModel() = SettingsViewModel(
         getUserPreferencesUseCase = GetUserPreferencesUseCase(fakePrefsRepo),
         savePreferencesUseCase = SavePreferencesUseCase(fakePrefsRepo),
@@ -62,7 +78,9 @@ class SettingsViewModelTest {
         triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
         localeProvider = fakeLocaleProvider,
-        appBuildInfoProvider = fakeBuildInfoProvider
+        appBuildInfoProvider = fakeBuildInfoProvider,
+        getEntitlementsUseCase = GetEntitlementsUseCase(fakePurchasesRepo),
+        dateTimeProvider = fakeDateTimeProvider
     )
 
     @BeforeTest
@@ -342,6 +360,233 @@ class SettingsViewModelTest {
         assertEquals("2.1.0", viewModel.uiState.value.appVersionName)
         assertEquals(42L, viewModel.uiState.value.buildNumber)
         assertEquals("Debug", viewModel.uiState.value.buildType)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onTriggerNotification_nullJourney_whenReminderEnabled_firesFallbackNotification() = runTest {
+        fakeJourneyRepo.todayJourney = null
+        fakePrefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = true))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onTriggerNotification()
+        advanceUntilIdle()
+
+        assertEquals("Sahaba Companion", fakeScheduler.immediateNotificationTitle)
+        assertEquals("Discover today's journey with the Sahaba.", fakeScheduler.immediateNotificationBody)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onToggleReminder_true_schedulerIsCalledWithCurrentPreferredTime() = runTest {
+        fakePrefsRepo.saveUserPreferences(UserPreferences(isReminderEnabled = false, reminderHour = 7, reminderMinute = 15))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onToggleReminder(true)
+        advanceUntilIdle()
+
+        assertEquals(7, fakeScheduler.scheduledHour)
+        assertEquals(15, fakeScheduler.scheduledMinute)
+        assertFalse(fakeScheduler.isCancelled)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun SettingsViewModel_releaseBuild_isDebugFalseAndBuildTypeIsRelease() = runTest {
+        val releaseBuildProvider = FakeAppBuildInfoProvider(
+            versionName = "1.0.0",
+            buildNumber = 100L,
+            isDebug = false
+        )
+        val viewModel = SettingsViewModel(
+            getUserPreferencesUseCase = GetUserPreferencesUseCase(fakePrefsRepo),
+            savePreferencesUseCase = SavePreferencesUseCase(fakePrefsRepo),
+            scheduleDailyReminderUseCase = ScheduleDailyReminderUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
+            requestNotificationPermissionUseCase = RequestNotificationPermissionUseCase(fakeScheduler),
+            triggerImmediateNotificationUseCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo),
+            incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(fakeJourneyRepo),
+            localeProvider = fakeLocaleProvider,
+            appBuildInfoProvider = releaseBuildProvider,
+            getEntitlementsUseCase = GetEntitlementsUseCase(fakePurchasesRepo)
+        )
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isDebug)
+        assertEquals("Release", viewModel.uiState.value.buildType)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onToggleReminder_rapidToggle_resultsInCorrectFinalState() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onToggleReminder(false)
+        viewModel.onToggleReminder(true)
+        viewModel.onToggleReminder(false)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.userPreferences.isReminderEnabled)
+        assertTrue(fakeScheduler.isCancelled)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onUpdateReminderTime with future time emits ShowReminderConfirmation with isToday true`() = runTest {
+        fakeCurrentHour = 10
+        fakeCurrentMinute = 0
+        val viewModel = createViewModel()
+        val effects = mutableListOf<SettingsUiEffect>()
+        val collectJob = launch { viewModel.uiEffects.toList(effects) }
+        advanceUntilIdle()
+
+        viewModel.onUpdateReminderTime(14, 30)
+        advanceUntilIdle()
+
+        val confirmationEffect = effects.filterIsInstance<SettingsUiEffect.ShowReminderConfirmation>().firstOrNull()
+        kotlin.test.assertNotNull(confirmationEffect)
+        assertTrue(confirmationEffect.isToday)
+        assertEquals("02:30 PM", confirmationEffect.formattedTime)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onUpdateReminderTime with past time emits ShowReminderConfirmation with isToday false`() = runTest {
+        fakeCurrentHour = 15
+        fakeCurrentMinute = 30
+        val viewModel = createViewModel()
+        val effects = mutableListOf<SettingsUiEffect>()
+        val collectJob = launch { viewModel.uiEffects.toList(effects) }
+        advanceUntilIdle()
+
+        viewModel.onUpdateReminderTime(8, 0)
+        advanceUntilIdle()
+
+        val confirmationEffect = effects.filterIsInstance<SettingsUiEffect.ShowReminderConfirmation>().firstOrNull()
+        kotlin.test.assertNotNull(confirmationEffect)
+        assertFalse(confirmationEffect.isToday)
+        assertEquals("08:00 AM", confirmationEffect.formattedTime)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onUpdateReminderTime with past minutes in current hour emits isToday false`() = runTest {
+        fakeCurrentHour = 14
+        fakeCurrentMinute = 45
+        val viewModel = createViewModel()
+        val effects = mutableListOf<SettingsUiEffect>()
+        val collectJob = launch { viewModel.uiEffects.toList(effects) }
+        advanceUntilIdle()
+
+        viewModel.onUpdateReminderTime(14, 30)
+        advanceUntilIdle()
+
+        val confirmationEffect = effects.filterIsInstance<SettingsUiEffect.ShowReminderConfirmation>().firstOrNull()
+        kotlin.test.assertNotNull(confirmationEffect)
+        assertFalse(confirmationEffect.isToday)
+        assertEquals("02:30 PM", confirmationEffect.formattedTime)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `free user selecting premium theme emits OpenPaywall effect and does not change selectedTheme`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isPatron)
+        val initialTheme = viewModel.uiState.value.userPreferences.selectedTheme
+
+        viewModel.uiEffects.test {
+            viewModel.onSelectTheme(AppTheme.MUSHAF_PARCHMENT)
+            advanceUntilIdle()
+
+            val effect = awaitItem()
+            assertTrue(effect is SettingsUiEffect.OpenPaywall)
+            assertEquals(initialTheme, viewModel.uiState.value.userPreferences.selectedTheme)
+        }
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `free user selecting classic theme updates selectedTheme`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onSelectTheme(AppTheme.CLASSIC)
+        advanceUntilIdle()
+
+        assertEquals(AppTheme.CLASSIC.id, viewModel.uiState.value.userPreferences.selectedTheme)
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `patron user selecting premium theme updates selectedTheme`() = runTest {
+        fakePurchasesRepo.updateEntitlements(UserEntitlements(isPatron = true))
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isPatron)
+
+        viewModel.uiEffects.test {
+            viewModel.onSelectTheme(AppTheme.ANDALUS_EMERALD)
+            advanceUntilIdle()
+
+            expectNoEvents()
+            assertEquals(AppTheme.ANDALUS_EMERALD.id, viewModel.uiState.value.userPreferences.selectedTheme)
+        }
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `onOpenSupportCard emits OpenPaywall effect`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.uiEffects.test {
+            viewModel.onOpenSupportCard()
+            advanceUntilIdle()
+
+            val effect = awaitItem()
+            assertTrue(effect is SettingsUiEffect.OpenPaywall)
+        }
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `entitlements changes dynamically update SettingsUiState`() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isPatron)
+        assertFalse(viewModel.uiState.value.isSupporter)
+
+        fakePurchasesRepo.updateEntitlements(UserEntitlements(isPatron = true, isSupporter = true))
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isPatron)
+        assertTrue(viewModel.uiState.value.isSupporter)
 
         collectJob.cancel()
     }

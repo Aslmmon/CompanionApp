@@ -43,6 +43,7 @@ class UserPreferencesRepositoryImpl(
                 storage.putBoolean(KEY_REMINDER_ENABLED, preferences.isReminderEnabled)
                 preferences.preferredLanguage?.let { storage.putString(KEY_PREFERRED_LANGUAGE, it) }
                 storage.putString(KEY_DARK_MODE, preferences.isDarkMode?.toString() ?: "system")
+                preferences.selectedTheme?.let { storage.putString(KEY_SELECTED_THEME, it) }
                 _preferences.value = preferences
             } catch (e: Exception) {
                 // handle exception silently or log
@@ -82,7 +83,8 @@ class UserPreferencesRepositoryImpl(
                 reminderMinute = storage.getInt(KEY_REMINDER_MINUTE, 0),
                 isReminderEnabled = storage.getBoolean(KEY_REMINDER_ENABLED, true),
                 preferredLanguage = storage.getString(KEY_PREFERRED_LANGUAGE),
-                isDarkMode = isDarkMode
+                isDarkMode = isDarkMode,
+                selectedTheme = storage.getString(KEY_SELECTED_THEME) ?: "classic"
             )
         } catch (e: Exception) {
             UserPreferences() // Safe fallback
@@ -107,5 +109,6 @@ class UserPreferencesRepositoryImpl(
         private const val KEY_PREFERRED_LANGUAGE = "pref_preferred_language"
         private const val KEY_DARK_MODE = "pref_dark_mode"
         private const val KEY_BOOKMARKED_JOURNEYS = "pref_bookmarked_journeys"
+        private const val KEY_SELECTED_THEME = "pref_selected_theme"
     }
 }

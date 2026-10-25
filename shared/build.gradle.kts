@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.androidx.work.runtime.ktx)
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
+            implementation(libs.revenuecat.purchases)
         }
         commonMain.dependencies {
             api(libs.koin.core)

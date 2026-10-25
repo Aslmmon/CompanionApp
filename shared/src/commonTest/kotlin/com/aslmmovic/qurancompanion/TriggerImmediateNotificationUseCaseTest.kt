@@ -73,4 +73,32 @@ class TriggerImmediateNotificationUseCaseTest {
         assertNull(fakeScheduler.immediateNotificationBody)
         assertFalse(fakeScheduler.permissionRequested)
     }
+
+    @Test
+    fun whenReminderEnabled_permissionIsRequestedBeforeShowingNotification() = runTest {
+        val fakeScheduler = FakeNotificationScheduler()
+        val fakePrefsRepo = FakeUserPreferencesRepository(UserPreferences(isReminderEnabled = true))
+        val fakeJourneyRepo = FakeJourneyRepository()
+
+        val useCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo)
+        assertFalse(fakeScheduler.permissionRequested)
+
+        val result = useCase()
+        assertTrue(result)
+        assertTrue(fakeScheduler.permissionRequested)
+    }
+
+    @Test
+    fun whenReminderDisabled_customParamsAreIgnoredAndReturnFalse() = runTest {
+        val fakeScheduler = FakeNotificationScheduler()
+        val fakePrefsRepo = FakeUserPreferencesRepository(UserPreferences(isReminderEnabled = false))
+        val fakeJourneyRepo = FakeJourneyRepository()
+
+        val useCase = TriggerImmediateNotificationUseCase(fakeScheduler, fakePrefsRepo, fakeJourneyRepo)
+        val result = useCase(customTitle = "Custom", customBody = "Body")
+
+        assertFalse(result)
+        assertNull(fakeScheduler.immediateNotificationTitle)
+        assertNull(fakeScheduler.immediateNotificationBody)
+    }
 }

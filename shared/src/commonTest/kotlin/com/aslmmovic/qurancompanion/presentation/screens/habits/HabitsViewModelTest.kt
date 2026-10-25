@@ -154,4 +154,180 @@ class HabitsViewModelTest {
 
         collectJob.cancel()
     }
+
+    @Test
+    fun onAddHabitFromCatalog_addsHabitAndClosesSheet() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onOpenAddSheet()
+        advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.isAddSheetOpen)
+
+        viewModel.onAddHabitFromCatalog("3")
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isAddSheetOpen)
+        assertTrue(viewModel.uiState.value.activeHabits.any { it.id == "3" })
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onCreateCustomHabit_addsHabitAndClosesSheet() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onOpenAddSheet()
+        advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.isAddSheetOpen)
+
+        viewModel.onCreateCustomHabit("Daily Sadaqah", "Give charity", HabitCategory.CHARACTER)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isAddSheetOpen)
+        assertTrue(viewModel.uiState.value.activeHabits.any { it.title == "Daily Sadaqah" })
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onRemoveHabit_removesHabitAndDismissesDetail() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onSelectHabitForDetail(habit1)
+        advanceUntilIdle()
+        assertNotNull(viewModel.uiState.value.selectedHabitForDetail)
+
+        viewModel.onRemoveHabit("1")
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.selectedHabitForDetail)
+        assertFalse(viewModel.uiState.value.activeHabits.any { it.id == "1" })
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onCatalogCategorySelected_filtersCatalogByCategory() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onCatalogCategorySelected(HabitCategory.DAILY_PRAYERS)
+        advanceUntilIdle()
+
+        assertEquals(HabitCategory.DAILY_PRAYERS, viewModel.uiState.value.selectedCatalogCategory)
+        assertTrue(viewModel.uiState.value.catalogHabits.all { it.category == HabitCategory.DAILY_PRAYERS })
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onCatalogSearchQueryChanged_filtersCatalogByQuery() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onCatalogSearchQueryChanged("Tahajjud")
+        advanceUntilIdle()
+
+        assertEquals("Tahajjud", viewModel.uiState.value.catalogSearchQuery)
+        assertEquals(1, viewModel.uiState.value.catalogHabits.size)
+        assertEquals("3", viewModel.uiState.value.catalogHabits.first().id)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun onCloseAddSheet_resetsSearchQueryAndCategoryToAll() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onCatalogSearchQueryChanged("query")
+        viewModel.onCatalogCategorySelected(HabitCategory.ADHKAR)
+        advanceUntilIdle()
+
+        viewModel.onCloseAddSheet()
+        advanceUntilIdle()
+
+        assertEquals("", viewModel.uiState.value.catalogSearchQuery)
+        assertEquals(HabitCategory.ALL, viewModel.uiState.value.selectedCatalogCategory)
+        assertFalse(viewModel.uiState.value.isAddSheetOpen)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun catalogHabits_excludesAlreadyActiveHabits() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        // Active habits: habit1, habit2. Catalog: habit1, habit2, habit3.
+        assertEquals(1, viewModel.uiState.value.catalogHabits.size)
+        assertEquals("3", viewModel.uiState.value.catalogHabits.first().id)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun showCelebration_firesExactlyOnce_notOnResubscription() = runTest {
+        val viewModel = createViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        var celebrationCount = 0
+        val effectJob = launch {
+            viewModel.uiEffect.collect { effect ->
+                if (effect is HabitsUiEffect.ShowCelebration) {
+                    celebrationCount++
+                }
+            }
+        }
+        advanceUntilIdle()
+
+        viewModel.onToggleHabit("1")
+        viewModel.onToggleHabit("2")
+        advanceUntilIdle()
+
+        assertEquals(1, celebrationCount)
+
+        // Collecting another action shouldn't trigger celebration again if already completed
+        viewModel.onOpenAddSheet()
+        advanceUntilIdle()
+        assertEquals(1, celebrationCount)
+
+        collectJob.cancel()
+        effectJob.cancel()
+    }
+
+    @Test
+    fun progressCalculation_noHabits_percentageIsZero() = runTest {
+        val emptyRepo = FakeHabitRepository(initialActive = emptyList(), initialCatalog = emptyList())
+        val viewModel = HabitsViewModel(
+            getActiveHabitsUseCase = GetActiveHabitsUseCase(emptyRepo),
+            getCuratedHabitsUseCase = GetCuratedHabitsUseCase(emptyRepo),
+            toggleHabitCompletionUseCase = ToggleHabitCompletionUseCase(emptyRepo),
+            addHabitFromCatalogUseCase = AddHabitFromCatalogUseCase(emptyRepo),
+            createCustomHabitUseCase = CreateCustomHabitUseCase(emptyRepo),
+            removeHabitUseCase = RemoveHabitUseCase(emptyRepo)
+        )
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertEquals(0, viewModel.uiState.value.totalCount)
+        assertEquals(0, viewModel.uiState.value.progressPercentage)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun habitsViewModel_initialState_isLoading() {
+        val viewModel = createViewModel()
+        assertTrue(viewModel.uiState.value.isLoading)
+    }
 }

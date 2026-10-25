@@ -116,4 +116,68 @@ class HabitUseCasesTest {
         assertEquals(1, updated.size)
         assertEquals("duha_prayer", updated[0].id)
     }
+
+    @Test
+    fun toggleHabitCompletion_blankId_returnsIllegalArgumentFailure() = runTest {
+        val result = toggleHabitCompletionUseCase("")
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun addHabitFromCatalog_blankId_returnsIllegalArgumentFailure() = runTest {
+        val result = addHabitFromCatalogUseCase("   ")
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun removeHabit_blankId_returnsIllegalArgumentFailure() = runTest {
+        val result = removeHabitUseCase("")
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun createCustomHabit_blankTitle_returnsIllegalArgumentFailure() = runTest {
+        val result = createCustomHabitUseCase("", "Desc", HabitCategory.CHARACTER)
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun createCustomHabit_whitespaceOnlyTitle_returnsIllegalArgumentFailure() = runTest {
+        val result = createCustomHabitUseCase("   ", "Desc", HabitCategory.CHARACTER)
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun getCuratedHabits_categoryAll_returnsFullCatalog() = runTest {
+        val result = getCuratedHabitsUseCase(category = HabitCategory.ALL).first()
+        assertEquals(3, result.size)
+    }
+
+    @Test
+    fun getCuratedHabits_searchQuery_returnsMatchingItems() = runTest {
+        val result = getCuratedHabitsUseCase(searchQuery = "smile").first()
+        assertEquals(1, result.size)
+        assertEquals("smile_everyone", result[0].id)
+    }
+
+    @Test
+    fun getCuratedHabits_categoryAndQuery_filtersOnBothConditions() = runTest {
+        val result = getCuratedHabitsUseCase(
+            category = HabitCategory.CHARACTER,
+            searchQuery = "Sunnah"
+        ).first()
+        assertEquals(1, result.size)
+        assertEquals("smile_everyone", result[0].id)
+
+        val nonMatching = getCuratedHabitsUseCase(
+            category = HabitCategory.ADHKAR,
+            searchQuery = "smile"
+        ).first()
+        assertTrue(nonMatching.isEmpty())
+    }
 }

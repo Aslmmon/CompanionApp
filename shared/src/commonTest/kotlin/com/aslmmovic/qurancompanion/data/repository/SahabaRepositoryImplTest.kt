@@ -64,9 +64,31 @@ class SahabaRepositoryImplTest {
         assertEquals(SahabaCategory.ANSAR, catalog[14].category)
     }
 
+    @Test
+    fun localeChange_toArabic_reloadsSahabaCatalogInArabic() = runTest {
+        val dtosEn = listOf(SahabaDto("abu_bakr", "Abu Bakr", "أبو بكر", "أ", "As-Siddiq", "TEN_PROMISED", 14, "Bio"))
+        val dtosAr = listOf(SahabaDto("abu_bakr", "أبو بكر الصديق", "أبو بكر", "أ", "الصديق", "TEN_PROMISED", 14, "سيرة"))
+        fakeDataSource.catalogByLocale = mapOf("en" to dtosEn, "ar" to dtosAr)
+
+        val repository = createRepository(UnconfinedTestDispatcher(testScheduler))
+        assertEquals("Abu Bakr", repository.getSahabaCatalog().first().first().name)
+
+        fakeLocaleProvider.changeLocale("ar")
+        assertEquals("أبو بكر الصديق", repository.getSahabaCatalog().first().first().name)
+    }
+
+    @Test
+    fun getSahabaCatalog_emptyDataSource_emitsEmptyList() = runTest {
+        fakeDataSource.catalog = emptyList()
+        val repository = createRepository(UnconfinedTestDispatcher(testScheduler))
+        assertTrue(repository.getSahabaCatalog().first().isEmpty())
+    }
+
     private class FakeSahabaLocalDataSource : SahabaLocalDataSource {
         var catalog: List<SahabaDto> = emptyList()
-        override suspend fun loadSahabaCatalog(locale: String): List<SahabaDto> = catalog
+        var catalogByLocale: Map<String, List<SahabaDto>> = emptyMap()
+        override suspend fun loadSahabaCatalog(locale: String): List<SahabaDto> =
+            catalogByLocale[locale] ?: catalog
     }
 
     private class FakeLocaleProvider : LocaleProvider {

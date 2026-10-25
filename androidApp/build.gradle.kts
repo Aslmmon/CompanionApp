@@ -33,9 +33,16 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.koin.android)
+    implementation(libs.revenuecat.purchases)
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
+    debugImplementation(libs.compose.ui.test.manifest)
+
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.android.test)
+    androidTestImplementation(libs.androidx.testExt.junit)
 }
 
 android {
@@ -49,6 +56,7 @@ android {
         versionCode = vCode
         versionName = vName
         resourceConfigurations += listOf("en", "ar")
+        buildConfigField("String", "REVENUECAT_API_KEY", "\"${project.findProperty("REVENUECAT_API_KEY") ?: ""}\"")
     }
 
     signingConfigs {
@@ -100,6 +108,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

@@ -1,6 +1,8 @@
 package com.aslmmovic.qurancompanion.presentation.screens.splash
 
+import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -38,6 +40,17 @@ class SplashViewModelTest {
             val effect = awaitItem()
             assertEquals(SplashUiEffect.NavigateNext, effect)
             assertEquals(3000L, testScheduler.currentTime)
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun SplashViewModel_scopeCancelledBeforeDelay_doesNotEmitEffect() = runTest(testDispatcher) {
+        val viewModel = SplashViewModel()
+        viewModel.uiEffects.test {
+            testScheduler.advanceTimeBy(1000)
+            viewModel.viewModelScope.cancel()
+            testScheduler.advanceTimeBy(5000)
             expectNoEvents()
         }
     }

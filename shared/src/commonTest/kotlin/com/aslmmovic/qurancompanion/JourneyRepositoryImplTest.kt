@@ -286,6 +286,87 @@ class JourneyRepositoryImplTest {
         assertEquals("أبو بكر الصديق", repository.getAllJourneys().first().title)
     }
 
+    @Test
+    fun getTodayJourney_emptyDataSource_returnsNull() = runTest {
+        val repository = createRepository()
+        fakeDataSource.journeys = emptyList()
+        advanceUntilIdle()
+
+        assertNull(repository.getTodayJourney())
+    }
+
+    @Test
+    fun getTomorrowJourney_atLastJourney_returnsNullOrWraps() = runTest {
+        fakeDataSource.journeys = listOf(
+            createJourneyDto("1", title = "Journey 1"),
+            createJourneyDto("2", title = "Journey 2")
+        )
+        fakeDateTimeProvider.dateString = "2026-01-01"
+        val repository = createRepository()
+        advanceUntilIdle()
+
+        // Fast forward to journey 2 using debug offset
+        repository.incrementDebugDayOffset()
+        advanceUntilIdle()
+
+        assertEquals("2", repository.getTodayJourney()?.id)
+        // Tomorrow wraps around to journey 1
+        assertEquals("1", repository.getTomorrowJourney()?.id)
+    }
+
+    @Test
+    fun getWeeklyProgress_allDaysCompleted_returns7TrueSlots() = runTest {
+        fakeDataSource.journeys = listOf(createJourneyDto("1", title = "Abu Bakr"))
+        fakeDateTimeProvider.dayOfWeek = 1
+        fakeDateTimeProvider.dateString = "2026-01-05" // Monday
+        val repository = createRepository()
+        advanceUntilIdle()
+
+        // Complete all 7 days Monday to Sunday: 2026-01-05 to 2026-01-11
+        val dates = listOf(
+            "2026-01-05", "2026-01-06", "2026-01-07",
+            "2026-01-08", "2026-01-09", "2026-01-10", "2026-01-11"
+        )
+        dates.forEach { date ->
+            repository.markCompleted("1", date)
+        }
+        advanceUntilIdle()
+
+        val progress = repository.getWeeklyProgress().first()
+        assertEquals(listOf(true, true, true, true, true, true, true), progress)
+    }
+
+    @Test
+    fun localeChange_fromArabicToEnglish_reloadsCatalogInEnglish() = runTest {
+        val repository = createRepository()
+        fakeDataSource.journeysByLocale = mapOf(
+            "ar" to listOf(createJourneyDto("1", title = "أبو بكر")),
+            "en" to listOf(createJourneyDto("1", title = "Abu Bakr"))
+        )
+        fakeLocaleProvider.changeLocale("ar")
+        advanceUntilIdle()
+
+        assertEquals("أبو بكر", repository.getAllJourneys().first().title)
+
+        fakeLocaleProvider.changeLocale("en")
+        advanceUntilIdle()
+
+        assertEquals("Abu Bakr", repository.getAllJourneys().first().title)
+    }
+
+    @Test
+    fun isCompleted_differentDate_returnsFalse() = runTest {
+        val repository = createRepository()
+        fakeDataSource.journeys = listOf(createJourneyDto("1"))
+        advanceUntilIdle()
+
+        repository.markCompleted("1", "2026-01-01")
+        advanceUntilIdle()
+
+        assertTrue(repository.isCompleted("1", "2026-01-01").first())
+        assertFalse(repository.isCompleted("1", "2026-01-02").first())
+    }
+
     // Helper functions and fakes
     private fun createJourneyDto(id: String, title: String = "Journey $id") = JourneyDto(
         id = id,
@@ -329,6 +410,20 @@ class JourneyRepositoryImplTest {
         }
     }
 
+    @Test
+    fun `test_getJourneyStreak_calculatesConsecutiveDays`() = runTest {
+        val repository = createRepository()
+        fakeDateTimeProvider.dateString = "2026-03-15"
+
+        // Mark today (2026-03-15), yesterday (2026-03-14), and day before (2026-03-13)
+        repository.markCompleted("j1", "2026-03-15")
+        repository.markCompleted("j2", "2026-03-14")
+        repository.markCompleted("j3", "2026-03-13")
+
+        val streak = repository.getJourneyStreak().first()
+        assertEquals(3, streak)
+    }
+
     private class FakeKeyValueStorage : KeyValueStorage {
         private val booleans = mutableMapOf<String, Boolean>()
         private val ints = mutableMapOf<String, Int>()
@@ -349,5 +444,8 @@ class JourneyRepositoryImplTest {
         override fun getCurrentDayOfYear(): Int = dayOfYear
         override fun getCurrentDayOfWeek(): Int = dayOfWeek
         override fun getCurrentDateString(): String = dateString
+        override fun getTimeUntilMidnight(): Pair<Int, Int> = Pair(14, 22)
+        override fun getCurrentHijriDateString(): String = "14 RAMADAN 1447 AH"
     }
 }
+

@@ -1,54 +1,36 @@
 package com.aslmmovic.qurancompanion.presentation.screens.home
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.aslmmovic.qurancompanion.domain.model.Journey
-import com.aslmmovic.qurancompanion.domain.model.UserPreferences
-import com.aslmmovic.qurancompanion.presentation.screens.home.components.BismillahHeader
-import com.aslmmovic.qurancompanion.presentation.screens.home.components.CompletedStateContent
-import com.aslmmovic.qurancompanion.presentation.screens.home.components.HomeHeader
-import com.aslmmovic.qurancompanion.presentation.screens.home.components.ReadyStateContent
-import com.aslmmovic.qurancompanion.presentation.screens.home.components.WeeklyProgressTracker
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.stringResource
-import qurancompanion.shared.generated.resources.Res
-import qurancompanion.shared.generated.resources.home_loading
-
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.aslmmovic.qurancompanion.domain.model.Sahaba
+import com.aslmmovic.qurancompanion.presentation.screens.home.components.CuratedJourneyHeroCard
+import com.aslmmovic.qurancompanion.presentation.screens.home.components.DateSubHeader
+import com.aslmmovic.qurancompanion.presentation.screens.home.components.HomeBrandHeader
+import com.aslmmovic.qurancompanion.presentation.screens.home.components.SunnahHabitTeaserCard
+import com.aslmmovic.qurancompanion.presentation.screens.home.components.TenPromisedSeriesRow
+import com.aslmmovic.qurancompanion.presentation.screens.home.components.WeeklyStreakCalendar
 
 @Composable
 fun HomeContent(
-    journey: Journey?,
-    isCompleted: Boolean,
-    userPreferences: UserPreferences,
-    weeklyProgress: List<Boolean>,
-    tomorrowJourney: Journey?,
+    uiState: HomeUiState,
     onBeginClick: () -> Unit,
-    onResetClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onThemeToggle: (Boolean) -> Unit,
+    onBookmarkClick: () -> Unit,
+    onNotificationClick: () -> Unit,
+    onSahabaClick: (Sahaba) -> Unit,
+    onViewAllTenPromisedClick: () -> Unit,
+    onToggleHabitClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -62,86 +44,57 @@ fun HomeContent(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp, vertical = if (isCompleted) 8.dp else 16.dp),
+                .padding(horizontal = 20.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!isCompleted) {
-                Spacer(modifier = Modifier.height(24.dp))
-                BismillahHeader()
-                Spacer(modifier = Modifier.height(24.dp))
-            } else {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
-            HomeHeader(
-                isDarkMode = userPreferences.isDarkMode ?: isSystemInDarkTheme(),
-                onThemeToggleClick = onThemeToggle,
-                onSettingsClick = onSettingsClick
+            HomeBrandHeader(
+                streakCount = uiState.streakCount,
+                onNotificationClick = onNotificationClick
             )
 
-            if (!isCompleted) {
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-                // Subtitle — emotional hook for today's journey
-                Text(
-                    text = journey?.subtitle ?: stringResource(Res.string.home_loading),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(vertical = 8.dp)
+            DateSubHeader(
+                hijriDate = uiState.hijriDate
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            CuratedJourneyHeroCard(
+                journey = uiState.journey,
+                isCompleted = uiState.isCompleted,
+                isBookmarked = uiState.isBookmarked,
+                onBeginClick = onBeginClick,
+                onBookmarkClick = onBookmarkClick
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            WeeklyStreakCalendar(
+                weeklyProgress = uiState.weeklyProgress,
+                streakCount = uiState.streakCount,
+                currentDayOfWeek = uiState.currentDayOfWeek
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            if (uiState.tenPromisedCompanions.isNotEmpty()) {
+                TenPromisedSeriesRow(
+                    companions = uiState.tenPromisedCompanions,
+                    onSahabaClick = onSahabaClick,
+                    onViewAllClick = onViewAllTenPromisedClick
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
-            } else {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
-            WeeklyProgressTracker(
-                weeklyProgress = weeklyProgress,
-                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+            SunnahHabitTeaserCard(
+                habit = uiState.todayHabit,
+                isCompleted = uiState.isHabitCompleted,
+                onToggleClick = onToggleHabitClick
             )
-
-            Spacer(modifier = Modifier.height(if (isCompleted) 12.dp else 24.dp))
-
-            AnimatedContent(
-                targetState = isCompleted,
-                transitionSpec = {
-                    fadeIn() + slideInVertically { it / 4 } togetherWith
-                            fadeOut() + slideOutVertically { -it / 4 }
-                },
-                label = "home_state"
-            ) { completed ->
-                if (completed) {
-                    CompletedStateContent(
-                        journey = journey,
-                        tomorrowJourney = tomorrowJourney,
-                        onResetClick = onResetClick
-                    )
-                } else {
-                    ReadyStateContent(
-                        journey = journey,
-                        onBeginClick = onBeginClick
-                    )
-                }
-            }
 
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeContentPreview() {
-    HomeContent(
-        journey = null,
-        isCompleted = false,
-        userPreferences = UserPreferences(),
-        weeklyProgress = listOf(true, false, true, false, false, false, false),
-        tomorrowJourney = null,
-        onBeginClick = {},
-        onResetClick = {},
-        onSettingsClick = {},
-        onThemeToggle = {}
-    )
 }

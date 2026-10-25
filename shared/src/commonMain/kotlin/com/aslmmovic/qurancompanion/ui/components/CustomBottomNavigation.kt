@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -88,10 +89,18 @@ private fun RowScope.CustomBottomNavigationItem(
         label = "bottomNavColor_${tab.name}"
     )
 
+    val tag = when (tab) {
+        MainTab.Today -> "tab_today"
+        MainTab.Habits -> "tab_habits"
+        MainTab.Library -> "tab_library"
+        MainTab.Settings -> "tab_settings"
+    }
+
     Column(
         modifier = Modifier
             .weight(1f)
             .fillMaxHeight()
+            .testTag(tag)
             .clip(CircleShape)
             .clickable(
                 role = Role.Tab,

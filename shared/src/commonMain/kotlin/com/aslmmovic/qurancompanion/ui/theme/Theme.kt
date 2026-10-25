@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
+import com.aslmmovic.qurancompanion.domain.model.AppTheme
+
 internal val LightColorScheme = lightColorScheme(
     primary = SahabaEvergreen,
     onPrimary = SahabaOnEvergreen,
@@ -47,6 +49,57 @@ internal val DarkColorScheme = darkColorScheme(
     outlineVariant = SahabaMidnightBorder
 )
 
+internal val ParchmentColorScheme = lightColorScheme(
+    primary = ParchmentPrimary,
+    onPrimary = ParchmentOnPrimary,
+    primaryContainer = ParchmentPrimaryContainer,
+    onPrimaryContainer = ParchmentOnPrimaryContainer,
+    secondary = SahabaWarmGold,
+    onSecondary = SahabaOnWarmGold,
+    background = ParchmentBackground,
+    onBackground = ParchmentText,
+    surface = ParchmentSurface,
+    onSurface = ParchmentText,
+    surfaceVariant = ParchmentSurfaceVariant,
+    onSurfaceVariant = ParchmentTextMuted,
+    outline = ParchmentBorder,
+    outlineVariant = ParchmentBorder
+)
+
+internal val AndalusColorScheme = darkColorScheme(
+    primary = AndalusPrimary,
+    onPrimary = AndalusOnPrimary,
+    primaryContainer = AndalusPrimaryContainer,
+    onPrimaryContainer = AndalusOnPrimaryContainer,
+    secondary = SahabaEmeraldHighlight,
+    onSecondary = AndalusBackground,
+    background = AndalusBackground,
+    onBackground = AndalusText,
+    surface = AndalusSurface,
+    onSurface = AndalusText,
+    surfaceVariant = AndalusSurfaceVariant,
+    onSurfaceVariant = AndalusTextMuted,
+    outline = AndalusBorder,
+    outlineVariant = AndalusBorder
+)
+
+internal val OledColorScheme = darkColorScheme(
+    primary = OledPrimary,
+    onPrimary = OledOnPrimary,
+    primaryContainer = OledPrimaryContainer,
+    onPrimaryContainer = OledOnPrimaryContainer,
+    secondary = SahabaWarmGold,
+    onSecondary = Color.Black,
+    background = OledBackground,
+    onBackground = OledText,
+    surface = OledSurface,
+    onSurface = OledText,
+    surfaceVariant = OledSurfaceVariant,
+    onSurfaceVariant = OledTextMuted,
+    outline = OledBorder,
+    outlineVariant = OledBorder
+)
+
 val SahabaShapes = Shapes(
     small = RoundedCornerShape(8.dp),
     medium = RoundedCornerShape(16.dp),
@@ -55,7 +108,13 @@ val SahabaShapes = Shapes(
 )
 
 fun getThemeColorScheme(darkTheme: Boolean, themeName: String? = null): ColorScheme {
-    return if (darkTheme) DarkColorScheme else LightColorScheme
+    val theme = AppTheme.fromId(themeName)
+    return when (theme) {
+        AppTheme.MUSHAF_PARCHMENT -> ParchmentColorScheme
+        AppTheme.ANDALUS_EMERALD -> AndalusColorScheme
+        AppTheme.DARK_OLED -> OledColorScheme
+        AppTheme.CLASSIC -> if (darkTheme) DarkColorScheme else LightColorScheme
+    }
 }
 
 

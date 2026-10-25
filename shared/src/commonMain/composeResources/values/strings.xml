@@ -15,6 +15,24 @@
     <string name="splash_slogan">JOURNEY INTO EXCELLENCE</string>
 
     <!-- Home Screen -->
+    <string name="home_brand_title">Sahaba</string>
+    <string name="home_brand_subtitle">COMPANIONS</string>
+    <string name="home_date_today_selection">TODAY\'S SELECTION</string>
+    <string name="home_curated_journey_overline">TODAY\'S CURATED JOURNEY</string>
+    <string name="home_biography_tag">BIOGRAPHY</string>
+    <string name="home_faith_of_truth">— FAITH OF TRUTH</string>
+    <string name="home_begin_journey_btn">BEGIN JOURNEY</string>
+    <string name="home_completed_btn">COMPLETED ✓</string>
+    <string name="home_weekly_journey_title">WEEKLY JOURNEY</string>
+    <string name="home_weekly_journey_subtitle">Keep your spiritual routine active</string>
+    <string name="home_streak_counter_format">%1$d Day Streak</string>
+    <string name="home_streak_flame_format">🔥 %1$dd</string>
+    <string name="home_ten_promised_title">THE TEN PROMISED PARADISE</string>
+    <string name="home_view_all">View all</string>
+    <string name="home_sunnah_habit_overline">SUNNAH HABIT OF THE DAY</string>
+    <string name="home_sunnah_habit_default_title">Smile at Your Brother</string>
+    <string name="home_sunnah_habit_default_hadith">“Smiling in the face of your brother is an act of charity.”</string>
+    <string name="home_honorific_ra">رضي الله عنه (RA)</string>
     <string name="home_begin_journey">Discover Today\'s Sahabi (~10 min)</string>
     <string name="home_completed_title">Daily Sahabi Habit Complete</string>
     <string name="home_completed_subtitle">See you tomorrow with a new Sahabi insha\'Allah.</string>
@@ -38,12 +56,20 @@
     <string name="journey_default_arabic_verse">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</string>
 
     <!-- Completion Screen -->
-    <string name="completion_heading">Alhamdulillah</string>
+    <string name="completion_heading">Journey Complete</string>
+    <string name="completion_peace_subtitle">May it bring you peace</string>
+    <string name="completion_daily_reflection_tag">DAILY REFLECTION</string>
+    <string name="completion_card_subtitle">%1$s • Day %2$d</string>
+    <string name="completion_done_button">Done for Today</string>
+    <string name="completion_next_journey_countdown">Next Journey in %1$dh %2$dm</string>
+    <string name="completion_share_description">Share daily reflection</string>
+    <string name="completion_share_template">“%1$s”\n— %2$s\n\nShared via Sahaba Companions</string>
     <string name="completion_minutes_spent">You invested %1$d minutes learning from the Sahaba today.</string>
     <string name="completion_reward">May Allah reward your effort and bless your learning.</string>
     <string name="completion_next_day">We\'ll prepare another Sahabi discovery tomorrow.</string>
     <string name="completion_done">Done</string>
     <string name="completion_action_label">Today\'s Action</string>
+
 
     <!-- Reminder status & Settings -->
     <string name="reminders_label">Reminders:</string>
@@ -54,6 +80,8 @@
     <string name="reminder_time_6am">06:00 AM (Post-Fajr)</string>
     <string name="reminder_time_8am">08:00 AM (Morning)</string>
     <string name="reminder_time_8pm">08:00 PM (Evening)</string>
+    <string name="reminder_set_today">Reminder set for today at %1$s</string>
+    <string name="reminder_set_tomorrow">Reminder set for tomorrow at %1$s</string>
     <string name="notification_title_pattern">Discover Today\'s Sahabi: %1$s 🌟</string>
 
     <!-- Weekly Tracker -->
@@ -153,4 +181,37 @@
     <string name="habits_detail_virtue">Virtue &amp; Sunnah Significance</string>
     <string name="habits_detail_streak_label">Current Streak</string>
     <string name="habits_celebration_title">Mubarak! All habits completed today 🎉</string>
+
+    <!-- Patron Tier & Monetization (FEAT-010 / SPEC-010) -->
+    <string name="paywall_header_ornament">✦ Sadaqah Jariyah · Ongoing Support ✦</string>
+    <string name="paywall_title">Sahaba Plus Patron</string>
+    <string name="paywall_subtitle">Support continuous development, keep the app completely ad-free forever, and unlock sacred reading themes.</string>
+    <string name="paywall_annual_title">Annual Hero Patron</string>
+    <string name="paywall_annual_subtitle">Full year of support · %1$s</string>
+    <string name="paywall_best_value">Best Value</string>
+    <string name="paywall_monthly_title">Monthly Patron</string>
+    <string name="paywall_monthly_subtitle">Continuous contribution · 7-day free trial</string>
+    <string name="paywall_free_trial_tag">7-Day Free Trial</string>
+    <string name="paywall_tip_title">Supporter Tip</string>
+    <string name="paywall_tip_subtitle">One-time micro gift to champion our mission</string>
+    <string name="paywall_restore">Restore Purchases</string>
+    <string name="paywall_not_now">Not Now</string>
+    <string name="paywall_support_button">Become a Patron</string>
+    <string name="paywall_tip_button">Send Tip</string>
+    <string name="paywall_processing">Processing…</string>
+    <string name="paywall_success_message">JazakAllahu Khairan for your generous support!</string>
+
+    <string name="settings_support_card_title">Support Sahaba Companions</string>
+    <string name="settings_support_card_subtitle">Join as a Patron (Sadaqah Jariyah) to help us develop beautiful, ad-free Islamic experiences.</string>
+    <string name="settings_support_card_action">Become a Patron</string>
+    <string name="settings_patron_badge">Sahaba Plus Patron ★</string>
+    <string name="settings_patron_active_desc">Thank you for your blessed patron support (Sadaqah Jariyah).</string>
+    <string name="settings_supporter_badge">Generous Supporter ★</string>
+
+    <string name="settings_theme_title">Sacred Themes</string>
+    <string name="theme_classic">Classic</string>
+    <string name="theme_parchment">Mushaf Parchment</string>
+    <string name="theme_andalus">Andalus Emerald</string>
+    <string name="theme_oled">Dark OLED</string>
+    <string name="theme_locked_badge">Patron Only</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
 import com.aslmmovic.qurancompanion.data.datasource.LocaleProvider
+import com.aslmmovic.qurancompanion.domain.repository.PurchasesRepository
 import com.aslmmovic.qurancompanion.domain.usecase.GetUserPreferencesUseCase
 import com.aslmmovic.qurancompanion.ui.theme.SahabaModernDesignShowcase
 import org.koin.android.ext.android.inject
@@ -19,12 +20,17 @@ class MainActivity : ComponentActivity() {
 
     private val localeProvider: LocaleProvider by inject()
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase by inject()
+    private val purchasesRepository: PurchasesRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         
+        lifecycleScope.launch {
+            purchasesRepository.initialize()
+        }
+
         // Fetch and apply current persisted locale
         localeProvider.changeLocale(localeProvider.currentLocale)
 

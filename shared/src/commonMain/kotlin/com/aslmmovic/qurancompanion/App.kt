@@ -1,5 +1,10 @@
 package com.aslmmovic.qurancompanion
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -38,9 +43,11 @@ fun App() {
         null -> isSystemInDarkTheme()
     }
 
+    val activeTheme = state.userPreferences?.selectedTheme ?: state.todayJourney?.theme
+
     SahabaCompanionTheme(
         darkTheme = isDarkMode,
-        themeName = state.todayJourney?.theme,
+        themeName = activeTheme,
         isArabic = state.isArabic
     ) {
         val startDest = state.startDestination
@@ -65,7 +72,31 @@ fun App() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = AppRoute.Splash.route
+                    startDestination = AppRoute.Splash.route,
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        ) + fadeIn(animationSpec = tween(300, easing = FastOutSlowInEasing))
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        ) + fadeOut(animationSpec = tween(300, easing = FastOutSlowInEasing))
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.End,
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        ) + fadeIn(animationSpec = tween(300, easing = FastOutSlowInEasing))
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.End,
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        ) + fadeOut(animationSpec = tween(300, easing = FastOutSlowInEasing))
+                    }
                 ) {
                     composable(AppRoute.Splash.route) {
                         SplashScreen(

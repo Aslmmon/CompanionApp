@@ -45,6 +45,8 @@ class ViewModelsTest {
     private val testDispatcher = StandardTestDispatcher()
     private val repo = FakeJourneyRepository()
     private val prefsRepo = FakeUserPreferencesRepository()
+    private val fakeSahabaRepo = com.aslmmovic.qurancompanion.fakes.FakeSahabaRepository()
+    private val fakeHabitRepo = com.aslmmovic.qurancompanion.fakes.FakeHabitRepository()
     private val fakeScheduler = FakeNotificationScheduler()
     private val fakeLocaleProvider = object : LocaleProvider {
         private val _currentLocaleFlow = MutableStateFlow("en")
@@ -58,7 +60,10 @@ class ViewModelsTest {
         override fun getCurrentDayOfYear(): Int = 1
         override fun getCurrentDayOfWeek(): Int = 1
         override fun getCurrentDateString(): String = "2026-01-01"
+        override fun getTimeUntilMidnight(): Pair<Int, Int> = Pair(14, 22)
+        override fun getCurrentHijriDateString(): String = "14 RAMADAN 1447 AH"
     }
+
 
     private fun createHomeViewModel() = HomeViewModel(
         getTodayJourneyUseCase = GetTodayJourneyUseCase(repo),
@@ -70,7 +75,13 @@ class ViewModelsTest {
         savePreferencesUseCase = SavePreferencesUseCase(prefsRepo),
         getDebugDayOffsetUseCase = GetDebugDayOffsetUseCase(repo),
         incrementDebugDayOffsetUseCase = IncrementDebugDayOffsetUseCase(repo),
-        dateTimeProvider = fakeDateTimeProvider
+        dateTimeProvider = fakeDateTimeProvider,
+        getJourneyStreakUseCase = com.aslmmovic.qurancompanion.domain.usecase.GetJourneyStreakUseCase(repo),
+        getBookmarkedJourneyIdsUseCase = com.aslmmovic.qurancompanion.domain.usecase.GetBookmarkedJourneyIdsUseCase(prefsRepo),
+        toggleJourneyBookmarkUseCase = com.aslmmovic.qurancompanion.domain.usecase.ToggleJourneyBookmarkUseCase(prefsRepo),
+        getSahabaCatalogUseCase = com.aslmmovic.qurancompanion.domain.usecase.GetSahabaCatalogUseCase(fakeSahabaRepo),
+        getActiveHabitsUseCase = com.aslmmovic.qurancompanion.domain.usecase.GetActiveHabitsUseCase(fakeHabitRepo),
+        toggleHabitCompletionUseCase = com.aslmmovic.qurancompanion.domain.usecase.ToggleHabitCompletionUseCase(fakeHabitRepo)
     )
 
     private fun createAppViewModel() = AppViewModel(
@@ -306,6 +317,45 @@ class ViewModelsTest {
         assertEquals("Sahaba Companion: Abu Bakr", fakeScheduler.scheduledTitle)
         assertEquals("The Truthful", fakeScheduler.scheduledBody)
 
+        collectJob.cancel()
+    }
+
+    @Test
+    fun HomeViewModel_weeklyProgressReflectsRepository() = runTest {
+        repo.todayJourney = testJourney(id = "j1")
+        val viewModel = createHomeViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        val progress = viewModel.uiState.value.weeklyProgress
+        assertEquals(7, progress.size)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun HomeViewModel_onResetCompletionClick_nullJourney_doesNothing() = runTest {
+        repo.todayJourney = null
+        val viewModel = createHomeViewModel()
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.onResetCompletionClick()
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.journey)
+        collectJob.cancel()
+    }
+
+    @Test
+    fun HomeViewModel_initialStateIsLoading_thenFalseAfterLoad() = runTest {
+        val viewModel = createHomeViewModel()
+        assertTrue(viewModel.uiState.value.isLoading)
+
+        val collectJob = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isLoading)
         collectJob.cancel()
     }
 }

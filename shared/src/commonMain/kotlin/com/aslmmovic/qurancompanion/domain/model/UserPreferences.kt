@@ -5,5 +5,6 @@ data class UserPreferences(
     val reminderMinute: Int = 0,
     val isReminderEnabled: Boolean = true,
     val preferredLanguage: String? = null,
-    val isDarkMode: Boolean? = null
+    val isDarkMode: Boolean? = null,
+    val selectedTheme: String? = "classic"
 )

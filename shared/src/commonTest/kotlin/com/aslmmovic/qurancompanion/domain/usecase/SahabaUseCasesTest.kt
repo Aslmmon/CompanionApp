@@ -8,6 +8,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class SahabaUseCasesTest {
@@ -59,5 +60,49 @@ class SahabaUseCasesTest {
         val sahaba = result.getOrThrow()
         assertEquals("abu_bakr", sahaba.id)
         assertEquals("Abu Bakr as-Siddiq", sahaba.name)
+    }
+
+    @Test
+    fun getSahabaCatalog_noFilters_returnsFullCatalog() = runTest {
+        val result = getSahabaCatalogUseCase().first()
+        assertEquals(5, result.size)
+    }
+
+    @Test
+    fun getSahabaDetail_unknownId_returnsFailure() = runTest {
+        val result = getSahabaDetailUseCase("unknown_id")
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun getSahabaCatalog_emptySearchQuery_returnsAll() = runTest {
+        val result = getSahabaCatalogUseCase(searchQuery = "").first()
+        assertEquals(5, result.size)
+
+        val resultWhitespace = getSahabaCatalogUseCase(searchQuery = "   ").first()
+        assertEquals(5, resultWhitespace.size)
+    }
+
+    @Test
+    fun getSahabaCatalog_nonMatchingQuery_returnsEmptyList() = runTest {
+        val result = getSahabaCatalogUseCase(searchQuery = "non_existent_query_xyz").first()
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun getSahabaCatalog_categoryAndSearchCombined_returnsIntersection() = runTest {
+        val result = getSahabaCatalogUseCase(
+            category = SahabaCategory.TEN_PROMISED,
+            searchQuery = "Umar"
+        ).first()
+        assertEquals(1, result.size)
+        assertEquals("umar", result.first().id)
+
+        // Matching query but wrong category
+        val wrongCategoryResult = getSahabaCatalogUseCase(
+            category = SahabaCategory.ANSAR,
+            searchQuery = "Umar"
+        ).first()
+        assertTrue(wrongCategoryResult.isEmpty())
     }
 }

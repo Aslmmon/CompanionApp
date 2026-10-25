@@ -38,6 +38,9 @@ class JourneyViewModel(
     val uiEffects: SharedFlow<JourneyUiEffect> = _uiEffects.asSharedFlow()
 
     init {
+        val (hours, minutes) = dateTimeProvider.getTimeUntilMidnight()
+        _uiState.update { it.copy(hoursUntilMidnight = hours, minutesUntilMidnight = minutes) }
+
         viewModelScope.launch {
             val loadedJourney = getTodayJourneyUseCase()
             _journey.value = loadedJourney
@@ -51,6 +54,7 @@ class JourneyViewModel(
             }
         }
     }
+
 
     fun onNextStep() {
         val currentJourney = _uiState.value.journey ?: return
@@ -92,6 +96,8 @@ class JourneyViewModel(
     }
 
     fun onFinish() {
+        val (hours, minutes) = dateTimeProvider.getTimeUntilMidnight()
+        _uiState.update { it.copy(hoursUntilMidnight = hours, minutesUntilMidnight = minutes) }
         viewModelScope.launch {
             _uiState.value.journey?.let {
                 markJourneyCompletedUseCase(it.id, dateTimeProvider.getCurrentDateString())
@@ -99,6 +105,7 @@ class JourneyViewModel(
             _uiEffects.emit(JourneyUiEffect.NavigateToCompletion)
         }
     }
+
 
     fun onReturnHome() {
         _currentStepIndex.value = 0

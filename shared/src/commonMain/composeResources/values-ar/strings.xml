@@ -15,6 +15,24 @@
     <string name="splash_slogan">رحلة نحو الإحسان</string>
 
     <!-- Home Screen -->
+    <string name="home_brand_title">صحابة</string>
+    <string name="home_brand_subtitle">COMPANIONS</string>
+    <string name="home_date_today_selection">رحلة اليوم المختارة</string>
+    <string name="home_curated_journey_overline">رحلة اليوم</string>
+    <string name="home_biography_tag">سيرة</string>
+    <string name="home_faith_of_truth">— صدق الإيمان</string>
+    <string name="home_begin_journey_btn">ابدأ الرحلة</string>
+    <string name="home_completed_btn">مكتملة ✓</string>
+    <string name="home_weekly_journey_title">الرحلة الأسبوعية</string>
+    <string name="home_weekly_journey_subtitle">حافظ على وردك الإيماني اليومي</string>
+    <string name="home_streak_counter_format">%1$d أيام تتابع</string>
+    <string name="home_streak_flame_format">🔥 %1$d يوم</string>
+    <string name="home_ten_promised_title">العشرة المبشرون بالجنة</string>
+    <string name="home_view_all">عرض الكل</string>
+    <string name="home_sunnah_habit_overline">سنة اليوم النبوية</string>
+    <string name="home_sunnah_habit_default_title">تبسمك في وجه أخيك</string>
+    <string name="home_sunnah_habit_default_hadith">«تبسمك في وجه أخيك لك صدقة»</string>
+    <string name="home_honorific_ra">رضي الله عنه (RA)</string>
     <string name="home_begin_journey">تعرّف على صحابي اليوم (~١٠ دقائق)</string>
     <string name="home_completed_title">اكتملت عادة اليوم مع الصحابة</string>
     <string name="home_completed_subtitle">إلى اللقاء غداً مع صحابي جديد إن شاء الله.</string>
@@ -38,12 +56,20 @@
     <string name="journey_default_arabic_verse">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</string>
 
     <!-- Completion Screen -->
-    <string name="completion_heading">الحمد لله</string>
+    <string name="completion_heading">اكتملت الرحلة</string>
+    <string name="completion_peace_subtitle">عسى أن تجلب لك السكينة والسلام</string>
+    <string name="completion_daily_reflection_tag">تأمل اليوم</string>
+    <string name="completion_card_subtitle">%1$s • اليوم %2$d</string>
+    <string name="completion_done_button">تم لليوم</string>
+    <string name="completion_next_journey_countdown">الرحلة القادمة خلال %1$dس %2$dد</string>
+    <string name="completion_share_description">مشاركة تأمل اليوم</string>
+    <string name="completion_share_template">«%1$s»\n— %2$s\n\nتمت المشاركة عبر رفقاء الصحابة</string>
     <string name="completion_minutes_spent">استثمرت %1$d دقائق قيّمة في التعرف على الصحابة اليوم.</string>
     <string name="completion_reward">تقبل الله طاعتك وبارك في علمك وعملك.</string>
     <string name="completion_next_day">سنجهز لك قصة صحابي جديد غداً إن شاء الله.</string>
     <string name="completion_done">تم</string>
     <string name="completion_action_label">عمل اليوم</string>
+
 
     <!-- Reminder status & Settings -->
     <string name="reminders_label">التذكيرات:</string>
@@ -54,6 +80,8 @@
     <string name="reminder_time_6am">٠٦:٠٠ صباحاً (بعد الفجر)</string>
     <string name="reminder_time_8am">٠٨:٠٠ صباحاً (الصباح)</string>
     <string name="reminder_time_8pm">٠٨:٠٠ مساءً (المساء)</string>
+    <string name="reminder_set_today">تم ضبط التذكير لليوم الساعة %1$s</string>
+    <string name="reminder_set_tomorrow">تم ضبط التذكير لغداً الساعة %1$s</string>
     <string name="notification_title_pattern">تعرّف على صحابي اليوم: %1$s 🌟</string>
 
     <!-- Weekly Tracker -->
@@ -153,4 +181,37 @@
     <string name="habits_detail_virtue">فضل العمل وسنده</string>
     <string name="habits_detail_streak_label">التتابع الحالي</string>
     <string name="habits_celebration_title">مبارك! أتممت جميع سنن اليوم 🎉</string>
+
+    <!-- Patron Tier & Monetization (FEAT-010 / SPEC-010) -->
+    <string name="paywall_header_ornament">✦ رعاية مستمرة · صدقة جارية ✦</string>
+    <string name="paywall_title">رفقاء بلس · راعي الصحابة</string>
+    <string name="paywall_subtitle">ساهم في استمرار التطوير بلا إعلانات أبداً وافتح سمات القراءة المقدسة ومزايا حصرية.</string>
+    <string name="paywall_annual_title">اشتراك سنوي (راعي الصحابة)</string>
+    <string name="paywall_annual_subtitle">دعم عام كامل · %1$s</string>
+    <string name="paywall_best_value">أفضل قيمة</string>
+    <string name="paywall_monthly_title">اشتراك شهري (رعاية مستمرة)</string>
+    <string name="paywall_monthly_subtitle">مساهمة متجددة · تجربة مجانية لمدة 7 أيام</string>
+    <string name="paywall_free_trial_tag">تجربة مجانية 7 أيام</string>
+    <string name="paywall_tip_title">إكرامية داعم</string>
+    <string name="paywall_tip_subtitle">مساهمة لمرة واحدة دعماً لرسالتنا</string>
+    <string name="paywall_restore">استعادة المشتريات</string>
+    <string name="paywall_not_now">ليس الآن</string>
+    <string name="paywall_support_button">انضم لرفقاء بلس</string>
+    <string name="paywall_tip_button">تقديم الإكرامية</string>
+    <string name="paywall_processing">جاري المعالجة…</string>
+    <string name="paywall_success_message">جزاكم الله خيراً وبارك في عطائكم الكريم!</string>
+
+    <string name="settings_support_card_title">رعاية رفقاء الصحابة</string>
+    <string name="settings_support_card_subtitle">ساهم معنا كراعٍ للتطبيق (صدقة جارية) لنستمر في بناء تجارب إسلامية راقية بلا إعلانات.</string>
+    <string name="settings_support_card_action">انضم إلى الرعاة</string>
+    <string name="settings_patron_badge">راعي رفقاء الصحابة ★</string>
+    <string name="settings_patron_active_desc">شكراً لدعمك المبارك والمستمر (صدقة جارية).</string>
+    <string name="settings_supporter_badge">داعم كريم ★</string>
+
+    <string name="settings_theme_title">سمات القراءة الشريفة</string>
+    <string name="theme_classic">الأصلي</string>
+    <string name="theme_parchment">مصحف المدينة</string>
+    <string name="theme_andalus">زمرد أندلسي</string>
+    <string name="theme_oled">أسود نقي OLED</string>
+    <string name="theme_locked_badge">حصري للرعاة</string>
 </resources>

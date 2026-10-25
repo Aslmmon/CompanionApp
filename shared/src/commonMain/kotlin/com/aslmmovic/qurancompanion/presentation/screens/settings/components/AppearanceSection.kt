@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -113,6 +114,7 @@ fun AppearanceSection(
                     Switch(
                         checked = isDarkMode,
                         onCheckedChange = onThemeToggle,
+                        modifier = Modifier.testTag("settings_dark_mode_toggle"),
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colorScheme.surface,
                             checkedTrackColor = SahabaEmeraldHighlight,
@@ -132,6 +134,7 @@ fun AppearanceSection(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag("settings_language_row")
                         .clickable(
                             role = Role.Button,
                             onClick = onOpenLanguageSheet
