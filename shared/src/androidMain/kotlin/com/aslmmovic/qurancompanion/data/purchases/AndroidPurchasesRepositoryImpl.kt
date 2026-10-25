@@ -10,6 +10,7 @@ import com.aslmmovic.qurancompanion.util.AndroidActivityProvider
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
+import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
@@ -150,9 +151,9 @@ class AndroidPurchasesRepositoryImpl(
                         return
                     }
 
-                    Purchases.sharedInstance.purchasePackage(
-                        activity,
-                        pkg,
+                    val purchaseParams = PurchaseParams.Builder(activity, pkg).build()
+                    Purchases.sharedInstance.purchase(
+                        purchaseParams,
                         object : PurchaseCallback {
                             override fun onCompleted(
                                 storeTransaction: StoreTransaction,

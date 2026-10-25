@@ -22,7 +22,7 @@ kotlinxSerialization = "1.8.1"
 ktor = "3.1.1"
 material3 = "1.11.0-alpha07"
 navigation = "2.9.0-beta03"
-revenuecat = "8.12.2"
+revenuecat = "10.29.0"
 turbine = "1.2.0"
 
 [libraries]
